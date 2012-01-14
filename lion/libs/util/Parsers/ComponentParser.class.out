@@ -1,0 +1,260 @@
+State 0:
+          start ::= * ui_code
+          ui_code ::= * ui_code anychar
+          ui_code ::= * ui_code component_tag
+          ui_code ::= * ui_code component_property
+      (4) ui_code ::= *
+
+                         start accept
+                       ui_code shift  1
+                     {default} reduce 4
+
+State 1:
+      (0) start ::= ui_code *
+          ui_code ::= ui_code * anychar
+          ui_code ::= ui_code * component_tag
+          ui_code ::= ui_code * component_property
+          component_tag ::= * r_open_component_tag component_body r_close_component_tag
+          component_tag ::= * r_open_form_tag component_body r_close_form_tag
+          component_tag ::= * HTML_ELEMENT_TAG
+          component_tag ::= * SHORT_COMPONENT_TAG
+          r_open_form_tag ::= * OPEN_HTML_FORM_TAG
+          r_open_component_tag ::= * OPEN_COMPONENT_TAG
+          component_property ::= * r_open_property_tag property_value r_close_property_tag
+          r_open_property_tag ::= * OPEN_PROPERTY_TAG
+          anychar ::= * ANYTHINGELSE
+
+              HTML_ELEMENT_TAG shift  26
+           SHORT_COMPONENT_TAG shift  25
+            OPEN_HTML_FORM_TAG shift  24
+            OPEN_COMPONENT_TAG shift  18
+             OPEN_PROPERTY_TAG shift  16
+                  ANYTHINGELSE shift  12
+                       anychar shift  21
+                 component_tag shift  20
+            component_property shift  19
+          r_open_component_tag shift  8
+               r_open_form_tag shift  7
+           r_open_property_tag shift  5
+                     {default} reduce 0
+
+State 2:
+          ui_code ::= ui_code * anychar
+          ui_code ::= ui_code * component_tag
+          ui_code ::= ui_code * component_property
+          component_tag ::= * r_open_component_tag component_body r_close_component_tag
+          component_tag ::= * r_open_form_tag component_body r_close_form_tag
+          component_tag ::= * HTML_ELEMENT_TAG
+          component_tag ::= * SHORT_COMPONENT_TAG
+          r_open_form_tag ::= * OPEN_HTML_FORM_TAG
+          r_open_component_tag ::= * OPEN_COMPONENT_TAG
+     (13) component_body ::= ui_code *
+          component_property ::= * r_open_property_tag property_value r_close_property_tag
+          r_open_property_tag ::= * OPEN_PROPERTY_TAG
+          anychar ::= * ANYTHINGELSE
+
+              HTML_ELEMENT_TAG shift  26
+           SHORT_COMPONENT_TAG shift  25
+            OPEN_HTML_FORM_TAG shift  24
+            OPEN_COMPONENT_TAG shift  18
+             OPEN_PROPERTY_TAG shift  16
+                  ANYTHINGELSE shift  12
+                       anychar shift  21
+                 component_tag shift  20
+            component_property shift  19
+          r_open_component_tag shift  8
+               r_open_form_tag shift  7
+           r_open_property_tag shift  5
+                     {default} reduce 13
+
+State 3:
+          component_tag ::= * r_open_component_tag component_body r_close_component_tag
+          component_tag ::= * r_open_form_tag component_body r_close_form_tag
+          component_tag ::= * HTML_ELEMENT_TAG
+          component_tag ::= * SHORT_COMPONENT_TAG
+          r_open_form_tag ::= * OPEN_HTML_FORM_TAG
+          r_open_component_tag ::= * OPEN_COMPONENT_TAG
+          component_property ::= r_open_property_tag property_value * r_close_property_tag
+          r_close_property_tag ::= * CLOSE_PROPERTY_TAG
+          property_value ::= property_value * component_tag property_value
+
+              HTML_ELEMENT_TAG shift  26
+           SHORT_COMPONENT_TAG shift  25
+            OPEN_HTML_FORM_TAG shift  24
+            OPEN_COMPONENT_TAG shift  18
+            CLOSE_PROPERTY_TAG shift  15
+                 component_tag shift  6
+          r_open_component_tag shift  8
+               r_open_form_tag shift  7
+          r_close_property_tag shift  27
+
+State 4:
+          component_tag ::= * r_open_component_tag component_body r_close_component_tag
+          component_tag ::= * r_open_form_tag component_body r_close_form_tag
+          component_tag ::= * HTML_ELEMENT_TAG
+          component_tag ::= * SHORT_COMPONENT_TAG
+          r_open_form_tag ::= * OPEN_HTML_FORM_TAG
+          r_open_component_tag ::= * OPEN_COMPONENT_TAG
+          property_value ::= property_value * component_tag property_value
+     (17) property_value ::= property_value component_tag property_value *
+
+              HTML_ELEMENT_TAG shift  26
+              HTML_ELEMENT_TAG reduce 17  ** Parsing conflict **
+           SHORT_COMPONENT_TAG shift  25
+           SHORT_COMPONENT_TAG reduce 17  ** Parsing conflict **
+            OPEN_HTML_FORM_TAG shift  24
+            OPEN_HTML_FORM_TAG reduce 17  ** Parsing conflict **
+            OPEN_COMPONENT_TAG shift  18
+            OPEN_COMPONENT_TAG reduce 17  ** Parsing conflict **
+                 component_tag shift  6
+          r_open_component_tag shift  8
+               r_open_form_tag shift  7
+                     {default} reduce 17
+
+State 5:
+          component_property ::= r_open_property_tag * property_value r_close_property_tag
+          property_value ::= * property_value component_tag property_value
+          property_value ::= * literal
+          literal ::= * literal ANYTHINGELSE
+     (20) literal ::= *
+
+                property_value shift  3
+                       literal shift  11
+                     {default} reduce 20
+
+State 6:
+          property_value ::= * property_value component_tag property_value
+          property_value ::= property_value component_tag * property_value
+          property_value ::= * literal
+          literal ::= * literal ANYTHINGELSE
+     (20) literal ::= *
+
+                property_value shift  4
+                       literal shift  11
+                     {default} reduce 20
+
+State 7:
+          ui_code ::= * ui_code anychar
+          ui_code ::= * ui_code component_tag
+          ui_code ::= * ui_code component_property
+      (4) ui_code ::= *
+          component_tag ::= r_open_form_tag * component_body r_close_form_tag
+          component_body ::= * ui_code
+
+                       ui_code shift  2
+                component_body shift  9
+                     {default} reduce 4
+
+State 8:
+          ui_code ::= * ui_code anychar
+          ui_code ::= * ui_code component_tag
+          ui_code ::= * ui_code component_property
+      (4) ui_code ::= *
+          component_tag ::= r_open_component_tag * component_body r_close_component_tag
+          component_body ::= * ui_code
+
+                       ui_code shift  2
+                component_body shift  10
+                     {default} reduce 4
+
+State 9:
+          component_tag ::= r_open_form_tag component_body * r_close_form_tag
+          r_close_form_tag ::= * CLOSE_HTML_FORM_TAG
+
+           CLOSE_HTML_FORM_TAG shift  23
+              r_close_form_tag shift  22
+
+State 10:
+          component_tag ::= r_open_component_tag component_body * r_close_component_tag
+          r_close_component_tag ::= * CLOSE_COMPONENT_TAG
+
+           CLOSE_COMPONENT_TAG shift  13
+         r_close_component_tag shift  14
+
+State 11:
+     (18) property_value ::= literal *
+          literal ::= literal * ANYTHINGELSE
+
+                  ANYTHINGELSE shift  17
+                     {default} reduce 18
+
+State 12:
+     (21) anychar ::= ANYTHINGELSE *
+
+                     {default} reduce 21
+
+State 13:
+     (12) r_close_component_tag ::= CLOSE_COMPONENT_TAG *
+
+                     {default} reduce 12
+
+State 14:
+      (5) component_tag ::= r_open_component_tag component_body r_close_component_tag *
+
+                     {default} reduce 5
+
+State 15:
+     (16) r_close_property_tag ::= CLOSE_PROPERTY_TAG *
+
+                     {default} reduce 16
+
+State 16:
+     (15) r_open_property_tag ::= OPEN_PROPERTY_TAG *
+
+                     {default} reduce 15
+
+State 17:
+     (19) literal ::= literal ANYTHINGELSE *
+
+                     {default} reduce 19
+
+State 18:
+     (11) r_open_component_tag ::= OPEN_COMPONENT_TAG *
+
+                     {default} reduce 11
+
+State 19:
+      (3) ui_code ::= ui_code component_property *
+
+                     {default} reduce 3
+
+State 20:
+      (2) ui_code ::= ui_code component_tag *
+
+                     {default} reduce 2
+
+State 21:
+      (1) ui_code ::= ui_code anychar *
+
+                     {default} reduce 1
+
+State 22:
+      (6) component_tag ::= r_open_form_tag component_body r_close_form_tag *
+
+                     {default} reduce 6
+
+State 23:
+     (10) r_close_form_tag ::= CLOSE_HTML_FORM_TAG *
+
+                     {default} reduce 10
+
+State 24:
+      (9) r_open_form_tag ::= OPEN_HTML_FORM_TAG *
+
+                     {default} reduce 9
+
+State 25:
+      (8) component_tag ::= SHORT_COMPONENT_TAG *
+
+                     {default} reduce 8
+
+State 26:
+      (7) component_tag ::= HTML_ELEMENT_TAG *
+
+                     {default} reduce 7
+
+State 27:
+     (14) component_property ::= r_open_property_tag property_value r_close_property_tag *
+
+                     {default} reduce 14
+
