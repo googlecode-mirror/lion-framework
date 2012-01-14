@@ -1,0 +1,18 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="myInvoiceDao" class="InvoiceDAO">
+    
+        <!-- via ref attribute (shortcut of ref node) -->
+        <property name="connection" ref="localDbConnection"/>
+        
+    </context-instance>
+
+    ...    
+
+  </context-instances>
+  
+</configuration>
+

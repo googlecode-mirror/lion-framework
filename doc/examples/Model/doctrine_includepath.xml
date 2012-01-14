@@ -1,0 +1,12 @@
+<?xml version = "1.0" standalone="yes"?>
+<classes>
+
+  ...
+
+  <cluster name="Doctrine classes" path="/libs/thrdparty/doctrine/lib">
+    <class name="Doctrine" file="Doctrine.php"/>
+  </cluster>
+
+  ...
+  
+</classes>

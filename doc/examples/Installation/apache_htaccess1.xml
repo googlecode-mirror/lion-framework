@@ -1,0 +1,8 @@
+  ...
+  
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #fix the following directive if you experience problems with url redirections:
+    your_application/directory/here  
+  
+  ...

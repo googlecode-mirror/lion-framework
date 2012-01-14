@@ -1,0 +1,22 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Caching the model</refname>
+  <refpurpose>Improving the model performance</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id caching_capabilities}">
+  <title>Caching the model</title>
+  <para>Model layer allows to declare caching properties associated to model services (within the <emphasis>/app/config/model_services.xml</emphasis>) by using the <italic>cache</italic> and <italic>cache-ttl</italic> attributes at service level.<br/>
+  i.e.
+  {@example Model/model_services_cache.xml}
+  In this example, we are caching the <italic>getAllInvoices</italic> service to expire after 300 seconds (ttl), as well as the <italic>getInvoices</italic> with a ttl of 1 minute</para>
+  <note>Use cache capabilities in model services designed just to return results without altering the model.<br/>
+        Take into account that a cached service won't be executed itself.</note>
+  <para>The <italic>cache-ttl</italic>is optional, being 0 by default, forcing the cache to never expire
+  For more information regarding the model, please see the {@tutorial Model/Model.pkg} section.
+  </para>
+ </refsect1>
+</refentry>

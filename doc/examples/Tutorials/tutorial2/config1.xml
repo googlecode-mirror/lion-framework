@@ -1,0 +1,11 @@
+<?xml version = "1.0" standalone="yes"?>
+<classes>
+ 
+  ...
+
+  <!-- Model classes -->
+  <cluster name="Model" path="/libs/model">
+    <class name="*" file="*.class.php"/>
+  </cluster>
+  
+</classes>

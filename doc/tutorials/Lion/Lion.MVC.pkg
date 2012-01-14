@@ -1,0 +1,74 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Model-View-Controller</refname>
+  <refpurpose>Applications well-structured</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id MVC_definition}">
+  <title>The Model-View-Controller pattern</title>
+  <para>Model-View-Controller (aka MVC) is a design pattern that enforces the separation between the input, processing, and output of an application. To this end, an application is divided into three core components: the model, the view, and the controller. Each of these components handles a discreet set of tasks.</para>
+  <floatnote>
+  <para><emphasis>Other resources:</emphasis><br/>
+  - {@link http://en.wikipedia.org/wiki/Model-view-controller From Wikipedia}<br />
+  - {@link http://java.sun.com/blueprints/patterns/MVC-detailed.html From BluePrints J2EE patterns}<br />
+  </para>
+  <para>Just google "MVC pattern" :)</para>
+  </floatnote>
+  <para><emphasis>Model:</emphasis><br />The model represents enterprise data and business rules: It manages the behavior and data of the application domain, responds to requests for information about its state (usually from the view), and responds to instructions to change state (usually from the controller).<br/>
+  The data returned by the model is display-neutral, meaning that the model applies no formatting. This way, a single model can provide data for any number of display interfaces. This reduces code duplication, because model code is only written once and is then reused by all of the views.<br/>
+  It has a purely functional interface, meaning that it has a set of public functions that can be used to achieve all of its functionality. Some of the functions are query methods that permit a "user" to get information about the current state of the model. Others are mutator methods that permit the state to be modified.</para>
+  <para><emphasis>View:</emphasis><br />The view manages the display of information. The view is the interface the user sees and interacts with. For Web applications, this has historically been an HTML interface.<br/>
+  Handling all of these interfaces in your application is becoming increasingly challenging. A big advantage of MVC is that it handles the use of many different views for your application. There's no real processing happening in the view; it serves only as a way to output data and allow the user to act on that data, whether it is an online store or an employee list.</para>
+  <para><emphasis>Controller:</emphasis><br />Processes and responds to events, typically user actions, and may invoke changes on the model.<br/>
+  It interprets requests from the user and calls portions of the model and view as necessary to fulfill the request. So when the user clicks a Web link or submits an HTML form, the controller itself doesn't output anything or perform any real processing. It takes the request and determines which model components to invoke and which formatting to apply to the resulting data
+  </para>
+  <image>imagesdir/MVC/MVC.png</image>
+  <para>So, to summarize, a user request is interpreted by the controller, which determines what portions of the model and view to call. The model handles interaction with data and applies business rules and then returns data. Finally, the appropriate view is determined and formatting is applied to the resulting data for presentation.</para>
+ </refsect1>
+ <refsect1 id="{@id mvcinlion}">
+  <title>MVC in Lion</title>
+  <para>Lion has a MVC implementation ready to be used by just adding our <emphasis>Action Controllers</emphasis> and <emphasis>templates</emphasis>.</para>
+  <para>
+  Some of the most valuable features of Lion MVC are:
+  <orderedlist>
+    <listitem>MVC is Dual, as the integration of a MVC and a MVP pattern together.</listitem>
+    <listitem>In that sense, the view layer is based on components: Components simplifies the development of rich user interfaces. Unlike other MVC frameworks, Lion uses a component-based View approach: Graphical components within the user interface correspond to instances in the server side. The state of UI components is synchronized between the client and the server. Out of the box, Lion uses Smarty for its display technology, but it can also accommodate to other display technologies.</listitem>
+    <listitem>Reusable business layer: There are not contracts between the business layer and the rest of the system. To make it happens, the model is exposed by defining a set of services that acts as middleware, hidding the model classes to the rest of the application. This approach has a lot of advantages, i.e. the easy way to expose some of those services as webservices declarativelly.</listitem>
+    <listitem>Clear separation between the model, the view and the controller.</listitem>
+    <listitem>Authorization already integrated: We can protect and control the access to the model, the view and the controller declarativelly or programmatically. We can also perform some very low grain protections, i.e. restricting the viewable of some UI zones depending on user privileges.</listitem>
+  </orderedlist>
+  </para>
+ <refsect2 id="{@id mvc-lifecycle}">
+  <title>Basic life-cycle</title>
+  <para>The MVC life-cycle in Lion begins in an special class: The <emphasis>Action Dispatcher</emphasis>.<br/>
+  The Action Dispatcher is the class in which the <emphasis>Front Controller</emphasis> delegates to in order to execute the <emphasis>Action Controller</emphasis> associated to the incoming <emphasis>Request</emphasis>.</para>
+  <para>Once the {@link __ActionDispatcher} receives a Request (normally from the Front Controller, but not limited to) it performs the following tasks:
+    <orderedlist>
+      <listitem>It resolves and call to an Action Controller. The Action Controller returns a portion of the <emphasis>Model</emphasis> as well as some information regarding the <emphasis>View</emphasis> to be executed to.</listitem>
+      <listitem>After that, it resolves the View and sends the Model information to it.</listitem>
+      <listitem>Finally, it setups the <emphasis>Response</emphasis> with the information provided by the View. The Response is sent back to upper layers.</listitem>
+    </orderedlist>
+  </para>
+  <image>imagesdir/MVC/mvc_lifecycle.png</image>
+  <para>The {@link __ModelAndView} represents a portion of the model retrieved by the Action Controller as well as information regarding the view to execute to.</para>
+ </refsect2>
+ <refsect2 id="{@id controllers_and_actions}">
+  <title>Controllers and Actions</title>
+  <para>There are 2 different concepts in Lion that we need to understand clearly: The Controller and the Action.</para>
+  <para>A Controller is a class in charge of the execution of one or more actions, while an action is a the minimal execution unit, usually a Controller's method.</para>
+ </refsect2>
+ </refsect1>
+ <refsect1 id="{@id practical_tutorials}">
+  <title>Practical tutorials regarding MVC</title>
+  <para>Take a look at the following tutorials regarding MVC:
+  <orderedlist>
+    <listitem>{@tutorial Lion/Tutorials/Lion.tutorial1.pkg}</listitem>
+    <listitem>{@tutorial Lion/Tutorials/Lion.tutorial2.pkg}</listitem>
+  </orderedlist>
+  </para>
+ </refsect1>
+</refentry>
+

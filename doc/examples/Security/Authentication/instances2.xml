@@ -1,0 +1,24 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+    
+    <instance id="authenticationManager" class="__AuthenticationManager">
+      <property name="authenticators">
+        <list>
+          <ref id="authenticator"/>
+        </list>
+      </property>
+    </instance>
+
+    <instance id="authenticator" class="__Authenticator">
+      <property name="userLoader">
+        <ref id="userDao"/>
+      </property>
+    </instance>
+    
+    <instance id="userDao" class="UserDao"/>
+    
+  </context-instances>
+  
+</configuration>

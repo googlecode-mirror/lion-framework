@@ -1,0 +1,34 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id = "doctrine_manager" class="Doctrine_Manager"/>
+
+    <context-instance id = "conn"
+        factory-instance = "doctrine_manager"
+          factory-method = "openConnection">
+        <constructor-arg>
+            <value>mysql://username:password@localhost/dbname</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>connection 1</value>
+        </constructor-arg>
+    </context-instance>
+
+    <context-instance id = "conn2"
+        factory-instance = "doctrine_manager"
+          factory-method = "openConnection">
+        <constructor-arg>
+            <value>mysql://username2:password2@localhost/dbname2</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>connection 2</value>
+        </constructor-arg>
+    </context-instance>
+
+
+
+  </context-instances>
+  
+</configuration>

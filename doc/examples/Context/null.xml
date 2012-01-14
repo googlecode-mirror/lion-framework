@@ -1,0 +1,18 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="myInvoiceDao" class="InvoiceDAO">
+    
+        <!-- do not use any database engine by default -->
+        <property name="defaultDbEngine"><null/></property>
+        
+    </context-instance>
+
+    ...    
+
+  </context-instances>
+  
+</configuration>
+

@@ -1,0 +1,51 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Bootstrap a new project</refname>
+  <refpurpose>Creating new lion based projects from the scratch</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+   <note><emphasis>IMPORTANT:</emphasis> The bootstrapping capability has been deprecated. Now lion is distributed with an empty project all together.
+   </note>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id how_to_bootstrap}">
+  <title>Bootstrapping a new project</title>
+  <para>Lion has a bootstrap capability that allows the automagic creation of empty projects from the scratch.<br/>
+  To use that, just follow the next steps:</para>
+  <orderedlist>
+    <listitem>Create a directory where you want to bootstrap your new project. Ensure that the directory has write permissions in order to be able to bootstrap there.</listitem>
+    <listitem>Create a php file inside that directory called <emphasis>bootstrap.php</emphasis> with the following content (ah! fix the "path_to_your_lion_framework"):
+      {@example Bootstrap/bootstrap.php}
+    </listitem>
+    <listitem>Execute the <emphasis>bootstrap.php</emphasis> from your browser!</listitem>
+  </orderedlist>
+  <para>Once we have followed those steps, we should view an screen like the following one:</para>
+  <para><image>imagesdir/Bootstrap/bootstrap_success.png</image></para>
+  <para>Sorry, no more steps :)<br/>
+ This screen means that your project has been created successfully. Congratullations!</para>
+ <note>
+ If you have troubles bootstrapping your new project, please take a look at {@tutorial Lion/Lion.CommonTroubles.pkg}
+ </note>
+ </refsect1>
+ <refsect1 id="{@id bootstrapped_application_structure}">
+  <title>Directory structure on a bootstrapped project</title>
+  <para>Now let see what Lion has created exactly when bootstrapping the project.</para>
+  <para>If we go to the directory where we placed and executed the bootstrap.php, we'll see now a directory structure similar to the following one:</para>
+  <para><image>imagesdir/Bootstrap/bootstrapped_project_directory_structure.png</image></para>
+  <para>Now let see one by one:</para>
+  <para>
+  <itemizedlist>
+    <listitem><emphasis>includepath</emphasis>: This directory contains all the xml files used to define the location of each class file. By default, it contains the includepath.xml file, but Lion will read all the files contained in this directory.</listitem>
+    <listitem><emphasis>config</emphasis>: This directory contains all the xml files used to configure the application.</listitem>
+    <listitem><emphasis>libs/controllers</emphasis>: This directory is usefull to place action controllers.</listitem>
+    <listitem><emphasis>libs/language</emphasis>: This directory is used to define language string files. By default you can create a directory for each language that your application will support. i.e. /libs/language/en (english strings), /libs/language/es (spanish strings)...</listitem>
+    <listitem><emphasis>libs/model</emphasis>: This directory is usefull to place the model classes.</listitem>
+    <listitem><emphasis>templates</emphasis>: This directory is usefull to place the application templates.</listitem>
+    <listitem><emphasis>var</emphasis>: This directory is used to store temporal data such as cache files or compiled templates.</listitem>
+  </itemizedlist>
+  </para>
+  <para>However Lion is enough flexible to allow and support your own directory structure. The only restriction is the includepath directory, being the only one that can not be renamed nor moved.</para>
+ </refsect1>
+</refentry>
+

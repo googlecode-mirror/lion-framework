@@ -1,0 +1,74 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Advanced Hello World</refname>
+  <refpurpose>Using the MVC - Accessing the Model</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ <para>
+    <note>
+    <para>
+    Note that all the source code used in this tutorial is available to <emphasis>download</emphasis> and to <emphasis>see in action</emphasis>:
+    <itemizedlist>
+      <listitem>{@link http://bamboo.lionframework.org/download/[build_key]/artifacts/build-[build_number]/Deliverables/tutorial2-[version].tgz Download the source code}</listitem>
+      <listitem>{@link http://www.lionframework.org/tutorials/[version]/tutorial2 See the application in action}</listitem>
+    </itemizedlist>
+    </para>
+    </note>
+ </para>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Goal</title>
+  <para>The goal of this tutorial is to learn how to use the model layer in Lion application.<br/>
+  The application that we are going to develop makes the same as the one explained in {@tutorial Lion/Tutorials/Lion.tutorial1.pkg} tutorial: shows the 'Hello world' string.</para>
+  <para>The difference between both applications is that the one explained in current tutorial will get the 'Hello world' string from the model instead of hardcoding it directly into the {@link __ModelAndView} instance.</para>
+  <para>What we are going to do in this tutorial is:
+  <itemizedlist>
+    <listitem>To define a model class (libs/model/HelloWorld.class.php)</listitem>
+    <listitem>To declare a model service by modifying the app/config/model_services.xml file</listitem>
+    <listitem>To modify the controller in order to call to the already defined service (libs/controllers/HelloWorldController.class.php)</listitem>
+  </itemizedlist></para>
+  <image>imagesdir/Tutorials/tutorial2/directory_structure.png</image>
+ </refsect1>
+ <refsect1 id="{@id creating_the_model_class}">
+  <title>Creating a model class</title>
+  <para>First thing to do will be to create a model class with a single method to return the 'Hello world' string:</para>
+  {@example samples/tutorial2/libs/model/HelloWorld.class.php}}
+  <para>Pretty simple class, enough for our purposes.</para>
+ </refsect1>
+ <refsect1 id="{@id placing_the_controller}">
+  <title>Placing the model class</title>
+  <para>
+  In Lion the <emphasis>app/libs/model</emphasis> directory is reserved to place model classes into it.</para>
+  <para>There is a mapping rule in the <emphasis>app/config/includepath.xml</emphasis> file to let Lion know that any file in the model directory with the suffix '.class.php' corresponds to a class with the same name without the suffix.</para>
+  <para>
+  Continuing with our example, as our class is HelloWorld, let's name the file as <emphasis>HelloWorld.class.php</emphasis> and place it into the libs/model directory.
+  </para>
+ </refsect1>  
+ <refsect1 id="{@id declaring_the_service}">
+  <title>Declaring a model service</title>
+  <para>Now it's time to declare the service, it is, to let Lion know how to route a call to the model service 'getHelloWorldString'.<br/>
+  For that purpose, let's modify the app/config/model_services.xml file as following:</para>
+  {@example samples/tutorial2/config/model_services.xml}
+  <para>In this rule we are telling to Lion that the service named as 'getHelloWroldString' correspond to the class HelloWorld and method getHelloWroldString<br/>
+  Note that we are grouping services into class nodes because we are going to expose more than one method for each class usually.</para>
+ </refsect1>
+ <refsect1 id="{@id modifying_the_controller}">
+  <title>Modifying the Action Controller</title>
+  <para>Last thing to do will be to modify the Controller in order to get the 'Hello world' string from the model by consuming the already declared model service:</para>
+  {@example samples/tutorial2/libs/controllers/HelloWorldController.class.php}
+  <para>As we can see in the listing above, The class {@link __ModelProxy} is the one to be used to consume model services. This class resolves which model class and method should be called in response to a model service request, making transparent to the action controller the real model class and method that has handled the service call.</para>
+ </refsect1>
+ <refsect1 id="{@id executing_the_hello_world}">
+  <title>Executing the Hello World</title>
+  <para>Now it's time to execute our application. Just type the following url: <underline>http://yourdomain/pathtoyourapplication/helloWorld.html</underline></para>
+  <para>The aspect of our application should be like the following figure:</para>
+  <image>imagesdir/Tutorials/tutorial2/execution_in_browser.png</image>
+  <para>That's all :)</para>
+  <para>Next tutorial shows how to define and use components and event handlers:<br/>
+  {@tutorial Lion/Tutorials/Lion.tutorial3.pkg}
+  </para>
+
+ </refsect1>
+</refentry>

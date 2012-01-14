@@ -1,0 +1,24 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <role-definitions>
+  
+    <!-- REGISTERED_USER is a role for registered users -->
+    <role id="REGISTERED_USER">
+      <permissions>
+        <permission id="PRIVATE_AREA_PERMISSION"/>
+      </permissions>
+    </role>
+
+  </role-definitions>
+  
+  <permission-definitions>
+  
+    <!-- PRIVATE_AREA_PERMISSION is the needed permission 
+         to be able to access to the private area of
+         our website -->
+    <permission id="PRIVATE_AREA_PERMISSION"/>  
+    
+  </permission-definitions>
+  
+</configuration>

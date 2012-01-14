@@ -1,0 +1,42 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Troubleshooting</refname>
+  <refpurpose></refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id q1}">
+  <title>1. I get an error 55601: Unknown Url format</title>
+  <para>Ensure that your web server url rewrite engine is working (i.e. for Apache users: ensure that the <emphasis>mod rewrite</emphasis> module is enabled as well as the Apache <emphasis>AllowOverride</emphasis> directive).</para>
+  <para>Also check the .htaccess file located in the root directory of your application. Sometimes, depending on your server configuration, you may need to fix the directory where your application is located within your web server:
+  {@example Installation/apache_htaccess1.xml}
+  </para>
+  <para><emphasis>Note:</emphasis> Lion has its own Url rewrite engine. A common mistake is to try and make a call directly to the "index.php" file from the browser (i.e. http://yourdomain/index.php).<br/>
+  Instead, try using an URL ending with the <italic>.html</italic> extension (i.e. http://yourdomain/index.html). This is the default url format out of the box for Lion. Don't worry though, you can change this behavior by customizing and defining your own routes. Take a look at {@tutorial Request/Request.UrlRouting.pkg} for more information on how to do this.
+  </para>
+  <para>Also take a look at {@tutorial Lion/Installation/Lion.SystemRequirements.pkg} and {@tutorial Lion/Lion.Install.pkg} section.</para>
+ </refsect1>
+ <refsect1 id="{@id q2}">
+  <title>2. A Forbidden error is shown when I try to execute an application from the browser</title>
+  <para>This is commonly due to a permissions issue.<br/>
+  Just check that the web server user has enough permissions to access to both the Lion framework and to your application files.</para>
+ </refsect1>
+ <refsect1 id="{@id q3}">
+  <title>3. A 404 error is shown when I try to execute the index.html page</title>
+  <para>Your web server is not redirecting requests properly to the index.php file.</para>
+  <para>
+  For Apache users, the most common causes include:
+  <itemizedlist>
+    <listitem>The <emphasis>mod rewrite</emphasis> module is disable.</listitem>
+    <listitem>The AllowOverride directive is disabled.</listitem>
+  </itemizedlist>
+  </para>
+  <para>Take a look at {@tutorial Lion/Installation/Lion.SystemRequirements.pkg} section.</para>
+ </refsect1>
+ <refsect1 id="{@id q4}">
+  <title>4. I get a Javascript error on some tutorials, such as the "Hello World Deluxe".</title>
+  <para>There is a directive in your "settings.ini" file of your Application directory. Just make sure it is set to point to Lion's "forms" location.</para>
+ </refsect1>
+</refentry>

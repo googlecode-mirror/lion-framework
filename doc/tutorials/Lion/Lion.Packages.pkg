@@ -1,0 +1,53 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Packages</refname>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+ <refsect1 id="{@id packagelist}">
+  <title>Package list</title>
+  <para>
+    <itemizedlist>
+      <listitem>Context:</listitem>
+      <packagelist>
+        <listitem><externallink href="../classtrees_Context.html">Context</externallink></listitem>
+        <listitem><externallink href="../classtrees_Cache.html">Cache</externallink></listitem>
+        <listitem><externallink href="../classtrees_Session.html">Session</externallink></listitem>
+        <listitem><externallink href="../classtrees_Configuration.html">Configuration</externallink></listitem>
+      </packagelist>
+      <listitem>Request Dispatcher:</listitem>
+      <packagelist>
+        <listitem><externallink href="../classtrees_UrlRoutingEngine.html">UrlRoutingEngine</externallink></listitem>
+        <listitem><externallink href="../classtrees_FrontController.html">FrontController</externallink></listitem>
+        <listitem><externallink href="../classtrees_Request.html">Request</externallink></listitem>
+        <listitem><externallink href="../classtrees_Response.html">Response</externallink></listitem>
+        <listitem><externallink href="../classtrees_Filter.html">Filter</externallink></listitem>
+        <listitem><externallink href="../classtrees_Client.html">Client</externallink></listitem>
+      </packagelist>
+      <listitem>MVC:</listitem>
+      <packagelist>
+        <listitem><externallink href="../classtrees_ActionController.html">ActionController</externallink></listitem>
+        <listitem><externallink href="../classtrees_Model.html">Model</externallink></listitem>
+        <listitem><externallink href="../classtrees_View.html">View</externallink></listitem>
+        <listitem><externallink href="../classtrees_ComponentModel.html">ComponentModel</externallink></listitem>
+      </packagelist>
+      <listitem>Security:</listitem>
+      <packagelist>
+        <listitem><externallink href="../classtrees_Security.html">Security</externallink></listitem>
+      </packagelist>
+      <listitem>General purpose:</listitem>
+      <packagelist>
+        <listitem><externallink href="../classtrees_Annotation.html">Annotation</externallink></listitem>
+        <listitem><externallink href="../classtrees_Event.html">Event</externallink></listitem>
+        <listitem><externallink href="../classtrees_Exception.html">Exception</externallink></listitem>
+        <listitem><externallink href="../classtrees_I18n.html">I18n</externallink></listitem>
+        <listitem><externallink href="../classtrees_Log.html">Log</externallink></listitem>
+        <listitem><externallink href="../classtrees_Stream.html">Stream</externallink></listitem>
+        <listitem><externallink href="../classtrees_Base.html">Base</externallink></listitem>
+      </packagelist>
+    </itemizedlist>
+  </para>
+ </refsect1>
+
+</refentry>
+

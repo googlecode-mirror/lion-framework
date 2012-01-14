@@ -1,0 +1,14 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Model-View-Presenter</refname>
+  <refpurpose>Handling user interface events</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id MVC_definition}">
+  <title>The Model-View-Presenter pattern</title>
+  <para>todo...</para>
+ </refsect1>
+</refentry>

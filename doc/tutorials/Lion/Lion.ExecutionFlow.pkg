@@ -1,0 +1,51 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Lion Execution Flow</refname>
+  <refpurpose>How client requests are driven</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id introduction}">
+  <title>Introduction</title>
+  <para>A Lion application needs to include an special class to launch the rest of the framework in each request: <emphasis>The Lion Engine</emphasis>.<br/>
+  To include the Lion Engine, we just need to include the file <emphasis>lion.php</emphasis> located in the root directory within the lion distribution.</para>
+  <para>At the same time, there are 3 main parts of the framework architecture that are involved in every request: The <emphasis>Context Container</emphasis>, the <emphasis>Request Dispatcher</emphasis> and the <emphasis>Dual-MVC</emphasis>.</para>
+  <para>The Context Container represents the application itself as an space where all our application instances <italic>live</italic> in. It's loaded by the Lion Engine and used by the rest of the framework to discover all the instances involved in a request.</para>
+  <para>The execution sequence order is, at the very top level, as shown in the following image:</para>
+  <para><image>imagesdir/Lion/basic_lion_lifecycle.png</image></para>
+  <orderedlist>
+    <listitem>The request is routed to the Lion Engine. The Lion Engine loads the Context Container and delegates to the Request Dispatcher.</listitem>
+    <listitem>The Request Dispatcher resolves some of the classes involved in the request, executes some logic and delegates to the Dual-MVC.</listitem>
+    <listitem>The Dual-MVC executes the logic itself to create a response in answer to the given request. Finally, the response is returned through upper layers.</listitem>
+  </orderedlist>
+ </refsect1>
+ <refsect1 id="{@id basic_lifecycle}">
+  <title>Basic life-cycle</title>
+  <para>Now, let's zoom a little bit the execution sequence explained above:</para>
+  <para><image>imagesdir/Lion/lion_lifecycle.png</image></para>
+  <orderedlist>
+    <listitem>The request arrives to our <emphasis>index.php</emphasis>. The index.php does not belong to lion framework but to our application. It includes the Lion Engine in which delegates the execution to.</listitem>
+    <floatnote>Note that we must redirect all the request to the index.php file. Lion applications contains a <emphasis>.htaccess</emphasis> prepared to do that out of the box.<br/>
+    The URL route engine of Lion will route the request to a controller or the other one depending on the URL.</floatnote>
+    <listitem>The index.php includes de <emphasis>lion.php</emphasis> file in which delegates to. As explained below, lion.php contains the Lion Engine.</listitem>
+    <listitem>The Lion engine initializes the <emphasis>Application Context</emphasis> in which the rest of our application instances are contained in. Once the application context has been started-up, it loads the configuration which will be used to setup the rest of the instances.</listitem>
+    <listitem>Once the Application Context has been initialized, the request is sent to the <emphasis>Url Route Engine</emphasis> which is the component in charge of parse the incoming request URL and determine the best route to redirect the request to. A route is basically the combination of the following information:
+      <itemizedlist>
+        <listitem>The intercepting filters to be executed to.</listitem>
+        <listitem>The front controller to handle the request to.</listitem>
+        <listitem>The controller to handle the request.</listitem>
+        <listitem>The parameters to be added to the request (or modified) previous to call the controller.</listitem>
+      </itemizedlist>
+    </listitem>
+    <listitem>After the route is resolved, the request is intercepted by the <emphasis>filters</emphasis> associated to it. Filters have logic to be executed before and after calling the front controller.</listitem>
+    <listitem>Once the filters has been executed, the <emphasis>Front Controller</emphasis> get the control. The front controller contains generic logic associated to each kind of request. i.e. the {@link __HttpFrontController} contains logic associated to HTTP incoming requests while the {@link __CommandLineFrontController} contains logic associated to command line executions.</listitem>
+    <listitem>The front controller delegates to the Dual-MVC. In that sense, an <emphasis>Action Controller</emphasis> is resolved to attend the request. The Action Controller is a class usually representing the requested page (in a web environment) which usually retrieves a portion from the Model to send to the view, according to the MVC pattern.</listitem>
+    <listitem>Finally, the controller returns the control to the <emphasis>view</emphasis>. The view is the MVC piece in charge of rendering the user interface, it is, how the information will be shown to the user.</listitem>
+    <listitem>While the view is being executed, the <emphasis>Event Handler</emphasis> associated to it will be called. In that sense, the view delegates to the Event Handler in order to perform some operations associated basically to user interface controls. The Event Handler will be also able to access to the Model for his own purposes, like the Action Controller.</listitem>
+    <listitem>Finally, the rendered view will be returned as part of the response to the <emphasis>Front Controller</emphasis>.</listitem>
+    <listitem>The Front Controller at the same time returns the response to the upper layer, being executed again all the filters associated to the current route.</listitem>
+  </orderedlist>
+ </refsect1>
+</refentry>

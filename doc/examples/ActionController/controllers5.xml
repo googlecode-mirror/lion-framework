@@ -1,0 +1,12 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <controller-definitions>
+
+    <controller code="admin_*" class="*AdminController">
+      <permission id="ADMIN"/>  
+    </controller>
+  
+  </controller-definitions>
+  
+</configuration>

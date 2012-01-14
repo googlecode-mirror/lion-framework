@@ -1,0 +1,19 @@
+<?xml version = "1.0" standalone="yes"?>
+
+<configuration>
+
+  <model-services>
+
+    <!-- Invoice services -->
+    <instance id="invoiceDao">
+      <service name = "getAllInvoices" class-method = "loadAll"/>
+      <service name = "getInvoice"     class-method = "load"/>
+      <!-- Need the SAVE_INVOICES_PERMISSION to call to this service: -->
+      <service name = "saveInvoice"    class-method = "save">
+        <permission id="SAVE_INVOICES_PERMISSION"/>
+      </service>
+    </instance>
+    
+  </model-services>
+  
+</configuration>

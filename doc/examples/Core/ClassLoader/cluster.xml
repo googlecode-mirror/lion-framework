@@ -1,0 +1,8 @@
+<?xml version = "1.0" standalone="yes"?>
+<classes>
+
+  <cluster name="My classes" path="/libs/classes">
+    ...
+  </cluster>
+
+</classes>

@@ -1,0 +1,26 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Exceptions and I18n</refname>
+  <refpurpose>Internationalizating Exceptions</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id error_table}">
+  <title>The error table and I18n</title>
+  <para>One of the most valuable benefits of using an error table (app/config/errors.xml) is how easy is to maintain I18n strings bound to each exception.<br />
+  i.e.</para>
+  {@example Exception/errors.xml}
+  <para>Now we can declare a I18n file for each language, setting an entry with the same name as the id assigned to each error within the error table.</para>
+  <para>If we have an error with id <emphasis>ERR_WRONG_USERNAME_OR_PASSWORD</emphasis>, this is the entry that we must set in our I18n files.</para>
+  <para>i.e.
+  {@example Exception/errors.ini}
+  </para>
+  <para>It's important to note that we must configure I18n strings as per session in case the exceptions may happens in whatever page, otherwise as per request.</para>
+  <para>However, recommend to configure them as per session since eases refactorizations</para>
+  <para>i.e.
+  {@example Exception/I18n.xml}
+  </para> 
+ </refsect1>
+</refentry>

@@ -1,0 +1,18 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="myInvoiceDao" class="InvoiceDAO">
+    
+        <!-- via the value attribute (shortcut of value node) -->
+        <property name="id" value="invoiceDao"/>
+        
+    </context-instance>
+
+    ...    
+
+  </context-instances>
+  
+</configuration>
+

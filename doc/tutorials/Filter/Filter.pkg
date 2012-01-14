@@ -1,0 +1,49 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Request Intercepting Filters</refname>
+  <refpurpose>Filtering requests</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction</title>
+   <para>Lion defines a complete infrastructure of modules and classes to dispatch and transform client requests in terms of application components.<br/>
+   The request dispatching mechanism receives many different types of requests, which require varied types of processing. Some requests are simply forwarded to a concrete controller, while other requests must be modified, audited, or uncompressed before being further processed.</para>
+   <para>When a request enters on Lion, it often must pass several entrance tests prior to the main processing stage. i.e. perform the user authentication, switch the language, validate certain constraints, ...</para>
+   <para>The key to solving this problem in a flexible and unobtrusive manner is to have a simple mechanism for adding and removing processing components, in which each component completes a specific filtering action. This pattern is known as <emphasis>intercepting filter</emphasis>, which is one of the most interesting features on Lion request dispatcher system.</para>
+ </refsect1>
+ <refsect1 id="{@id interecing_filter}">
+  <title>Intercepting filter pattern</title>
+   <para>Filters intercept incoming requests and outgoing responses, allowing preprocessing and post-processing. We are able to add and remove these filters unobtrusively, without requiring changes to our existing code.</para>
+   <note>Lion intercepting filter has been based on the J2EE intercepting filter pattern.<br/>
+   To learn more about this pattern, take a look at {@link http://java.sun.com/blueprints/corej2eepatterns/Patterns/InterceptingFilter.html Core J2EE Patterns - Intercepting Filter}
+   </note>
+   <para>Execution life-cycle is as shown in the following sequence:</para>
+   <image>imagesdir/Request/interceptingFilter.png</image>
+   <para>Filters are executed before giving the control to the front controller (preFilter) and after returning the response to the client (postFilter).</para>
+   <para>A filter is a class extending the {@link __Filter} abstract class, which contains a template method to allow the execution of code before and after giving the control to the front controller.<br/>
+   A filter class has the following appearance:
+   {@example Request/InterceptingFilterClass.class.php}
+   </para>
+   <para>However, we are able to just implement one of those methods, depending on the concrete filter.<br/>
+   i.e., imagine a filter to intercept when the currency parameter is present within the request in order to execute specific code before giving the control to the front controller:
+   {@example Request/InterceptingFilter.class.php}
+   </para>
+ </refsect1>
+ <refsect1 id="{@id interecing_filter_and_routes}">
+  <title>Intercepting filter and Routes</title>
+   <para>Filters are associated to routes declaratively within the configuration.<br/>
+   When lion resolves a route depending on the request, it recover the filter chain associated to the route and executes it.</para>
+   <para>The way to associate a filter to a route is within the configuration, inside the <italic>filters</italic> section.</para>
+   <para>i.e.
+   {@example Request/interceptingfilter.xml}
+   in this example, we are associating our filter to the <italic>myRoute</italic> route, which means that lion will execute this filter just when the request belong to the <italic>myRoute</italic> route.</para>
+   <note>To learn more about routes, see the {@tutorial Request/Request.UrlRouting.pkg} section.</note>
+   <para>We can also associate a filter to all the available routes, for all of those filters which must be executed always.<br/>
+   i.e., imagine that the currency filter of the example above must be executed for every request:
+   {@example Request/interceptingfilter1.xml}
+   </para>
+ </refsect1>
+</refentry>

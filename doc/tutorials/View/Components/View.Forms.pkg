@@ -1,0 +1,14 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Working with forms</refname>
+  <refpurpose>Component based forms</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id events}">
+  <title>Introduction</title>
+  <para>aslkdfj</para>
+ </refsect1>
+</refentry>

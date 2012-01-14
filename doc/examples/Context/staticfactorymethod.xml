@@ -1,0 +1,12 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="exampleInstance"
+                   class="ExampleClass"
+          factory-method="createInstance"/>
+
+  </context-instances>
+  
+</configuration>

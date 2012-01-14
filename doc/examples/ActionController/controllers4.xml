@@ -1,0 +1,14 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <controller-definitions>
+
+    <controller code = "ssl_*" 
+               class = "Ssl*Controller">
+      <property name = "requireSsl" 
+               value = "true"/>
+    </controller>
+
+  </controller-definitions>
+  
+</configuration>

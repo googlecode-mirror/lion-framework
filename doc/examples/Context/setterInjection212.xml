@@ -1,0 +1,23 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="myDaoManager" class="DaoManager">
+    
+        <!-- via a hash -->
+        <property name="daos">
+          <list>
+            <entry key="Invoice"><ref id="invoiceDao"/></entry>
+            <entry key="Company"><ref id="companyDao"/></entry>
+            <entry key="Customer"><ref id="customerDao"/></entry>
+          </list>
+        </property>
+        
+    </context-instance>
+
+    ...    
+
+  </context-instances>
+  
+</configuration>

@@ -1,0 +1,69 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Configuration</refname>
+  <refpurpose>Configurating your application</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction</title>
+  <para>The premise for the Lion configuration system is simple: to provide developers with a consistent manner for storing and reading configuration information.</para>
+  <para>The Lion configuration system features an extensible infrastructure opened for extension, providing the following benefits:</para>
+  <para>
+    <itemizedlist>
+      <listitem>Configuration information is allowed to be stored in several formats (XML, .ini files, ...) as well as in multiple configuration files. In that sense, Lion offers a flexible way to organize the configuration within an application.</listitem>
+      <listitem>Configuration information is cached once it has been parsed and transformed. So there are not performance penalties in that sense.</listitem>
+      <listitem>Lion configuration system is extensible. You can define new configuration parameters and write configuration section handlers to process them.</listitem>
+      <listitem>Lion protects configuration files from outside access to prevent direct browser access to configuration files.</listitem>
+    </itemizedlist>
+  </para>
+ </refsect1>
+ <refsect1 id="{@id configuration}">
+  <title>The main configuration file</title>
+  <para>The first configuration file that Lion reads is one located at <emphasis>/app/config.xml</emphasis>.</para>
+  <note>
+    <para>The application context directory is the <emphasis>/app</emphasis> directory. However, lion support multiple contexts within the same application.</para>
+    <para>See the {@link Context/Context.pkg} section for more information about contexts in lion.</para>
+  </note>
+  <para>However, Lion has a mechanism to organize the configuration in multiple files. This capability eases the configuration maintainment.</para>
+  <para>Let see it with an example:</para>
+  <para>
+    {@example BootstrappedApplication/config.xml}
+  </para>
+  <para>In this file we can see a bundle of <emphasis>include</emphasis> directives. Those directives let Lion know which other files belong to the configuration.</para>
+ <refsect2 id="{@id configuration_directives}">
+  <title>Configuration directives</title>
+  <para>The configuration-directives section contains the directives that the {@link __ConfigurationLoader} will follow to parsing the configuration settings.</para>
+  <para>In this section we can define:</para>
+  <para>
+  <itemizedlist>
+    <listitem><emphasis>configuration-basedir</emphasis> directive, which is the directory where the configuration files will be located by default. In fact, this is the first directory that lion search when a configuration file is specified by ussing the <emphasis>config</emphasis> protocol, i.e. <italic>config://controllers.xml</italic>.</listitem>
+    <listitem><emphasis>section-handler</emphasis> directives, which allow us to extend the configuration system by adding custom section handlers.<br/>
+    See the {@tutorial Configuration/Configuration.SectionHandler.pkg} section for more information.</listitem>
+  </itemizedlist>
+  </para>
+ </refsect2>
+ <refsect2 id="{@id include_tags}">
+  <title>Include sections</title>
+  <para>The use of include allows us to define which other files are part of the configuration settings.</para>
+  <para>Internally, lion will get the content of each included file (once it has been transformed as a tree) and will put in the tree location where the include section resides.</para>
+  <para>i.e., if we have this <italic>config.xml</italic> file:
+    {@example Configuration/config1.xml}
+  and this <italic>i18n.xml</italic> file located in the config directory:
+    {@example Configuration/i18n.xml}
+  it has the same effect than to have just the following <italic>config.xml</italic> file:
+    {@example Configuration/config2.xml}
+  </para>
+  <para>Note that because the supported-languages section is a child section of the configuration section, it is included within this section in the main configuration file.</para>
+  <para>One of the most important aspects to have into account is the fact that Lion does not compose a single configuration file when reading the include sections. It just build multiple trees by ussing the configuration classes designed for that purpose.<br/>
+  This feature allow us to have files in different formats, structures and natures within the same context.</para>
+ </refsect2>
+ </refsect1>
+ <refsect1 id="{@id included_files}">
+  <title>Default configuration sections</title>
+  <para></para>
+ </refsect1>
+</refentry>
+

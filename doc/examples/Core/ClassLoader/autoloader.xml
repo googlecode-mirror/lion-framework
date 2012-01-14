@@ -1,0 +1,10 @@
+<?xml version = "1.0" standalone="yes"?>
+<classes>
+
+  <autoload class="Doctrine" method="autoload"/>
+
+  <cluster name="Doctrine classes" path="path_to_doctrine_lib">
+    <class name="Doctrine" file="Doctrine.php"/>
+  </cluster>
+
+</classes>

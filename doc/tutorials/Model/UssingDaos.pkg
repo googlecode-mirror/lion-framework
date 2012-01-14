@@ -1,0 +1,20 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Ussing DAOs</refname>
+  <refpurpose>Isolating data access layer</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id whats_a_dao}">
+  <title>What's a DAO</title>
+  <para>a Data Access Object (DAO) is an object that provides an abstract interface to some type of database or persistence mechanism, providing some specific operations without exposing details of the database. This isolation separates the concerns of what data accesses the application needs, in terms of domain-specific objects and data types (the public interface of the DAO), and how these needs can be satisfied with a specific DBMS, database schema, etc. (the implementation of the DAO).</para>
+  <para>The advantage of using data access objects is the relatively simple and rigorous separation between two important parts of an application which can and should know almost nothing of each other, and which can be expected to evolve frequently and independently.<br/>
+  Changing business logic can rely on the same DAO interface, while changes to persistence logic do not affect DAO clients as long as the interface remains correctly implemented.</para>
+ </refsect1>
+ <refsect1 id="@id configuring_daos}">
+  <title>Configuring DAOs</title>
+  
+ </refsect1>
+</refentry>

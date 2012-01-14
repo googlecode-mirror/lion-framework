@@ -1,0 +1,28 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="authorizationManager" class="__AuthorizationManager"/>
+
+    <context-instance id="authenticationManager" class="__AuthenticationManager">
+      <property name="authenticators">
+        <list>
+          <ref id="authenticator"/>
+        </list>
+      </property>
+    </context-instance>
+
+    <context-instance id="authenticator" class="__Authenticator">
+      <property name="userLoader">
+        <ref id="userLoader"/>
+      </property>
+    </context-instance>
+    
+    <!-- Set our custom user loader as the 
+         authentication user loader: -->
+    <context-instance id="userLoader" class="CustomUserLoader"/>
+    
+  </context-instances>
+  
+</configuration>

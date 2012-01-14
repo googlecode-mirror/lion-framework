@@ -1,0 +1,12 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <controller-definitions>
+
+    <controller code="adminForum" class="AdminForumController">
+      <permission id="ADMIN_POSTS"/>  
+    </controller>
+
+  </controller-definitions>
+  
+</configuration>

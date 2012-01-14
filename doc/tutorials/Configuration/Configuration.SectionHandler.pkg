@@ -1,0 +1,57 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Section Handlers</refname>
+  <refpurpose>Extending the configuration system</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction</title>
+  <para>Configuration can be organized in sections, which is not bound to a concrete configuration format.<br/>
+  Sections group configuration settings in order to have them organized according to the purpose they represent in terms of the application.<br/>
+  However, we may want to handle each section in a different way and assign different classes to load them.</para>
+  <para>The Lion configuration system provides an easy way to assign classes to handle concrete sections as well as accessors to get them.<br/>
+  {@link __Configuration} is the class for providing developer's access to their configuration. We can retrieve the configuration linked to a concrete context container by calling the {@link __Context::getConfiguration()} accessor.<br/>
+  The {@link __Configuration} class exposes an accessor which provides a way for the developer to request the configuration settings for a specific section: {@link __Configuration::getSection()}</para>
+  <para>We may also want to create custom configuration sections and classes to handle them. In that sense Lions provides an interface designed for that purpose: {@link __ISectionHandler}.<br/>
+  All we have to do is to implement this interface which defines just one single method: {@link __ISectionHandler::process()}. This method receives a callback when Lion intercepts a request to retrieve the associated configuration section. In the other hand, this method will receive an object representing the configuration section with accessors to navigate through the entire section structure.<br/>
+  This mechanism allows us to ignore details such as where the configuration files are located, parsing the configuration file for the particular section, and opening or closing the file.</para>
+  <para>
+  <image>imagesdir/Configuration/sectionhandlerprocess.png</image>
+  </para>
+  <para>Any call to get any section from the configuration system will be intercepted by Lion.<br/>
+  If the requested section has a section handler associated, Lion will execute the {@link __ISectionHandler::process()} method and return the obtained result from the section handler instead of the object representing the section.</para>
+ </refsect1>
+ <refsect1 id="{@id creating_section_handlers}">
+  <title>Creating a section handler</title>
+  <para>Create a section handler is as simple as implement the {@link __ISectionHandler}.<br/>
+  At the same time, implement the {@link __ISectionHandler} is as simple as implement the {@link __ISectionHandler::process()} method.</para>
+  <para>The {@link __ISectionHandler::process()} receives a {@link __ConfigurationSection} instance representing the requested section. This object exposes several methods to ease the navigation through the section content.</para>
+  <para>i.e., imagine the following configuration file:
+    {@example Configuration/foobar.xml}
+  </para>
+  <para>Now, a valid section handler to transform the configuration section in terms of Foo instances could be like the following one:</para>
+  <para>
+    {@example Configuration/SectionHandler.class.php}
+  </para>
+ </refsect1>
+ <refsect1 id="{@id enabling_section_handlers}">
+  <title>Enabling a section handler</title>
+  <para>Once we have defined a section handler we'll need to let Lion know which concrete section will be handled by it.<br/>
+  To do that, we'll add a new section-handler directive within the configuration-directives section.</para>
+  <para>i.e. continuing with our example, to enable the FooBarsSectionHandler to handle foobars section, will define the following section-handler directive:</para>
+  <para>
+    {@example Configuration/config3.xml}
+  </para>
+ </refsect1>
+ <refsect1 id="{@id requesting_sections}">
+  <title>Requesting a configuration section</title>
+  <para>Finally, to request a section within the configuration, we'll use the {@link __Configuration::getSection()} method:</para>
+  <para>i.e. continuing with our example:
+    {@example Configuration/getSection.php}
+  </para>
+ </refsect1>
+</refentry>
+

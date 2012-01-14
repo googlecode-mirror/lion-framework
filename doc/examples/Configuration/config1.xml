@@ -1,0 +1,10 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <configuration-directives>
+    <configuration-basedir>config</configuration-basedir>
+  </configuration-directives>
+  
+  <include>config://i18n.xml</include>
+  
+</configuration>

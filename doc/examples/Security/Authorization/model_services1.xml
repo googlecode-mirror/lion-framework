@@ -1,0 +1,21 @@
+<?xml version = "1.0" standalone="yes"?>
+ 
+<configuration>
+ 
+  <model-services>
+  
+    <class name="ForumManager">
+
+      <service name="getPosts" class-method="getPosts">
+        <permission id="READ_POSTS"/>
+      </service>
+
+      <service name="createPost" class-method="createPost">
+        <permission id="WRITE_POSTS"/>
+      </service>
+
+    </class>
+  
+  </model-services>
+  
+</configuration>

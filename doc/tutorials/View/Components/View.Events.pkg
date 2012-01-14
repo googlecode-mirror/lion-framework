@@ -1,0 +1,119 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Lion Events</refname>
+  <refpurpose>Event types in lion framework</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id events}">
+  <title>Events in Lion</title>
+  <para>Lion has been designed in order to be able to support not just HTML but whatever kind of user interface.<br/>
+  In that sense, event types depend on the interface nature that we are working with.</para>
+  <para>We can talk about 2 different event types:
+    <itemizedlist>
+      <listitem>DOM Level 2 Events: Raised by HTML based components since they are rendered as HTML elements</listitem>
+      <listitem>Lion custom events: Custom events raised by some components (i.e. the validate event raised by a validator component)</listitem>
+    </itemizedlist>
+  </para>
+ </refsect1>  
+ <refsect1 id="{@id domlevel2_events}">
+  <title>DOM Level 2 Events</title>
+  <para>DOM Level 2 events are raised by HTML based components. i.e., since a button component it's represented by a HTML button, it raises the click event defined on DOM Level 2 specification when clicked, not a custom event</para>
+  <para>The following list shows DOM Level 2 events:</para>
+  <para>
+   <table frame="all" id="{@id definitions_table}">
+    <tgroup cols="3">
+    <thead align="center">
+     <row>
+      <entry><emphasis>Name</emphasis></entry>
+      <entry><emphasis>Definition</emphasis></entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>click</entry>
+      <entry>The click event occurs when the pointing device button is clicked over an element. A click is defined as a mousedown and mouseup over the same screen location. The sequence of these events is: mousedown, mouseup, click.</entry>
+     </row>
+     <row>
+      <entry>mousedown</entry>
+      <entry>The mousedown event occurs when the pointing device button is pressed over an element. This event is valid for most elements.</entry>
+     </row>
+     <row>
+      <entry>mouseup</entry>
+      <entry>The mousedown event occurs when the pointing device button is pressed over an element. This event is valid for most elements.</entry>
+     </row>
+     <row>
+      <entry>mouseover</entry>
+      <entry>The mouseover event occurs when the pointing device is moved onto an element. This event is valid for most elements.</entry>
+     </row>
+     <row>
+      <entry>mousemove</entry>
+      <entry>The mousemove event occurs when the pointing device is moved while it is over an element. This event is valid for most elements.</entry>
+     </row>
+     <row>
+      <entry>mouseout</entry>
+      <entry>The mouseout event occurs when the pointing device is moved away from an element. This event is valid for most elements.</entry>
+     </row>
+     <row>
+      <entry>load</entry>
+      <entry>The load event occurs when the DOM implementation finishes loading all content within a document, all frames within a FRAMESET, or an OBJECT element.</entry>
+     </row>
+     <row>
+      <entry>unload</entry>
+      <entry>The unload event occurs when the DOM implementation removes a document from a window or frame. This event is valid for BODY and FRAMESET elements.</entry>
+     </row>
+     <row>
+      <entry>abort</entry>
+      <entry>The abort event occurs when page loading is stopped before an image has been allowed to completely load. This event applies to OBJECT elements.</entry>
+     </row>
+     <row>
+      <entry>error</entry>
+      <entry>The error event occurs when an image does not load properly or when an error occurs during script execution. This event is valid for OBJECT elements, BODY elements, and FRAMESET element.</entry>
+     </row>
+     <row>
+      <entry>select</entry>
+      <entry>The select event occurs when a user selects some text in a text field. This event is valid for INPUT and TEXTAREA elements.</entry>
+     </row>
+     <row>
+      <entry>change</entry>
+      <entry>The change event occurs when a control loses the input focus and its value has been modified since gaining focus. This event is valid for INPUT, SELECT, and TEXTAREA. element.</entry>
+     </row>
+     <row>
+      <entry>submit</entry>
+      <entry>The submit event occurs when a form is submitted. This event only applies to the FORM element.</entry>
+     </row>
+     <row>
+      <entry>reset</entry>
+      <entry>The reset event occurs when a form is reset. This event only applies to the FORM element.</entry>
+     </row>
+     <row>
+      <entry>focus</entry>
+      <entry>The focus event occurs when an element receives focus either via a pointing device or by tabbing navigation. This event is valid for the following elements: LABEL, INPUT, SELECT, TEXTAREA, and BUTTON.</entry>
+     </row>
+     <row>
+      <entry>blur</entry>
+      <entry>The blur event occurs when an element loses focus either via the pointing device or by tabbing navigation. This event is valid for the following elements: LABEL, INPUT, SELECT, TEXTAREA, and BUTTON.</entry>
+     </row>
+     <row>
+      <entry>resize</entry>
+      <entry>The resize event occurs when a document view is resized.</entry>
+     </row>
+     <row>
+      <entry>scroll</entry>
+      <entry>The scroll event occurs when a document view is scrolled.</entry>
+     </row>
+    </tbody>
+    </tgroup>
+   </table>
+  </para>
+  <para>Not all the components are able to raise all the events. So, is a developer task to ensure that a concrete component is able to raise a concrete event.</para>
+ </refsect1>
+ <refsect1 id="{@id custom_events}">
+  <title>Lion Custom Events</title>
+  <para>Lion also support the execution of custom events, raised from the client by components and handled by the server.<br/>
+  Those events depend on the component but not on how components are rendered as HTML elements.</para>
+  <para>i.e., a validator component raises a <italic>validate</italic> event in case a validation method has been defined in an event handler. However, this event is a custom event designed just for that purpose.</para>
+ </refsect1>
+</refentry>

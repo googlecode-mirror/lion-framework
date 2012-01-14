@@ -1,0 +1,57 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Component types</refname>
+  <refpurpose>What a wonderful components world</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id component_types}">
+  <title>Classification</title>
+   <para>Depending on the point of view we can consider the following component types:</para>
+   <itemizedlist>
+     <listitem>Poolable and non-poolable components</listitem>
+     <listitem>Container and non-container components</listitem>
+     <listitem>Valueholder and non-valueholder components</listitem>
+     <listitem>Validator and non-validator components</listitem>
+     <listitem>A component can also be a composition from other components</listitem>
+   </itemizedlist>
+   <image>imagesdir/View/Components/componentmodel.png</image>
+   <refsect2 id="{@id poolable_components}">
+    <title>Poolable components</title>
+     <para>Poolable components persist along the user session. Internally, the component lives within the component pool, a class designed for that purpose.<br/>
+     A component implementing the {@link __IPoolable} is recognized by Lion as a poolable component. A non-poolable component just lives during the request, being not available to ajax calls nor the session.</para>
+     <para>A component is created the first time the container view is rendered.<br/>
+     A non-poolable component is created once and again the container view is rendered within different requests (during the same request, each component is created once).<br/>
+     If the component is poolable, it persists during the user session.</para>
+     <para>i.e. A textbox is created the first time the page containing it is shown. After that, it persists during the user session.<br/>
+     It means that the textbox will remember the latest filled value, even if the user navigates to another page and come back again. In that sense, a component need to be reset or deleted to keep back the blank.</para>
+   </refsect2>
+   <refsect2 id="{@id container_components}">
+    <title>Container components</title>
+     <para>A component can (or not) contain more components. A component which is able to contain other components is a <italic>container</italic> component.<br/>
+     A component implementing the {@link __IContainer} is recognized by Lion as a container component. A non-container component can not contain other components.</para>
+     <para>It's a common practice to, instead of implementing the {@link __IContainer}, just extend the {@link __UIContainer} class.</para>
+   </refsect2>
+   <refsect2 id="{@id valueholders_components}">
+    <title>Valueholder components</title>
+     <para>A component can (or not) be a valueholder. A valueholder component is a component containing a value (i.e. the typical form component, such a textbox).<br/>
+     A component implementing the {@link __IValueHolder} is recognized by Lion as a valueholder component.</para>
+     <para>It's a common practice to, instead of implementing the {@link __IValueHolder}, just extend the {@link __InputComponent} class.</para>
+   </refsect2>
+   <refsect2 id="{@id container_components}">
+    <title>Validator components</title>
+     <para>A component can (or not) validate other components. A validator is designed commonly in order to validate values contained in valueholders.<br/>
+     A component implementing the {@link __IValidator} is recognized by Lion as a validator component.</para>
+     <para>It's a common practice to, instead of implementing the {@link __IValidator}, just extend the {@link __ValidationRuleComponent} class.</para>
+   </refsect2>
+   <refsect2 id="{@id composite_components}">
+    <title>Composite components</title>
+     <para>A component can also be a composition from other components.<br/>
+     The most typical implementation is by a view defining the component from others, with defines his own event handler to dispatch events raised from children components.</para>
+     <para>From outside the component, all the children components are part of the same component, which means that can't be handled individually.</para>
+     <para>It's a common practice to, instead of implementing the {@link __IComposite}, just extend the {@link __Composite} class.</para>
+   </refsect2>
+ </refsect1>
+</refentry>

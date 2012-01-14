@@ -1,0 +1,20 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <!-- Prototype instance -->
+    <context-instance id="exampleInstance"
+                   class="ExampleInstance"
+               singleton="false"/>
+               
+    <!-- Singleton instance -->
+    <context-instance id="yetAnotherExample"
+                   class="ExampleInstanceTwo" 
+               singleton="true"/>
+
+  </context-instances>
+  
+</configuration>
+
+

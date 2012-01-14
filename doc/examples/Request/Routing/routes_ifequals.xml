@@ -1,0 +1,20 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <routes>
+ 
+    <route id="search" uri-pattern="\/$module\/$search_id\.$extension$">
+      <front-controller class="__HttpFrontController"/>
+      <action controller="$module" code="search"/>
+
+      <if-equals variable="$extension" value="html">
+        <parameter name="use_cache" value="1"/>
+      </if-equals>
+
+      <parameter name="search_id" value="$search_id"/>
+      <variable name="$module" var-pattern="^(invoices|clients|accounts)$"/>
+      <variable name="$search_id" var-pattern="^\d+$"/>
+      <variable name="$extension" var-pattern="^(html|action)$"/>
+    </route>
+
+</configuration>

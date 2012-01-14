@@ -1,0 +1,91 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Component Tag Language</refname>
+  <refpurpose>Declaring user interface controls</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id component_tag_language}">
+  <title>Component Tag Language</title>
+  <para>The component tag language eases the definition of user interface components within our templates.<br/>
+  Component tag language offers an extendible XML-based syntax that is interpreted by the framework and replaced by client-side specific code in run-time (i.e. XHTML + javascript code).</para>
+  <para>Note that components can be declared by using the tag language just in template based views. Out of the box Lion uses a view based on Smarty templates to render the user interface.</para>
+ <refsect2 id="{@id defining_components}">
+  <title>Declaring Components</title>
+  <para>The component tag has the following syntax:</para>
+  <floatnote>
+    <para>Do not assign template placeholders to component properties.<br/>
+    To initialize a component with a value taken from the model, use the {@link __EventHandler::init()} method.</para>
+    <para>See the {@tutorial View/Components/View.EventManagementSystem.pkg} section for more information.</para>
+  </floatnote>
+  <para>
+  <syntaxdefinition>
+  &lt;comp:<italic>tag</italic> <br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;[name="<italic>component-name</italic>"]<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;[<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<italic>property = value</italic><br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;]*<br/>
+  /&gt;<br/>
+  </syntaxdefinition>
+  </para>
+  <para>where<br/>
+  <itemizedlist>
+    <listitem><emphasis>tag</emphasis> is a name identifying the component that the tag represents to (i.e. commandbutton, inputbox, ...).</listitem>
+    <listitem><emphasis>component-name</emphasis> is a name to identify a concrete component instance. This parameter is optional. If no names are supplied, a default one will be assigned to the component.</listitem>
+    <listitem>The list of pair <emphasis>property-value</emphasis> is a set of initial values to setup a component.</listitem>
+  </itemizedlist>
+  </para>
+  <para>i.e.
+    {@example View/Components/componentsExample1.tpl}
+  In this example, we have defined 2 components, a command button and an input box.<br/>
+  An yes, components are defined within the template content as part of.</para>
+ </refsect2>
+ <refsect2 id="{@id defining_containers}">
+  <title>Defining Containers</title>
+  <para>A component can be also defined by ussing a pair begin-end tags. It allows to close a piece of template content:</para>
+  <para>
+  <syntaxdefinition>
+  &lt;comp:<italic>tag</italic> <br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;[name="<italic>component-name</italic>"]<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;[<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<italic>property = value</italic><br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;]*<br/>
+  &gt;<br/>
+  <br/>
+  ...<br/>
+  <br/>
+  &lt;/comp:<italic>tag</italic>&gt;<br/>
+  </syntaxdefinition>
+  </para>
+  <para>In that case, the content closed by the component can also contain other component tags. In that case, the component acts as container.</para>
+  <para>i.e.
+    {@example View/Components/componentsExample2.tpl}
+  </para>
+ </refsect2>
+ <refsect2 id="{@id defining_properties}">
+  <title>Defining Properties</title>
+  <para>Finally, a component can define properties within the enclosed area by ussing the <emphasis>comp-property</emphasis> tag.<br/>
+  This is really usefull to assign components as property for other components.</para>
+  <para>
+  The syntax for ussing the comp-property is the following one:</para>
+  <para>
+  <syntaxdefinition>
+  &lt;comp-property name="<italic>property-name</italic>"&gt;<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;(property value goes here)<br/>
+  &lt;/comp-property&gt;<br/>
+  </syntaxdefinition>
+  </para>
+  <para>i.e.
+    {@example View/Components/componentsExample3.tpl}
+    In this example we are using the comp-property tag to assign a component to the caption property.
+  </para>
+  <para>It's really important to note that we can not use template placeholders as attribute values within component tags, because the template is processed before the component render engine parses it.</para>
+  <para>However, Lion offers a workarround by ussing the tag comp-property as we have seen. i.e.:
+    {@example View/Components/componentsExample3bis.tpl}
+    In this example, we can not assign directly the placeholder <italic>about_us_literal</italic> as an attribute value, but we have the workarround of ussing the comp-property tag for the same purpose.</para>
+ </refsect2>
+ <para>The {@tutorial Lion/Tutorials/Lion.tutorial3.pkg} is a simple but practical tutorial regarding components and event handlers.</para>
+ </refsect1>
+</refentry>

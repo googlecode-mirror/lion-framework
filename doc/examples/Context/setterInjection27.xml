@@ -1,0 +1,24 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="errorHandler" class="ErrorHandler">
+    
+        <!-- via a hash -->
+        <property name="exceptionClasses">
+          <list>
+            <entry key="Model"><value>ModelException</value></entry>
+            <entry key="Database"><value>DatabaseException</value></entry>
+            <entry key="ORM"><value>ORMException</value></entry>
+          </list>
+        </property>
+        
+    </context-instance>
+
+    ...    
+
+  </context-instances>
+  
+</configuration>
+

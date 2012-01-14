@@ -1,0 +1,15 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Resource Providers</refname>
+  <refpurpose>Managing I18n resources storage</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>What's a resource providers</title>
+  <para>Resource</para>
+ </refsect1> 
+</refentry>
+

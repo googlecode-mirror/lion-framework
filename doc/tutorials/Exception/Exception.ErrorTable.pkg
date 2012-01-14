@@ -1,0 +1,35 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Error Table</refname>
+  <refpurpose>Classifying Exceptions</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id error_table}">
+  <title>The Error Table</title>
+  <para>Exceptions can be declared and classified in the errors.xml file (app/config/errors.xml).<br />
+  i.e.</para>
+  {@example Exception/errors.xml}
+  <para>What we're doing in the errors.xml is to group exceptions according to their nature. 
+  Each group has an specific Exception class that will be used in case an exception within the group is raised to. In the example above, look the <italic>exception-class</italic> attribute declare for each group.</para>
+  <para>To use an error table has 3 main advantages:</para>
+  <orderedlist>
+    <listitem>It decouples the usage of an exception class or the other one depending on a given error, making it transparent to our application.</listitem>
+    <listitem>It eases the internationalization of our exception messages. See {@tutorial Exception/Exception.I18n/pkg}.</listitem>
+    <listitem>It eases the maintenance of all our exceptions within a single place as well as the assignment of error codes</listitem>
+  </orderedlist>
+ </refsect1>
+ <refsect1 id="{@id exception_factory}">
+  <title>The Exception Factory</title>
+  <para>The {@link __ExceptionFactory} is a class in charge of create exceptions according to the error table.</para>
+  <para>It basically receives a given error code in order to create the most appropriate exception according to how it has been declared in the error table</para>
+  <para>i.e.
+  {@example Exception/error_table.php}
+  </para>
+  <para>In this example, the {@link __ExceptionFactory} takes as argument an exception code (ERR_WRONG_USERNAME_OR_PASSWORD), so it will create a MySecurityExceptionClass exception supposing we are using the error table above.</para>
+  <para>It's also important to note that, in our example, the MySecurityExceptionClass will have the error code 76002 as we have declared in our error table</para>
+ </refsect1>
+</refentry>
+

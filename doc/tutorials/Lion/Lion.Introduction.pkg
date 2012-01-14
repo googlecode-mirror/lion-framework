@@ -1,0 +1,41 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Introduction</refname>
+  <refpurpose>What is Lion Framework</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id installing}">
+  <title>What is Lion Framework?</title>
+  <para>Lion is an emerging open source PHP framework for creating rich web applications. It combines some of the most valuable features and patterns taken from the development community.</para>
+  </refsect1>
+ <refsect1 id="{@id benefit_of_lion}">
+  <title>What is the benefit of using Lion Framework?</title>
+  <para>Lion offers an elegant way to minimize development efforts in building a feature-rich web applications with PHP.<br/>
+  There are a number of features Lion has implemented, all of which are  based on accepted web development patterns.</para>
+  <para>Some of these features include:</para>
+  <itemizedlist>
+    <listitem>MVC plus MVP architecture</listitem>
+    <listitem><italic>Spring</italic>-style Dependency Injection</listitem>
+    <listitem>Request dispatcher with Intercepting filter</listitem>
+    <listitem>Powerful custom URLs rewrite engine</listitem>
+    <listitem>Event-driven development</listitem>
+    <listitem>Native AJAX components</listitem>
+    <listitem>Easiest AJAX plus Reverse AJAX</listitem>
+    <listitem>Authentication and Authorization</listitem>
+    <listitem>I18n</listitem>
+    <listitem>Easy cache management</listitem>
+    <listitem><italic>.Net</italic>-style configuration management</listitem>
+    <listitem>Easy form validations (component based validation)</listitem>
+    <listitem>Template based views</listitem>
+    <listitem>Component based data sanitization</listitem>
+    <listitem>Integrated logging facade</listitem>
+    <listitem>Context containers based sessions</listitem>
+    <listitem>Web-based project administration</listitem>
+	<listitem>Easy ORM integration</listitem>
+  </itemizedlist>
+ </refsect1>
+</refentry>
+

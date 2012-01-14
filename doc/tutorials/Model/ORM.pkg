@@ -1,0 +1,94 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Integrating an ORM</refname>
+  <refpurpose>Isolating the data access logic</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id introduction}">
+  <title>Introduction</title>
+  <para>Nowadays, ORM is one of the best paradigms to manage the persistence vs. maintaining SQL and handling persistence via code directly.</para>
+  <para>ORMs make transparent the database as well as how instances are loaded and stored on it.<br/>
+  In this section, we're going to show some practices to integrate an ORM within the model layer.</para>
+  <note>In this section we're going to cover 2 ORMs: Doctrine and Propel. However, the idea is enough generic to be extendible to whatever ORM.</note>
+ </refsect1>
+ <refsect1 id="{@id doctrine}">
+  <title>Doctrine</title>
+  <para>Doctrine is a PHP ORM (object relational mapper) for PHP 5.2.3+ that sits on top of a powerful PHP DBAL (database abstraction layer). One of its key features is the ability to optionally write database queries in an OO (object oriented) SQL-dialect called DQL inspired by Hibernates HQL. This provides developers with a powerful alternative to SQL that maintains a maximum of flexibility without requiring needless code duplication.</para>
+   <note>We are assuming that you have some knowledge about Doctrine and you have already defined/generated your model according to Doctrine documentation.<br/>
+   To learn how, take a look at {@link http://www.phpdoctrine.org Doctrine home}
+   </note> 
+  <refsect2 id="{@id including_doctrine}">
+   <title>Including Doctrine</title>
+   <para>Doctrine has the following directory structure out of the box:</para>
+   <image>imagesdir/Model/DoctrineDirStructure.png</image>
+   <para>The only file that we're going to include is the Doctrine.php, placed within the doctrine <italic>lib</italic> directory. The Doctrine.php contains the main class Doctrine, which has an autoload method in charge of include the rest of files as soon as they are needed.</para>
+   <para>First of all, we need to place Doctrine inside our project. A good practice is to use a directory to place all the third-party libraries. We usually place our libraries within a directory <italic>thrdparty</italic> under the <italic>libs</italic> (<italic>/libs/thrdparty/</italic>) just to keep a placing convention, but it could be placed wherever</para>
+   <para>Second, we need to include the Doctrine.php file, so we can do that easily by adding an entry within the <italic>app/config/includepath.xml</italic> file:
+   {@example Model/doctrine_includepath.xml}
+   So, the Doctrine.php file will be included just when needed, more like <italic>on demand</italic>, it is, just when the Doctrine class is used.</para>
+   <para>Now let's register the Doctrine autoload function that we have told about within our configuration file as following:
+   {@example Model/doctrine_autoload_config.xml}
+   This will register the Doctrine autoload callback instead of ussing the <italic>spl_autoload_register</italic> function directly within our code.
+   </para>
+   <para>Now we are able to consume doctrine API directly from our model.</para>
+  </refsect2>
+  <refsect2 id="{@id configuring_doctrine}">
+   <title>Configuring Doctrine</title>
+   <para>We recommends to use Lion's dependency injection capabilities to configure Doctrine. It eases and centralizes the doctrine configuration. Let's see it with some examples:</para>
+   The following code has been extracted from doctrine documentation, explaining how to use PDO to create a connection:
+   {@example Model/doctrine.php}
+   Well, we can use dependency injection to setup a connection, let's see it in terms of context instance definitions:
+   {@example Model/doctrine_context.xml}
+   <note>To learn more about dependency injection in lion, see the {@tutorial Context/Context.DependencyInjection.pkg} section</note>
+   <para>Now it's as easy as get the <italic>conn</italic> instance by asking the application context:
+   {@example Model/doctrine_context.php}
+   Take the followin benefits of configuring Doctrine with Lion's dependency injection:
+   <itemizedlist>
+     <listitem>Maintain a configuration file declarativelly (vs. maintain a PHP source code programatically)</listitem>
+     <listitem>Let Lion to discover and resolve dependency between instances (vs. keep a concrete order to create instances programatically)</listitem>
+     <listitem>The connection instance is managed by the application context: it can be retrieved from whatever part within our code (vs. implementing singleton mechanism to make available our connection instance)</listitem>
+   </itemizedlist>
+   </para>
+   <para>Let's try now with a more complex example:
+   {@example Model/doctrine2.php}
+   In this example, we are going to setup 2 connections, each one associated to a model class: One to handle User's persistence and the other one to handle Group's persistence. Each one connects to a different data source.</para>
+   <para>First thing to do will be to setup connection by ussing dependency injection, as shown in the following code:
+   {@example Model/doctrine_context2.xml}
+   </para>   
+   <para>Next, we'll associate each connection to each model class.<br/>
+   The way to do that could be by ussing the same context.xml file, the only thing to take into account is the fact that we should need a manager::bindComponent method to get an array of pairs class, connection ids. Unfortunatelly we don't have this method within the original Doctrine API, so we could solve it by subclassing the Doctrine_Manager in order to add this method. i.e.:
+   {@example Model/doctrine_manager_subclass.php}
+   Now that we have the bindComponents method allowing to set an array of pairs, we are able to associate connections declarativelly within our context.xml. i.e.:
+   {@example Model/doctrine_bindComponents_context.xml}
+   </para>
+   <para>Now we have everything configure in order to use the Doctrine API:
+   {@example Model/doctrine3.php}</para>
+   <para>Again, the summary is to let the framework handle the configuration to just focus on code.</para>
+  </refsect2>   
+ </refsect1>
+ <refsect1 id="{@id propel}">
+  <title>Propel</title>
+  <para>Propel is an Object-Relational Mapping (ORM) framework for PHP5. It allows you to access your database using a set of objects, providing a simple API for storing and retrieving data.</para>
+   <note>We are assuming that you have some knowledge about Propel and you have already defined/generated your model according to Propel documentation.<br/>
+   To learn how, take a look at {@link http://propel.phpdb.org/trac/ Propel home}
+   </note>
+  <refsect2 id="{@id including_propel}">
+   <title>Including Propel</title>
+   <para>Propel has the following directory structure out of the box:</para>
+   <image>imagesdir/Model/PropelDirStructure.png</image>
+   <para>The only file that we're going to include is the Propel.php, placed within the propel <italic>runtime/classes/propel</italic> directory. The Propel.php contains the main class Propel, which has an autoload method in charge of include the rest of files as soon as they are needed.</para>
+   <para>First of all, we need to place Propel inside our project. A good practice is to use a directory to place all the third-party libraries. We usually place our libraries within a directory <italic>thrdparty</italic> under the <italic>libs</italic> (<italic>/libs/thrdparty/</italic>) just to keep a placing convention, but it could be placed wherever</para>
+   <para>Second, we need to include the Propel.php file, so we can do that easily by adding an entry within the <italic>app/config/includepath.xml</italic> file:
+   {@example Model/propel_includepath.xml}
+   So, the Propel.php file will be included just when needed, more like <italic>on demand</italic>, it is, just when the Propel class is used.</para>
+   <para>Now let's register the Propel autoload function that we have told about within our configuration file as following:
+   {@example Model/propel_autoload_config.xml}
+   This will register the Propel autoload callback instead of ussing the <italic>spl_autoload_register</italic> function directly within our code.
+   </para>
+   <para>Now we are able to consume propel API directly from our model.</para>
+  </refsect2>
+ </refsect1>
+</refentry>

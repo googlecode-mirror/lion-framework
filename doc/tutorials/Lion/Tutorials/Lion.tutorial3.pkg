@@ -1,0 +1,67 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Hello World Deluxe</refname>
+  <refpurpose>Declaring UI components</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ <para>
+    <note>
+    <para>
+    Note that all the source code used in this tutorial is available to <emphasis>download</emphasis> and to <emphasis>see in action</emphasis>:
+    <itemizedlist>
+      <listitem>{@link http://bamboo.lionframework.org/download/[build_key]/artifacts/build-[build_number]/Deliverables/tutorial3-[version].tgz Download the source code}</listitem>
+      <listitem>{@link http://www.lionframework.org/tutorials/[version]/tutorial3 See the application in action}</listitem>
+    </itemizedlist>
+    </para>
+    </note>
+ </para>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Goal</title>
+  <para>The goal of this tutorial is to learn how to use <emphasis>user interface components</emphasis> within your application.<br/>
+  The application that we are going to develop is an improvement of {@tutorial Lion/Tutorials/Lion.tutorial1.pkg}: This application will show the 'Hello world' string but just by clicking on a button.</para>
+  <para>What we are going to do in this tutorial is:
+  <itemizedlist>
+    <listitem>To modify the helloWorld template by adding 2 components: a button and a label (templates/helloWorld.tpl)</listitem>
+    <listitem>To define an event handler and associate to the helloWorld view (libs/eventhandlers/HelloWorldEventHandler.class.php)</listitem>
+  </itemizedlist></para>
+  <image>imagesdir/Tutorials/tutorial3/directory_structure.png</image>
+ </refsect1>
+ <refsect1 id="{@id placing_components}">
+  <title>Placing components within the template</title>
+  <para>First thing to do will be to modify the template helloWorld.tpl by adding 2 components:</para>
+  {@example samples/tutorial3/templates/helloWorld.tpl}
+  <para>As we can see, we have declared 2 components: a commandbutton (helloWorldButton) and a label (helloWorldLabel).<br/>
+  What we expect is to see the 'Hello World!' message just when click on the button.</para>
+ </refsect1>
+ <refsect1 id="{@id creating_event_handler}">
+  <title>Creating the event handler</title>
+  <para>The following task to do is to create an event handler to execute a piece of code when we click on the button.</para>
+  <para>To do that, we have to define a class extending the {@link __EventHandler}. Because the view we are executing is helloWorld, by following the event handlers naming convention (see the {@tutorial View/Components/View.EventManagementSystem.pkg#naming_convention} section for more information about this naming convention), we'll define it as <emphasis>HelloWorldEventHandler</emphasis></para>
+  {@example samples/tutorial3/libs/eventhandlers/HelloWorldEventHandler.class.php}
+  <para>As we can see in the listing above, we have defined the HelloWorldEventHandler with a single method: <emphasis>helloWorldButton_onClick</emphasis>.<br/>
+  Note that the name for this method is not casual, but again: it follows the naming convention that the {@link __EventHandler} establish for methods: <emphasis>component_name</emphasis> plus <emphasis>'_'</emphasis> plus <emphasis>event_name</emphasis>.<br/>
+  In our event handler, because the button name is 'helloWorldButton' and the event to control is the 'click' event, the method is 'helloWorldButton_click'</para>
+  <para>One of the most interesting things within this code is how the label component reference is retrieved by ussing the {@link __EventHandler::getComponent()}. This method allows us to retrieve any component within the same view, being able to get or set any property within the component.</para>
+ </refsect1>  
+ <refsect1 id="{@id placing_the_event_handler}">
+  <title>Placing the event handler</title>
+  <para>
+  By default, the <emphasis>libs/eventhandlers</emphasis> directory is reserved to place event handler classes.</para>
+  <para>There is a mapping rule to let Lion know that any file in that directory with the suffix '.class.php' corresponds to a class with the same name without the suffix.<br/>
+  This mapping rule resides in the <emphasis>app/config/includepath.xml</emphasis> file.</para>
+  <para>
+  Continuing with our example, as our class is HelloWorldEventHandler, let's name the file as <emphasis>HelloWorldEventHandler.class.php</emphasis> and place it into the libs/eventhandlers directory.
+  </para>
+ </refsect1>  
+ <refsect1 id="{@id executing_the_hello_world}">
+  <title>Executing the Hello World</title>
+  <para>Now it's time to execute our application. Just type the following url: <underline>http://yourdomain/pathtoyourapplication/helloWorld.html</underline></para>
+  <para>The aspect of our application should be like the following figure:</para>
+  <image>imagesdir/Tutorials/tutorial3/execution_in_browser.png</image>
+  <para>And by clicking on the button, we'll see the 'Hello World!' down the button wihtout refreshing the page:</para>
+  <image>imagesdir/Tutorials/tutorial3/execution_in_browser2.png</image>
+ </refsect1>
+</refentry>

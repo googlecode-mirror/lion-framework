@@ -1,0 +1,17 @@
+<?xml version = "1.0" standalone="yes"?>
+
+<configuration>
+
+  <filters>
+
+    <!-- apply currency filter to all existing routes,
+         which means that it will be always executed -->
+    <filter name="currency_filter" class="CurrencyFilter">
+      <apply-to>
+        <all-routes/>
+      </apply-to>
+    </filter>  
+    
+  </filters>
+  
+</configuration>

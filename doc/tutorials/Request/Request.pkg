@@ -1,0 +1,36 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Request Dispatcher</refname>
+  <refpurpose>How request are dispatched and routed</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+  <refsect1 id="{@id intro}">
+   <title>Introduction</title>
+   <para>In Lion, all the requests are redirected to the same .php file: the <emphasis>index.php</emphasis> file. It doen't matter if you request for a foo.html or a bar.php file, the index.php file will be executed instead of.<br/>
+   <floatnote>Note that the <emphasis>.htaccess</emphasis> redirects all incoming requests to the index.php.<br />That's the reason because you may need to enable the mod-rewrite (or equivalent) in your web server.</floatnote>
+   For that purpose, our applications must have a <emphasis>.htaccess</emphasis> in order to perform the mentioned redirection.</para>
+   <para>In Lion we don't have multiple .php files to be executed directly from the browser, as we are accustomed in traditional php applications.<br/>
+   In that sense, a URL like http://example.com/foo.php does not corresponds to a file foo.php in the web-root of our server.</para>
+   <para>Instead of that, Lion parses every incoming request and determines where to route each request to based on our own rules.</para>
+   <para><image>imagesdir/Request/tradition_php_and_lion.png</image></para>
+   <para>This approach has several advantages, being some of them:</para>
+   <itemizedlist>
+     <listitem>We can define and use friendly URLs easily (i.e. <italic>http://yourdomain.com/invoices/10948.html</italic> instead of <italic>http://yourdomain.com/index.php?module=invoices&amp;view_id=10948</italic>)</listitem>
+     <listitem>We can change our URLs without refactorizing our file structure (i.e. changing <italic>http://example.com/catalog.html</italic> to <italic>http://example.com/<emphasis>games</emphasis>/catalog.html</italic> does not implies to create a <emphasis>games</emphasis> directory)</listitem>
+     <listitem>We can change our URLs without finding and replacing URL occurrences in our code. We just specify the new URL format and every occurrence of the URL will be adapted automatically by the framework.</listitem>
+     <listitem>We can configure filters (intercepting filter) associated to URLs declaratively.</listitem>
+   </itemizedlist>
+ </refsect1>
+ <refsect1 id="{@id urlRouteEngine}">
+   <title>The URL Routing Engine</title>
+   <para>The URL Routing Engine is one of the key pieces within the framework: Is the one in charge of resolve where to route each request to.</para>
+   <para>In that sense, all the requests are sent to the Url Routing Engine in order to resolve a route or the other one based on the configuration where our routes are declared in.<br/>
+   Out of the box, routes are declared within the <emphasis>app/config/routes.xml</emphasis> file.</para>
+   <para>A route is basically the combination of 3 elements: A <emphasis>Front Controller</emphasis> to handle the request, an <emphasis>Action Controller</emphasis> to be executed and a set of <emphasis>Parameters</emphasis> to be added to the request.</para>
+   <para>Additionally, a route has associated some filters (intercepting filters) that are executed before the Front Controller receives the request and after it returns the response.</para>
+  </refsect1>
+</refentry>
+

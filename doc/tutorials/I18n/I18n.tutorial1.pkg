@@ -1,0 +1,45 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Internationalizating the Hello World</refname>
+  <refpurpose>Practical tutorial</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Objetive</title>
+  <para>The objetive of this tutorial is to learn how to apply I18n capabilities to a Yawar application.<br/>
+  The application that we are going to develop just shows a 'Hello world' message.</para>
+  <para>What we are going to do in this tutorial is:
+  <itemizedlist>
+    <listitem>To modify the controller created in the {@tutorial Yawar/Yawar.MVC.tutorial1} tutorial (libs/controllers/HelloWorldController.class.php)</listitem>
+    <listitem>To create 2 files with strings in english and spanish</listitem>
+  </itemizedlist></para>
+  <image>../images/tutorial2/directory_structure.png</image>
+ </refsect1>
+ <refsect1 id="{@id modifying_the_controller}">
+  <title>Modifying the controller to add I18n capabilities</title>
+  <para>First thing to do will be to modify how the string 'Hello world' is assigned to the {@link __ModelAndView} instance.</para>
+ </refsect1>
+ <refsect1 id="{@id executing_the_hello_world}">
+  <title>Executing the Hello World</title>
+  <para>Now it's time to execute our application, and for that purpose, we need to know how to build the appropriate URL to execute the action we want.</para>
+  <floatnote>
+  <para>The default mapping rule for URLs in Yawar is <emphasis>&lt;controller&gt;.&lt;action&gt;.html</emphasis></para>
+  <para>i.e. if we want to execute the action bar and the controller foo, just use the url <emphasis>foo.bar.html</emphasis>.</para>
+  </floatnote>
+  <para>For that purpose, just use the following url: <emphasis>http://yourdomain/pathtoyourapplication/helloWorld.html</emphasis></para>
+  <para>Yawar will deduce that the action controller that you are requesting is the one with code 'helloWorld'. Because we haven't define any action to execute, Yawar will try to execute one of the following action codes:
+  <itemizedlist>
+    <listitem>An action with the same code than the controller, in our example <emphasis>helloWorld</emphasis>.</listitem>
+    <listitem>If (and only if) that action doesn't exists, the action with the code 'default', it is, a method named 'defaultAction'</listitem>
+  </itemizedlist>
+  </para>
+  <para>
+  Because we have already declared a method with the name <emphasis>helloWorldAction</emphasis>, this is the method that will be executed in response to the request</para>
+  <para>The aspect of our application should be like the following figure:</para>
+  <image>../images/tutorial1/execution_in_browser.png</image>
+  <para>And yes: we know that it's not a Picasso, but for the goal of this tutorial is enough :)</para>
+ </refsect1>
+</refentry>

@@ -1,0 +1,43 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <!-- We have changed the doctrine_manager class to point to our 
+         new LionDoctrine_Manager class -->
+    <context-instance id = "doctrine_manager" class="LionDoctrine_Manager">
+      <property name="bindComponents">
+        <list>
+          <entry key="User"><value>connection 1</value></entry>
+          <entry key="Group"><value>connection 2</value></entry>
+        </list>
+      </property>
+    </context-instance>
+    
+    <context-instance id = "conn"
+        factory-instance = "doctrine_manager"
+          factory-method = "openConnection">
+        <constructor-arg>
+            <value>mysql://username:password@localhost/dbname</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>connection 1</value>
+        </constructor-arg>
+    </context-instance>
+
+    <context-instance id = "conn2"
+        factory-instance = "doctrine_manager"
+          factory-method = "openConnection">
+        <constructor-arg>
+            <value>mysql://username2:password2@localhost/dbname2</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>connection 2</value>
+        </constructor-arg>
+    </context-instance>
+
+
+
+  </context-instances>
+  
+</configuration>

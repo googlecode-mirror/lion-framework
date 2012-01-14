@@ -1,0 +1,59 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Hello World Enterprise Edition</refname>
+  <refpurpose>Validating user inputs</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Goal</title>
+  <para>The goal of this tutorial is to learn how to use <emphasis>validator components</emphasis>.<br/>
+  The application that we are going to develop is a single page with a typical registration form. This page will contain some validator components in order to check user inputs before submitting.</para>
+  <para>What we are going to do in this tutorial is:
+  <itemizedlist>
+    <listitem>To create a page with a registration form.</listitem>
+    <listitem>To add validators associated to input components.</listitem>
+    <listitem>To create an event handler in order to perform some server-side validations as well.</listitem>
+  </itemizedlist></para>
+  <image>imagesdir/Tutorials/tutorial3/directory_structure.png</image>
+ </refsect1>
+ <refsect1 id="{@id creating_the_controller}">
+  <title>Create a new controller</title>
+  <para>Let's create a new controller as following:</para>
+  {@example Tutorials/tutorial5/registrationController.php}
+  <para>This controller just returns a {@link __ModelAndView} instance to execute the <italic>registrationForm</italic> view.</para>
+ </refsect1>
+ <refsect1 id="{@id create_the_template}">
+  <title>Create a new template</title>
+  <para>Now will create a template containing the registration form as following:</para>
+  {@example Tutorials/tutorial5/registrationForm1.tpl}
+  <para>As you can see, we have just defined a typical registration form asking for the following values: the first name, the last name, the birdth date, the sex, an email address, a password and also a reminder question plus the answer.</para>
+  <para>Now it's time to define validation rules for our input components</para>
+ </refsect1>  
+ <refsect1 id="{@id defining_validation_rules}">
+  <title>Defining validation rules</title>
+  <para>There is an special component to automate a great part of the validation process: The validation rule component</para>
+  <floatnote><para>To know more about LiveValidation, please visit {@link http://http://www.livevalidation.com LiveValidation homepage}.</para></floatnote>
+  <para>This component uses a great javascript library to perform client-side validations: The <emphasis>LiveValidation</emphasis> library, by Alec Hill.<br/>
+  This library is plenty mature and covers a great number of different validation cases, but may be one of the most notable feature the capability to validate as soon as values are written within the form.</para>
+  <para>Continuing with the validation rule component, it has 2 main tasks:
+  <itemizedlist>
+    <listitem>To generate optimized javascript code on client side</listitem>
+    <listitem>To intercept requests that require parameter validation in order to perform same validations on server-side</listitem>
+  </itemizedlist>
+  So, once we have defined a validation rule, by default it performs the same validations on both the client and server side (double validation)</para>
+  <para>Not let's define some validation rules for input components within our registration form:</para>
+  {@example Tutorials/tutorial5/registrationForm2.tpl}
+  <para>As you can see, we have just defined a typical registration form asking for the following values: the first name, the last name, the birdth date, the sex, an email address, a password and also a reminder question plus the answer.</para>
+  <para>Now it's time to define validation rules for our input components</para>
+ </refsect1>  
+ <refsect1 id="{@id executing_the_hello_world}">
+  <title>Executing the Hello World Enterprise Edition</title>
+  <para>Now it's time to execute our application. Just type the following url: <underline>http://yourdomain/pathtoyourapplication/registration.html</underline></para>
+  <para>The aspect of our application should be like the following figure once we have click on the button:</para>
+  <image>imagesdir/Tutorials/tutorial4/execution_in_browser.png</image>
+  <para>And again: No need to refresh the entire page to show the hello message. Ajax + Json instead of, which is handled automagically by the framework.</para>
+ </refsect1>
+</refentry>

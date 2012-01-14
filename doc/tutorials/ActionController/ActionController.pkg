@@ -1,0 +1,142 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Controller</refname>
+  <refpurpose>Handling user requests</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>What's an Action Controller?</title>
+  <para>An Action Controller, or simply a Controller, is a class in charge of the execution of concrete tasks in response to certain events, typically user requests.</para>
+  <floatnote>
+  <para>See the {@tutorial Lion/Lion.MVC.pkg} section in order to know more about MVC pattern and how it's implemented in Lion</para>
+  </floatnote>
+  <para>It's important to note the difference between the concepts action and controller:<br/>
+  A <emphasis>controller</emphasis> is a class in charge of the execution of one or more <emphasis>actions</emphasis>, while an action is the minimal execution unit, usually a controller's method, that perform a set of task in order to satisface an user's request.</para>
+  <para>All requests reference a pair Controller-Action to be executed, it is: An action to be executed and the controller class in charge to handle that execution.</para>
+  <para>In Lion, an action controller is a class implementing the {@link __IActionController}, but usually a class subclassing the {@link __ActionController}.</para>
+  <para>However, our recomendation is to just subclass the {@link __ActionController} class that already implements the {@link __IActionController} to define action controllers.</para>
+ </refsect1>
+ <refsect1 id="{@id controller_and_action_code}">
+  <title>Requesting actions</title>
+  <para>Each request in Lion references the execution of an action.<br/>
+  Because actions are handled by controllers, the request need to provide information regarding the controller to be used as well as the action to be executed.<br/>
+  In fact, every request is resolved in a pair Controller-Action, it is, which action to execute and which controller to handle the execution.</para>
+  <para>Both the controllers and the actions are identified by codes. So, each request provides enough information to resolve the controller code as well as the action code</para>
+  <para>i.e. The request <underline>http://yourdomain/foo.bar.html</underline> references the use of the controller identified as 'foo' to execute the action identified as 'bar'.
+  Is a Lion task to resolve which class corresponds to the controller code 'foo', while is a controller task to execute the action identified as 'bar'.
+  </para>
+  <para>When Lion resolves the controller to use, it calls to the {@link __IActionController::execute()} method by passing the action code as argument.<br/>
+  However, by subclassing the {@link __ActionController}, we just need to define methods following some naming conventions.</para>
+ </refsect1>
+ <refsect1 id="{@id naming_convention_and_location}">
+  <title>Naming convention and location</title>
+  <para>Lion is enough flexible to allow whatever name and location for your action controllers. There are not restrictions in that sense.<br/>
+  However there are some naming conventions and predefined locations that make easier the creation and enablement of action controllers:</para>
+  <para>
+  <itemizedlist>
+    <listitem>Use the suffix <emphasis>'Controller'</emphasis> for all your controller classes.</listitem>
+    <listitem>Define each controller in a single file with the same name of the controller followed by the suffix <emphasis>'.class.php'</emphasis></listitem>
+    <listitem>Place your controllers in the <emphasis>/libs/controllers</emphasis> directory</listitem>
+  </itemizedlist>
+  </para>
+  <para>
+    <image>imagesdir/ActionController/directory_structure.png</image>
+  </para>
+  <refsect2 id="{@id controller_suffix}">
+    <title>Controller name</title>
+    <para>The fact of defining a controller class is not enough to be able to execute it.<br/>
+    To enable a controller in Lion we need to create an entry in the <emphasis>app/config/controllers.xml</emphasis>, associating a code to each one.</para>
+    <para>i.e.
+    {@example ActionController/controllers1.xml}
+    In this entry we are specifying that the controller code 'FooBar' correspond to the action controller BooBarController.</para>
+    <para>However, there is a special rule designed for all the controllers that haven't been declared in this file:
+    {@example ActionController/controllers2.xml}
+    In this entry we are specifying that a controller code corresponds to the controller with same name plus the suffix 'Controller'.<br/>
+    i.e. the controller code 'FooBar' corresponds to the controller FooBarController</para>
+    <para>This is the reason because we recomend to use the 'Controller' suffix in controller classes.</para>
+  </refsect2>
+  <refsect2 id="{@id controller_file_location}">
+    <title>Controller file and location</title>
+    <para>The file <emphasis>/app/config/includepath.xml</emphasis> contains the following mapping rule:</para>
+    {@example ActionController/classes.xml}
+    <para>This mapping rule let Lion know that any file placed in <emphasis>libs/controllers</emphasis> with the suffix '.class.php' corresponds to a class with the same name without the suffix.</para>
+    <para>So, by placing controller files in that directory and following the naming convention, it's not needed to declare explicitly the location of your controllers in the includepath.xml file.</para>
+  </refsect2>
+ </refsect1>
+ <refsect1 id="{@id defining_actions}">
+  <title>Defining Actions</title>
+  <para>By subclassing the {@link __ActionController} class, it's really easy to define actions by just defining method with the following naming conventions:</para>
+  <para>
+  <floatnote><para>The name of defaultAction() method is due to the setting value <emphasis>DEFAULT_ACTION_CODE</emphasis> ('default') followed by the 'Action' suffix.<br/>
+  Of course, it can be configured to use other prefix by changing the corresponding setting value</para></floatnote>
+  <itemizedlist>
+    <listitem>All the actions are controller's methods with the suffix 'Action' (i.e. fooAction(), barAction(), ...)</listitem>
+    <listitem>A request for an action will be handled by the controller by executing a method with same name as the action followed by the suffix 'Action'. i.e. to execute the action 'fooBar', an {@link __ActionController} will try to execute the 'fooBarAction()' method.</listitem>
+    <listitem>If a method for an action is not found, an error will be trigged! (sorry, but it's similar to a 404)</listitem>
+    <listitem>However, it's possible to define a default action (an action that will be executed when no actions have been specified). It will correspond to one of the following methods:
+    <itemizedlist>
+      <listitem>A method with the same name as the controller code plus the suffix 'Action' (i.e., the method that corresponds to the default action for a controller with code 'foo' will be the 'fooAction()')</listitem>
+      <listitem>The defaultAction() method if the previous one does not exist.</listitem>
+    </itemizedlist>
+    </listitem>
+  </itemizedlist>
+  </para>
+  <para>And again: those naming conventions belong to the {@link __ActionController}. If you implement the {@link __IActionController} then you should develop your own ways to execute actions.</para>
+  <para>i.e. A Controller capable to handle multiple actions:
+  {@example ActionController/listing1.php}
+  </para>
+ </refsect1>
+ <refsect1 id="{@id pre_and_post_execution}">
+  <title>Defining common tasks: preExecute and postExecute methods</title>
+  <para>There are 2 special methods in a class implementing the {@link __IActionController}: {@link __IActionController::preExecute()} and {@link __IActionController::postExecute()}. In {@link __ActionController} those methods have been already defined empty in order to allow the subclassing just when needed.</para>
+  <para>Those methods are usefull to define common tasks that should be executed before and/or after any action in a controller.<br/>
+  So, the preExecute() method will be executed previous to the action execution while the postExecute() method will be executed after the action execution (also after the view execution if the action returned a {@link __ModelAndView} instance).
+  {@example ActionController/listing2.php}
+  </para>
+ </refsect1>
+ <refsect1 id="{@id validating_action_executions}">
+  <title>Validating Action executions</title>
+  <para>The file app/config/controllers.xml has not been designed just to define codes for controllers, but to define policies to grant or deny the execution of action within a controller.</para>
+  <para>In fact, there are some controller's properties that can be defined declaratively in app/config/controllers.xml that Lion will check previous to executing any action handled by the controller:</para>
+  <para>
+  <itemizedlist>
+    <listitem><emphasis>validRequestMethod</emphasis>: The request method allowed to execute actions on a controller. i.e. we can declare a controller to be executed just in case the request method is POST. By default, a controller has not request method restrictions, it is, it can be executed by ussing whatever request method.<br/> 
+    Allowed values for this property are:
+    <itemizedlist>
+      <listitem><emphasis>REQMETHOD_NONE</emphasis>: There is not any valid request method for current controller. It's similar to disable the controller</listitem>
+      <listitem><emphasis>REQMETHOD_GET</emphasis>: The controller can be executed just in case the request method is GET</listitem>
+      <listitem><emphasis>REQMETHOD_POST</emphasis>: The controller can be executed just in case the request method is POST</listitem>
+      <listitem><emphasis>REQMETHOD_GET_POST</emphasis>: The controller can be executed in both GET and POST request methods</listitem>
+      <listitem><emphasis>REQMETHOD_COMMAND_LINE</emphasis>: The controller can be executed just from the command line (by ussing PHP CLI)</listitem>
+      <listitem><emphasis>REQMETHOD_ALL</emphasis> (default value): The controller can be executed in any case</listitem>
+    </itemizedlist>  
+    </listitem>
+    <listitem><emphasis>requestable</emphasis>: If a controller can be 'requested' directly by the user or not. A controller not requestable means that it's not allowed to specify the controller code within the request. By default, a controller can be requested directly.</listitem>
+    <listitem><emphasis>requireSsl</emphasis>: If a controller can be executed in a non-secure protocol or not. i.e. some controllers are able to be executed just in case the http protocol is secured. By default, a controller can be executed without any protocol restriction, it is, in both the secured and non-secured protocol.</listitem>
+  </itemizedlist>
+  </para>
+  <para>i.e.:</para>
+  {@example ActionController/controllers3.xml}
+  <para>And yes: Lion does not support those validations at action level, just at controller level. This is not a Lion limitation, it has been designed as it due to the most common use case: assign same validation rules to all the actions within the same controller.</para>
+  <para>You can also play with the '*' symbol in your controller definitions. See the following example:
+  {@example ActionController/controllers4.xml}
+  In this example, we are restricting to SSL protocol all the controllers with the prefix 'ssl_' in the code. i.e. the controller code ssl_login, according to this mapping rule, corresponds to the controller SslLoginController, and the execution of any action within this controller is allowed just over SSL protocol.
+  </para>
+  <para>Last but not the least, Controller authorization aspects can be also declared in the app/config/controllers.xml file. Yeah, the app/config/controlelrs.xml becomes an interesting file.<br/>
+  Because controllers are classes implementing the {@link __ISystemResource}, we can assign permissions to them</para>
+  <para>i.e.
+  {@example ActionController/controllers5.xml}
+  In this example, we have protected all the controllers that correspond to a code with the prefix 'admin_'. Just an user with the permission 'ADMIN' could request actions on those controllers.<br/>
+  For more information regarding authorization please visit {@tutorial Security/Authorization.pkg} section.</para>
+ </refsect1>
+<!-- todo: documenbt I18n resources associated to an action controller: 
+        <I18n-resources>
+          <resources-group id="createUser"/>
+        </I18n-resources>
+--> 
+ 
+</refentry>
+

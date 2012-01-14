@@ -1,0 +1,33 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Session</refname>
+  <refpurpose>Handling user sessions</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction</title>
+  <para>PHP brings a completed API to manage the session. However, Lion has his own session facade against the native PHP session by default.</para>
+  <para>One of the main advantages of ussing the Lion session facade is to isolate session instances between application contexts. The other one is to have a session space to store context instances without interfering with other containers.</para>
+ </refsect1>
+ <refsect1 id="{@id getting_the_session}">
+  <title>Accessing the session</title>
+  <para>The session can be accessed by calling the {@link __Context::getSession()} method. i.e.:
+  {@example Session/getSession.php}
+  </para>
+  <para>The session exposes mainly the following methods:
+  <itemizedlist>
+    <listitem>hasData (see {@link __Session::hasData()}): Check if some data is already stored in session</listitem>
+    <listitem>getData (see {@link __Session::getData()}): Get data from the session</listitem>
+    <listitem>setData (see {@link __Session::setData()}): Set data to the session</listitem>
+    <listitem>removeData (see {@link __Session::removeData()}): Remove data from the session</listitem>
+  </itemizedlist>
+  </para>
+  <para>i.e.
+  {@example Session/sessionUsage.php}
+  </para> 
+ </refsect1>
+</refentry>
+

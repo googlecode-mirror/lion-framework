@@ -1,0 +1,12 @@
+<?xml version = "1.0" standalone="yes"?>
+<classes>
+ 
+  ...
+
+  <cluster name="Event Handlers" path="/libs/eventhandlers">
+    <class name="*" file="*.class.php"/>
+  </cluster>
+
+  ...
+  
+</classes>

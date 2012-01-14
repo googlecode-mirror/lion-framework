@@ -1,0 +1,14 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Frequently Asqued Questions</refname>
+  <refpurpose></refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id q1}">
+  <title>1. Is lion framework ready for production usage</title>
+  <para>Yes, it is. Last stable version is often robust and mature to be used in production environments.</para>
+ </refsect1> 
+</refentry>

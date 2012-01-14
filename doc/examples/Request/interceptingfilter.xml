@@ -1,0 +1,15 @@
+<?xml version = "1.0" standalone="yes"?>
+
+<configuration>
+
+  <filters>
+
+    <filter name="myFilter" class="MyFilter">
+      <apply-to>
+        <route id="myRoute"/>
+      </apply-to>
+    </filter>  
+    
+  </filters>
+  
+</configuration>

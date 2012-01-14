@@ -1,0 +1,26 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <controller-definitions>
+
+    <controller code = "nonRequestableActions" 
+               class = "NonRequestableActionsController">
+      <property name = "requestable" 
+               value = "false"/>
+    </controller>
+
+    <controller code = "sslActions" 
+               class = "SslActionsController">
+      <property name = "requireSsl" 
+               value = "true"/>
+    </controller>
+
+    <controller code = "commandLineActions" 
+               class = "CommandLineActionsController">
+      <property name = "validRequestMethod" 
+               value = "REQMETHOD_COMMAND_LINE"/>
+    </controller>
+  
+  </controller-definitions>
+  
+</configuration>

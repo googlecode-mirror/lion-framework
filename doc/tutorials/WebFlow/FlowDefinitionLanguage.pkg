@@ -1,0 +1,43 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Flow Definition Language</refname>
+  <refpurpose>Declaring flows</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Essential language elements</title>
+   <refsect2 id="{@id flow}">
+   <title>Flow</title>
+   <para>Every flow begins with the following root element:</para>
+   {@example Flows/EssencialElements/flow-example.xml}
+   <para>All states of the flow are defined within this element. The first state defined becomes the flow's starting point.</para>
+   </refsect2>
+   <refsect2 id="{@id view-state}">
+   <title>View-state</title>
+   <para>Use the view-state element to define a step of the flow that renders a view:</para>
+   {@example Flows/EssencialElements/action-state-example.xml}
+   <para>By convention, a view-state maps its id to a view template in the directory where the flow is located. For example, the state above might render /WEB-INF/hotels/booking/enterBookingDetails.xhtml if the flow itself was located in the /WEB-INF/hotels/booking directory.</para>
+   </refsect2>
+   <refsect2 id="{@id transition}">
+   <title>Transition</title>
+   <para>Use the transition element to handle events that occur within a state:</para>
+   {@example Flows/EssencialElements/transition-example.xml}
+   <para>These transitions drive view navigations.</para>
+   </refsect2>
+   <refsect2 id="{@id end-state}">
+   <title>End state</title>
+   <para>Use the end-state element to define a flow outcome:</para>
+   {@example Flows/EssencialElements/end-state-example.xml}
+   <para>When a flow transitions to a end-state it terminates and the outcome is returned.</para>
+   </refsect2>
+   <refsect2 id="{@id checkpoint}">
+   <title>Checkpoint: Essential language elements</title>
+   <para>With the three elements view-state, transition, and end-state, you can quickly express your view navigation logic. Teams often do this before adding flow behaviors so they can focus on developing the user interface of the application with end users first. Below is a sample flow that implements its view navigation logic using these elements:</para>
+   {@example Flows/EssencialElements/summary-essencial-elements.xml}
+   </refsect2>
+ </refsect1> 
+</refentry>
+

@@ -1,0 +1,55 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Remote Services</refname>
+  <refpurpose>Exposing your services out there</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id declaring_remote_services}">
+  <title>Declaring remote services</title>
+  <para>As soon as you can declare your model services to be consumed via {@link __ModelProxy} instance (see {@tutorial Model/Model.pkg}), you can also expose them to be consumed remotelly.</para>
+  <para>To declare a service as remote, you just need to set the <emphasis>remote</emphasis> attribute as true:</para>
+  {@example Model/model_services_remote.xml}
+  <para>Note that the service is also callable locally, as if the remote attribute was not set.<br/>
+  Apart from that you will be also able to call the service remotelly.</para>
+ </refsect1>
+ <refsect1 id="{@id calling_remote_services}">
+  <title>Calling remote services</title>
+  <para>Your remote services are callable via REST. The url <syntaxdefinition>http://example.com/<emphasis>&gt;your_service_name&lt;</emphasis>.rest</syntaxdefinition> will be listening for that purpose.<br/>
+  i.e. the url for our previous example could be <syntaxdefinition>http://example.com/getInvoices.rest</syntaxdefinition></para>
+ </refsect1> 
+ <refsect1 id="{@id remote_services_and_parameters}">
+  <title>Remote services and parameters</title>
+  <para>We also need to specify which REST parameters corresponds to each one in the service.<br/>
+  i.e. image that we have a service, say <syntaxdefinition>getInvoice($dateFrom, $dateTo)</syntaxdefinition>, that retrieve invoices for a given date interval.<br/>
+  So we should need to specify how to map each parameter within an http request with each one within the service. To do that, we can use the <emphasis>service-arg</emphasis> tag:</para>
+  {@example Model/model_services_remote2.xml}
+  <para>So, to call the service (i.e. to retrieve january invoices) we could call <syntaxdefinition>http://example.com/getInvoices.rest?dateFrom=2009-01-01&amp;dateTo=2009-01-31</syntaxdefinition>.</para>
+ </refsect1>
+ <refsect1 id="{@id json_services}">
+  <title>JSON Services</title>
+  <para>By default, Lion remote services are JSON REST services. Service responses are transformed by Lion into JSON notation before being returned to client.</para>
+  <para>i.e.</para>
+  <para><syntaxdefinition>
+[<br/>
+   &#123;invoice_id: '2009-T1-1',<br/>
+    client_id: '19823719',<br/>
+    date: '2009-01-14',<br/>
+    lines: [<br/>
+        &#123;line_no: '1', desc: '', quantity: 1, unit_price: 10.50&#125;,<br/>
+        &#123;line_no: '2', desc: '', quantity: 1, unit_price: 15.00&#125;,<br/>
+        &#123;line_no: '3', desc: '', quantity: 5, unit_price:  6.00&#125;,<br/>
+        &#123;line_no: '4', desc: '', quantity: 1, unit_price: 12.75&#125;]<br/>
+   &#125;,
+   &#123;invoice_id: '2009-T1-2',<br/>
+    client_id: '12822341',<br/>
+    ...<br/>
+]<br/>
+</syntaxdefinition></para>
+  <para>Note that, you must declare your classes attributes as public for classes that you pretend to return via remote service.<br/>
+  Protected and private class members are not introspected, so they are not returned in the json string</para>
+ </refsect1>
+</refentry>
+

@@ -1,0 +1,163 @@
+<refentry id="{@id}">
+	<refnamediv>
+		<refname>PHP Login Tutorial</refname>
+		<refpurpose>A really simple login/logout PHP application</refpurpose>
+	</refnamediv>
+	<refsynopsisdiv>
+		<para>
+			<note>
+				<para>
+    Note that all the source code used in this tutorial is available to <emphasis>download</emphasis> and to <emphasis>see in action</emphasis>:
+					<itemizedlist>
+						<listitem>{@link http://bamboo.lionframework.org/download/[build_key]/artifacts/build-[build_number]/Deliverables/tutorial-php-login-[version].tgz Download the source code}</listitem>
+						<listitem>{@link http://www.lionframework.org/tutorials/[version]/tutorial-php-login See the application in action}</listitem>
+					</itemizedlist>
+				</para>
+			</note>
+		</para>
+	</refsynopsisdiv>
+{@toc}
+	<para></para>
+	<refsect1 id="{@id intro}">
+		<title>Goal</title>
+		<para>The goal of this tutorial is to learn how to use Lion's security framework to build a typical login process using PHP.<br />
+  These kinds of applications are really easy to develop but extremely hard to maintain in PHP without a solid and fine-grained security layer.</para>
+		<para>In this tutorial we are going to:
+			<itemizedlist>
+				<listitem>Build a login form and integrate it within the security framework</listitem>
+				<listitem>Define roles and permissions</listitem>
+				<listitem>Protect pages and sections to be accessible just by authenticated users</listitem>
+			</itemizedlist></para>
+		<para>The application that we are going to develop will expose a login form, allowing users to attempt to login and authenticate themselves. We're going to also protect some pages in order to be accessible just by users that have permission to view the page.</para>
+		<para>In the source code package, you will find the following directory structure and classes:</para>
+		<image>imagesdir/Tutorials/securitytutorial/dir_structure.png</image>
+		<para>Here's a summary of the classes we've defined in the example source code:
+			<itemizedlist>
+				<listitem>2 controllers: one for the login page and one corresponding to a protected page.</listitem>
+				<listitem>1 event handler: in charge of handling the submit from the login page</listitem>
+				<listitem>2 model classes: one required by the security framework (the user loader) and the other one defining the model service we're going to consume from outside the model in order to perform the login</listitem>
+			</itemizedlist></para>
+	</refsect1>
+	<refsect1 id="{@id defining_roles_and_permissions}">
+		<title>Defining roles and permissions</title>
+		<para>First, we want to define permission roles for our application. The concept of a role is similar to the concept of a user group. In fact, we use roles to group users having the same permissions.<br/>
+  i.e. we can define an ADMIN role, so all the users having this role will also have the same permissions.</para>
+		<para>For the purpose of our tutorial, we are going to just define a single role: <emphasis>REGISTERED_USER</emphasis>.<br/>
+  A user with the <emphasis>REGISTERED_USER</emphasis> role will be considered a registered user.</para>
+		<para>Once we have defined a role, we are then able to associate permissions with it. The concept of a permission is similar to the concept of a key that opens a door.<br/>
+  In our example, we are going to protect pages by only giving access to users having the correct permission, similar to a door accessible only for users having the key. <br/> 
+  We define a single permission level called the <emphasis>PRIVATE_AREA_PERMISSION</emphasis> and we assign it to the <emphasis>REGISTERED_USER</emphasis> role.</para>
+		<para>In order to define this role, let's take a look at the <emphasis>app/config/security.xml</emphasis> file:</para>
+		<para>{@example samples/tutorial-php-login/config/security.xml}</para>
+	</refsect1>
+	<refsect1 id="{@id the_login_page}">
+		<title>The Login Page</title>
+		<para>Let's use our knowledge we've gained from the earlier tutorials and add a login page to our web application. To do that, we'll add a controller and a template.</para>
+		<para>The controller can be seen in the source code (<emphasis>/libs/controllers/LoginController.class.php</emphasis>):</para>
+		<para>{@example samples/tutorial-php-login/libs/controllers/LoginController.class.php}</para>
+		<para>Since the controller returns a model and view referencing the view code <emphasis>login</emphasis>, we create a template with that name (<emphasis>/templates/login.tpl</emphasis>):</para>
+		<para>{@example samples/tutorial-php-login/templates/login.tpl}</para>
+		<para>Now, let's see how our login page is shown in a browser. To do that, just execute the url <emphasis>http://yourdomain/login.html</emphasis> within your browser:</para>
+		<image>imagesdir/Tutorials/securitytutorial/login.png</image>
+		<para>Suppose you want to add some validation checks to the user's input. Lion provides some very simple operations to achieve this.<br/>
+  In our example, we use the Component's <emphasis>validationrule</emphasis> to validate the login and password fields:
+			<itemizedlist>
+				<listitem>Neither the login or password are blank (i.e. they are both mandatory)</listitem>
+				<listitem>The login is not more than 10 characters nor is the password more than 20 characters</listitem>
+			</itemizedlist>
+		</para>    
+	</refsect1>
+	<refsect1 id="{@id login_event_handling}">  
+		<title>Login Event Handling</title>  
+		<para>The last stage of handling the login process is to define the <emphasis>submit</emphasis> event to actually login in the user. To handle the submission, we're going to define an event handler associated to the 'login' view.<br/>
+  Following the default naming convention, the event handler is named <emphasis>LoginEventHandler</emphasis> and is found in the file: <emphasis>/libs/eventhandler/LoginEventHandler.class.php</emphasis>:</para>
+		<para>{@example samples/tutorial-php-login/libs/eventhandlers/LoginEventHandler.class.php}</para>
+		<para>When the submit event happens and the form is submitted, Lion will intercept the call and the validation steps, mentioned above, will be done on the server side.<br/>
+  The values contained in the login and password components will contain the user's input.</para>
+		<para>This can all be seen in lines 7-10 in the <emphasis>LoginEventHandler</emphasis> class, where we retrieve both values from the components and pass them to the login model service.</para>
+	</refsect1>
+
+	<refsect1 id="{@id the_logon_model_service}">
+		<title>The Login Model Service</title>
+		<para>From the previous section, we see how Lion intercepts a login submission from a user. <br/>
+  If you follow the code seen in <emphasis>/libs/eventhandler/LoginEventHandler.class.php</emphasis>, you will notice we use Lion's Model Service (which hopefully you have already read about).<br/>
+  By utilizing Lion's Model Service, we abstract away which class is doing all of the work, so there's no need for an explicit "new ..." call.</para>
+		<para>If you recall, we define our Model Services by creating the information in our <emphasis>/app/config/model_services.xml</emphasis> file:</para>
+		<para>{@example samples/tutorial-php-login/config/model_services.xml}</para>
+		<para>Now, we need to create this <emphasis>UserServices</emphasis> class in order to declare a <italic>bridge</italic> method to perform the actual logon.</para>
+		<para>{@example samples/tutorial-php-login/libs/model/UserServices.class.php}</para>
+		<para>In our <emphasis>UserServices</emphasis> class, we make a call into Lion's {@link __AuthenticationManager::logon()} method. <br/>
+  In just a moment, we will see how to setup our configurations and classes to actually do <emphasis>our own</emphasis> user authentication, but first let's conceptualize the process visually:</para>
+		<image>imagesdir/Tutorials/securitytutorial/login_sequence.png</image>
+		<para>At this point, if you still have not read about Lion's Authentication section, it is highly recommended to do so: {@tutorial Security/Authentication.pkg}.<br/>
+  We need some way to tell Lion about which class will be handling our authentication. Thus, we integrate our user loader as the user loader used by the security framework to logon users.<br/>
+  The only thing we have to do is setup the <emphasis>/app/config/context.xml</emphasis> by setting the following configuration:</para>
+		<para>{@example samples/tutorial-php-login/config/context.xml}</para>
+		<para>In our example, we will construct our own <emphasis>user loader</emphasis> class that implements the {@link __IUserLoader} interface, which requires you to implement the {@link __IUserLoader::loadUser()} method.<br/>
+  This is what will be called by Lion's Authentication Framework.
+		</para>
+		<para>Let's take a look at our user loader implementation in the <emphasis>/libs/model/CustomUserLoader.class.php</emphasis>:</para>
+		<para>{@example samples/tutorial-php-login/libs/model/CustomUserLoader.class.php}</para>  
+		<para>The entire purpose of the class is to authenticate the user with the user identity. In our example, we have a simple array with user names and passwords for which to retrieve the <emphasis>real</emphasis> password.<br/>
+  In a real world example, you would probably be going to a database to retrieve this password with the given user name, rather than having a static array.<br/>
+  In fact, we will show an example of this later in this Tutorial.</para>
+		<para>Because we are identifying users by the login/username, the user identity will just contain the login string.<br/>
+  It's this class's responsibility to return a Lion Framework instance of a {@link __User} object. If no user exists with the given login, then we return null.</para>
+		<para>Another thing to take notice of is how the user loaded sets roles to users that we find a name for in the database.</para>
+		<para>Here's a summarized list of what we just accomplished in this section.</para>
+		<orderedlist>
+			<listitem>The model service will call the authentication manager in order to perform the authentication</listitem>
+			<listitem>The authentication manager will delegate (as we have configure in the context.xml) to our user loader in order to get the user</listitem>
+			<listitem>After the user loader returns a user instance, the authentication manager will check the given credentials with the user credentials</listitem>
+			<listitem>Finally, if credentials match, the authentication manager will set the user as authenticated and return a reference to it</listitem>
+		</orderedlist>
+	</refsect1>
+	<refsect1 id="{@id protecting_pages}">
+		<title>Protecting pages</title>
+		<para>Another requirement of a good web framework is being able to manage the protection of certain pages. In order to accomplish this, Lion allows us to set permissions to controllers that  we want to protect.</para>
+		<para>We have a controller named <emphasis>ProtectedPageController</emphasis> located in <emphasis>/libs/controllers/ProtectedPageController.class.php</emphasis> as the following:</para>
+		<para>{@example samples/tutorial-php-login/libs/controllers/ProtectedPageController.class.php}</para>
+		<para>and the corresponding template:</para>
+		<para>{@example samples/tutorial-php-login/templates/protectedPage.tpl}</para>
+		<para>By using the definitions we setup in the very first section of this tutorial, let's assign the PRIVATE_AREA_PERMISSION to the ProtectedPageController controller in the <emphasis>/app/config/controllers.xml</emphasis>:</para>
+		<para>{@example samples/tutorial-php-login/config/controllers.xml}</para>
+		<para>Now the page <syntaxdefinition>http://yourdomain/protectedPage.html</syntaxdefinition> will only be accessible for users that have the <emphasis>PRIVATE_AREA_PERMISSION</emphasis> permission. <br/>
+  In our example, this translates to users having the REGISTERED_USER role.</para>
+		<para>In order to see that our protected controller protectedPage is already protected, try to execute it from your browser without being logged-in (remember to clear the cache):</para>
+		<image>imagesdir/Tutorials/securitytutorial/security_error.png</image>
+		<para>This page indicates that lion has detected an invalid user attempting to access a protected page without having the required permission.</para>
+		<para>By default, the {@link __ActionController} will throw an Exception when a user without the correct permissions attempts to access the page. <br/>
+		However, Lion allows us to customize our behavior in the case that the page is accessed without the required permission. <br/> 
+		To do so, we just need to override the <emphasis>onAccessError</emphasis> method within the <emphasis>ProtectedPageController</emphasis> class (i.e. to redirect to the login page):</para>
+		<para>{@example samples/tutorial-php-login/libs/controllers/ProtectedPageController.class.php}</para>
+		<para>Now, when we try to access to the protectedPage.html, the application will send us to the login page. <br/>
+		Certainly, we could improve the functionality by adding some error messaging, but for the purpose of this tutorial this is enough.</para>
+	</refsect1>
+	<refsect1 id="{@id executing_the_hello_world}">
+		<title>Executing the application</title>
+		<para>Now, let's  execute our application. Write the following url within your browser: <underline>http://yourdomain/login.html</underline></para>
+		<image>imagesdir/Tutorials/securitytutorial/login2.png</image>
+		<para>Now try by entering a non existent login/password and see how the application redirects you again to the login page.</para>
+		<para>Now, try with a valid login/password. i.e. aparraga/secret1:</para>
+		<image>imagesdir/Tutorials/securitytutorial/protectedPage2.png</image>
+	</refsect1>
+	<refsect1 id="{@id retrieving_users_from_database}">
+		<title>Retrieving users from a database</title>
+		<para>As we mentioned before, most authentication frameworks use a database to authenticate a user. Here we illustrate how to load our users from a database.<br/>
+		If you are familiar with a DAO design pattern, you might recognize that our user loader is more like a DAO in charge of loading users. <br/>
+		Thus, let's improve the original user loader class in order to get users from a data source.</para>
+		<para>First, let's see a simple example of structuring user information in a database. <br/>
+		We want to have users with roles; this suggests to us that we want a <emphasis>user</emphasis> table and a <emphasis>roles</emphasis> tables as shown in the following diagram:</para>
+		<image>imagesdir/Tutorials/securitytutorial/user_and_role.png</image>
+		<para>In short, we want to associate users to a set of roles so that we can dynamically load them for a given user. Take a look at our table definitions in "database language":</para>
+		<para>{@example Tutorials/securitytutorial/users_and_roles.sql}</para>
+		<para>Let's change our previous user loader to now retrieve user and roles from the database:</para>
+		<para>{@example Tutorials/securitytutorial/UserLoaderDao.class.php}</para>
+		<para>Notice how easy it is to then assign the set of roles to a given user? Just set the array of roles on the the Lion {@link __User} object.</para>
+	</refsect1> 
+	<refsect1 id="{@id logout}">
+		<title>How to perform a logout</title>
+		<para>To perform a logout is really simple with the security framework: just call to the <syntaxdefinition>__AuthenticationManager::getInstance()->logout()</syntaxdefinition> method.</para>
+	<para>The default behavior of the {@link __AuthenticationManager}'s logout method is to unset the User object, reset the User in the session, and then login in as an Anonymous User.</para>
+</refsect1>
+</refentry>

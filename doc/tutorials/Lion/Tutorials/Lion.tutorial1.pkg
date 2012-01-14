@@ -1,0 +1,104 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Hello World</refname>
+  <refpurpose>Using the MVC</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ <para>
+    <note>
+    <para>
+    Note that all the source code used in this tutorial is available to <emphasis>download</emphasis> and to <emphasis>see in action</emphasis>:
+    <itemizedlist>
+      <listitem>{@link http://bamboo.lionframework.org/download/[build_key]/artifacts/build-[build_number]/Deliverables/tutorial1-[version].tgz Download the source code}</listitem>
+      <listitem>{@link http://www.lionframework.org/tutorials/[version]/tutorial1 See the application in action}</listitem>
+    </itemizedlist>
+    </para>
+    </note>
+ </para>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Goal</title>
+  <para>The goal of this tutorial is to learn how to define controllers in Lion. The application that we are going to develop just shows a 'Hello world' message.</para>
+  <para>Here is what we will accomplish in this tutorial:
+  <itemizedlist>
+    <listitem>Create a controller to handle the user request (libs/controllers/HelloWorldController.class.php)</listitem>
+    <listitem>Modify the app/config/controllers.xml file to declare the controller as active</listitem>
+    <listitem>Create a template to show the string 'Hello world' (templates/helloWorld.tpl)</listitem>
+  </itemizedlist></para>
+  <graphic fileref="imagesdir/Tutorials/tutorial1/directory_structure.png"/>
+ </refsect1>
+ <refsect1 id="{@id defining_the_controller}">
+  <title>Defining the Controller</title>
+  <para>First, define which controller we're going to use in our application.</para>
+  <note>
+  <para><emphasis>Naming convention:</emphasis></para>
+  <para>
+  By default, when an {@link __ActionController} receives a request to execute an action, it tries to find a method with the name of the action followed by the suffix 'Action'.</para>
+  <para>i.e., to execute the action 'fooBar', an {@link __ActionController} will try to execute the 'fooBarAction' method.<br />
+  If no action is specified, the controller will use the 'default' action, which then corresponds to the function "defaultAction'.
+  </para>
+  </note>
+  <para>
+  Since we just want a page to show the 'Hello world' message, we only need a single action to handle it.<br/>
+  So, let's start by defining a new action controller to execute that action:</para>
+  <para>{@example samples/tutorial1/libs/controllers/HelloWorldController.class.php}</para>
+  <para>In the class above we are defining our action controller by subclassing the {@link __ActionController} class (this is the most common and recommended practice in Lion).</para>
+  <para>This action controller will have at the same time one single method: defaultAction. This method is called by default when executing the HelloWorld controller.<br/>
+  This method just creates a {@link __ModelAndView} instance, assigns the 'Hello world' message and returns it. That's all.</para>
+  <note>
+  <para>Because class names are case insensitive in PHP, action codes will inherit this feature.</para>
+  <para>i.e., the codes 'helloworld', 'HELLOWORLD' and 'HeLLoWorLd' are equivalents and correspond to the same controller: 'HelloWorldController'</para></note>
+  <para>Note that we are naming the controller class with the suffix 'Controller' due to the following mapping rule defined in the <emphasis>config/controllers.xml</emphasis> file:
+  {@example BootstrappedApplication/config/controllers.xml}
+  This mapping rule lets Lion know that a 'code' for a controller corresponds to a class with the same name followed by the suffix 'Controller'. Thus, the 'HelloWorld' code will correspond to the 'HelloWorldController' controller class.<br/>
+  </para>
+  <para>Now we have our action controller defined. Good job! :)</para>
+ </refsect1>
+ <refsect1 id="{@id placing_the_controller}">
+  <title>Placing the Controller</title>
+  <para>
+  In Lion, the <emphasis>libs/controllers</emphasis> directory in your application is reserved to place the Controller files.</para>
+  <para>There is a mapping rule to let Lion know that any file in that directory with the suffix '.class.php' corresponds to a controller class with the same name without the suffix.<br/>
+  This mapping rule resides in the <emphasis>app/config/includepath.xml</emphasis> file:<br/>
+  {@example BootstrappedApplication/config/includepath.xml}
+  Of course, it can be customized, i.e. to place the controllers in other location or just to change the file suffix.</para>
+  <para>Continuing with our example, since our controller class is HelloWorldController, let's name the file as <emphasis>HelloWorldController.class.php</emphasis> and place it into the <emphasis>libs/controllers</emphasis> directory.
+  </para>
+ </refsect1>  
+ <refsect1 id="{@id defining_the_view}">
+  <title>Defining the View</title>
+  <para>Now it's time to define how the information will be shown to the user, it is, define the View (This is my favorite part :)</para>  
+  <para>First, we need to understand how Lion resolves which View to use and how it sets up that View:<br/>
+  The {@link __ModelAndView} class is the one designed to provide all the necessary information to let Lion knows which View technology to use to render the user interface as well as which model data and which other information like the template to use in that process.<br/>
+  Lion just needs to retrieve a 'view code' from the {@link __ModelAndView} in order to create and setup a View. By default, if there is no information in the {@link __ModelAndView} regarding the view code, the one used for the 'action' will be the one used for the view: <emphasis>helloWorld</emphasis>.<br/>
+  <emphasis>Where is this behavior defined?</emphasis> In the app/config/views.xml file where you can edit the configuration section's <emphasis>view-definitions</emphasis>:<br/>
+  {@example BootstrappedApplication/config/views.xml}
+  The rule in the above configuration specifies that for every view code, use the {@link __SmartyView} class as a View, and assign to the <emphasis>template</emphasis> property the same 'view code' followed by the suffix <emphasis>.tpl</emphasis><br/>
+  Since we have not specified a view code, the one used for the action will be the one used for the view: <emphasis>helloWorld</emphasis>. So, according to the configuration, it implies to use the {@link __SmartyView} and set the <emphasis>template</emphasis> property with the value: <emphasis>helloWorld.tpl</emphasis>.
+  So, voile: everything was already configured as we wanted :)<br/>
+  The only remainging issue that we need to address is the Smarty template (in /templates directory):</para>
+  {@example samples/tutorial1/templates/helloWorld.tpl}
+  <para>This template has a placeholder in Smarty format: <emphasis>{$hello_world_message}</emphasis>.<br/>
+  Because we have to assign a variable to the model with the same name as the placeholder, the View will try to fill this with the value already stored in the model. Which, in our example, is  string 'Hello world'.
+  </para>
+  <para>Sorry, there aren't any more steps to do, your application is ready to be launched :)</para>
+ </refsect1>
+ <refsect1 id="{@id executing_the_hello_world}">
+  <title>Executing the Hello World</title>
+  <para>Now it's time to execute our application, and for that purpose, we need to know how to build the appropriate URL to execute the action we want.</para>
+  <floatnote>
+  <para>The default mapping rule for URLs in Lion is <emphasis>&lt;controller&gt;.&lt;action&gt;.html</emphasis></para>
+  <para>i.e. if we want to execute the controller foo and a default action, the url should be <emphasis>foo.html</emphasis>.</para>
+  </floatnote>
+  <para>By making use of Lion's route scheme, just use the following url: <underline>http://yourdomain/helloWorld.html</underline></para>
+  <para>Lion will deduce that the action controller that you are requesting is the one with code 'helloWorld'.</para>
+  <para>Our application should be similar to the following one:</para>
+  <graphic fileref="imagesdir/Tutorials/tutorial1/execution_in_browser.png"/>
+  <para>And yes: we know that it's not a Picasso, but for the goal of this tutorial is enough :)</para>
+  <para>The next tutorial shows how to declare model services and how to consume them from action controllers:<br/>
+  {@tutorial Lion/Tutorials/Lion.tutorial2.pkg}
+  </para>
+ </refsect1>
+</refentry>

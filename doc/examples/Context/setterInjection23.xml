@@ -1,0 +1,26 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="myInvoiceDao" class="InvoiceDAO">
+    
+        <!-- via defining the reference directly: -->
+        <property name="connection">
+          <context-instance class="DbConnection">
+            <property name="dbName"><value>myDb</value></property>
+            <property name="dbEngine"><value>mysql</value></property>
+            <property name="dbHost"><value>localhost</value></property>
+            <property name="dbUser"><value>myUser</value></property>
+            <property name="dbPassword"><value>secret</value></property>
+          </context-instance>
+        </property>
+        
+    </context-instance>
+
+    ...    
+
+  </context-instances>
+  
+</configuration>
+

@@ -1,0 +1,58 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>What Lion stores in session</refname>
+  <refpurpose></refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>How Lion uses the session</title>
+  <para>Lion uses the session to store some information in order to keep them unaltered between requests as well as to improve the performance accessing to them.<br/>
+  We could highlight the following items:</para>
+  <itemizedlist>
+    <listitem><emphasis>Context instances</emphasis>: Context instances (see {@tutorial Context/Context.DependencyInjection.pkg}) defined as singleton, which is the default mode to define them.</listitem>
+    <listitem><emphasis>Configuration</emphasis>: The configuration (generally retrieved from the cache) is stored in session the first time the session is created in order to accelerate the access to it</listitem>
+    <listitem><emphasis>Security</emphasis>: The security framework implements a session based RBAC, which means that the user has an space in session where roles/permissions are stored in</listitem>
+    <listitem><emphasis>I18n literals</emphasis>: We can setup I18n to store some literals in session in order to be consumed by whatever controller/view.</listitem>
+    <listitem><emphasis>UI Components</emphasis>: The component pool ({@link __ComponentPool}) stores some of the components in session to be recovered whenever they are needed. In that sense UI component status are keeping between requests.</listitem>
+  </itemizedlist>
+ </refsect1>
+ <refsect1 id="{@id context_instances}">
+  <title>Context instances</title>
+  <para>Context instances, when they are singleton, are stored within the session and recovered from it between request and request.</para>
+  <para>Context instances that are defined in lazy initialization are stored in the session once they are requested, but never before that.</para>
+  <para>See the {@tutorial Context/Context.DependencyInjection.pkg} for more information regarding context instances</para>
+ </refsect1>
+ <refsect1 id="{@id configuration}">
+  <title>Configuration and the session</title>
+  <para>As part of the first request, Lion recovers the configuration (generally from the cache) and stores it in session.<br/>
+  Next requests get the configuration from the session directly in order to ensure that the configuration has not been changed between requests.</para>
+  <note>It's important to note that if we change anything within the configuration, we must remove the cache as well as invalidate our session (generally is enough to remove the session cookie from our browser).<br/>
+  Otherwise, the configuration in session will be stored again in the cache, resulting in the old configuration version.</note>
+ </refsect1>
+ <refsect1 id="{@id security}">
+  <title>Security and the session</title>
+  <para>Security framework implements what is known as a session based RBAC.<br/>
+  This is a security pattern that resolves the permissions that a user has and stores them in what's known as the user session. The user session is represented in Lion by the {@link __UserSession} class, which is the one that contains the active roles: a set of roles the user has, which are translated in terms of permissions on demand</para>
+  <para>So, the {@link __UserSession} is stored and retrived to and from the session. This is the session usage that security framework does</para>
+ </refsect1>
+ <refsect1 id="{@id I18n}">
+  <title>I18n and the session</title>
+  <para>There are 2 kind of I18n literals from the persistence level point of view:<br/>
+  <itemizedlist>
+    <listitem>I18n literals at <emphasis>session persistence level</emphasis>: Literals that are loaded once and persisted within session.</listitem>
+    <listitem>I18n literals at <emphasis>request persistence level</emphasis>: Literals that are loaded each time a controller requires them.</listitem>
+  </itemizedlist>
+  </para>
+  <para>So, first group at session persistence level are usually very common used literals that, for performance reasons, are stored in session to accelerate the recover process (vs. read again and again from the literals source)</para>
+ </refsect1>
+ <refsect1 id="{@id ui_components}">
+  <title>UI Components in session</title>
+  <para>UI Components are persisted in the {@link __ComponentPool}, which uses the session to persist them.<br/>
+  Those components implement the {@link __IPoolable} interface, which let the framework know that they must be stored as well as managed by the component pool</para>
+  <para>So, components such a textbox or a radiobutton are persisted since they are created and reside in the session. However, we can remove them from the session whenever we need. The UI Component API offer several methods to do that</para>
+ </refsect1>
+</refentry>
+

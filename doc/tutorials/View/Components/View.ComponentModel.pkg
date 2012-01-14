@@ -1,0 +1,62 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Component Model</refname>
+  <refpurpose>A component based framework</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id whats_a_component}">
+   <title>What's a component?</title>
+   <para>User interface (UI) components, also known as controls or just components, are elements in charge of the interaction with the end user. It's done in several ways: by rendering the interface, sending client events to the server side, showing pieces of the model to the client, ...</para>
+   <para>Creating UI elements as components (like a calendar or a rich HTML input component) makes development easier because the core functions are encapsulated within a reusable piece of code.<br/>
+   You just need to care on where to place the components as well as which logic will be executed for each event. If you have experience on classic desktop application development, you'll probably understand what we are talking about.</para>
+   <para>
+   <itemizedlist>
+     <listitem>A well defined, familiar idiom for UI design</listitem>
+     <listitem>Are configurable, reusable elements that compose the user interfaces of Lion application</listitem>
+     <listitem>Can be simple, like a button, or compound, like a table, which can be composed of multiple components</listitem>
+     <listitem>Extensible through composition, adding new components</listitem>
+     <listitem>Accessible via tags in template pages</listitem>
+   </itemizedlist>
+   </para>
+ </refsect1>
+ <refsect1 id="{@id component_model}">
+  <title>The component model</title>
+  <para>The Lion component model is compounded by the following parts:</para>
+  <para>
+  <itemizedlist>
+    <listitem>A component tag language to easily define components within our templates.</listitem>
+    <listitem>A component execution model which includes an event management system in charge of dispatch events fired from client side as well as synchronize component values between client and server.</listitem>
+    <listitem>A default set of user interface components out of the box.</listitem>
+  </itemizedlist>
+  </para>
+ <refsect2 id="{@id comp_render_model}">
+  <title>Component Tag Language</title>
+  <para>The component tag language eases the definition of user interface components within our templates.</para>
+  <para>Component tag language offers an extendible XML-based syntax that is interpreted by the framework and replaced by client-side specific code in run-time (i.e. XHTML + javascript code).<br/>
+  Note that Lion does not parse our templates once and again. Instead of that, it moves some information regarding the components to the cache in order to optimize the rendering process.</para> 
+  <para>See the {@tutorial View/Component/View.ComponentTagLanguage.pkg} section for more information</para>
+ </refsect2>
+ <refsect2 id="{@id event_mgmnt_system}">
+  <title>Component Execution Model</title>
+  <para>The component execution model is the piece in charge of:
+  <itemizedlist>
+    <listitem>Synchronize status between components and their client representation.</listitem>
+    <listitem>Execute the appropriate code in response to events, by delegating to the event management system.</listitem>
+  </itemizedlist>
+  </para>
+  <para>Component events (such a click in a button) are intercepted by Lion and sent to the correspondent <emphasis>Event Handler</emphasis>.<br/>
+  All the views have an event handler associated to. The event handler usually contains specific logic to be executed in order to handle each event.</para>
+  <para>See the {@tutorial View/Component/View.EventManagementSystem.pkg} section for more information about event handlers.</para> 
+  <para>See the {@tutorial View/Component/View.ComponentExecutionModel.pkg} section for more information about how the Component Execution Model works internally in Lion.</para>
+ </refsect2>  
+ <refsect2 id="{@id set_of_ui_components}">
+  <title>Default set of user interface components</title>
+  <para>There are several user interface components out of the box within the Lion distribution</para>
+  <para>See the {@tutorial View/Component/View.DefaultSetOfComponents.pkg} section for more information about those components</para>
+  <para>See the {@tutorial View/Component/View.WorkingWithComponents.pkg} section for more information about component classification</para>
+ </refsect2>
+ </refsect1>
+</refentry>

@@ -1,0 +1,14 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Validation Rules System</refname>
+  <refpurpose>Validating component contents</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id comp_render_model}">
+  <title>Validation in Lion</title>
+  <para></para>
+ </refsect1>
+</refentry>

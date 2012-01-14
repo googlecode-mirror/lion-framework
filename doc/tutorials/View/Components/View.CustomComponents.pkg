@@ -1,0 +1,20 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Custom components</refname>
+  <refpurpose>Powering the reusability</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Custom components</title>
+   <para>In fact, component is more like a synonym of reusability: We don't want to develop again and again the same calendar widget.</para>
+   <para>Lion has been designed to make pretty easy the creation of new components, as this is a really common practice on application development.<br/>
+   It has a clear separation between the component logic and the UI rendering, allowing several representations over the same components for several client types.</para>
+   <para>There are some pieces within Lion destined to ease the binding between component's properties and client representation:<br/>
+   Lion understand the end-point concept associated to terminal pieces envolved on client-server synchronization. A client end-point is the piece on the client side, i.e. a javascript object property. Analog to the server end-point, i.e. a component property.</para>
+   <para>Lion exposes an API to establish bindings between client and server end-points. i.e. to bind the value property of a textbox component to the HTML input value representing it.</para>
+   {@example View/Components/ComponentDefinition.class.php}
+ </refsect1>
+</refentry>

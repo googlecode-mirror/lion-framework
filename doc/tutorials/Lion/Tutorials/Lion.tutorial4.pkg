@@ -1,0 +1,59 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Hello World Pro</refname>
+  <refpurpose>Form components tutorial</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ <para>
+    <note>
+    <para>
+    Note that all the source code used in this tutorial is available to <emphasis>download</emphasis> and to <emphasis>see in action</emphasis>:
+    <itemizedlist>
+      <listitem>{@link http://bamboo.lionframework.org/download/[build_key]/artifacts/build-[build_number]/Deliverables/tutorial4-[version].tgz Download the source code}</listitem>
+      <listitem>{@link http://www.lionframework.org/tutorials/[version]/tutorial4 See the application in action}</listitem>
+    </itemizedlist>
+    </para>
+    </note>
+ </para>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Goal</title>
+  <para>The goal of this tutorial is to learn how to use <emphasis>input components</emphasis> such the inputbox and the combobox.<br/>
+  The application that we are going to develop is an improvement of {@tutorial Lion/Tutorials/Lion.tutorial3.pkg}: This application will ask the user to input some information in order to show a customized 'Hello world' message.</para>
+  <para>What we are going to do in this tutorial is:
+  <itemizedlist>
+    <listitem>To modify the helloWorld template by adding 4 components: an inputbox, a combobox, a button and a label (templates/helloWorld.tpl)</listitem>
+    <listitem>To modify the event handler associated to the helloWorld view (libs/eventhandlers/HelloWorldEventHandler.class.php)</listitem>
+  </itemizedlist></para>
+  <image>imagesdir/Tutorials/tutorial3/directory_structure.png</image>
+ </refsect1>
+ <refsect1 id="{@id placing_components}">
+  <title>Placing input components within the template</title>
+  <para>First thing to do will be to modify the template helloWorld.tpl by adding the following components:</para>
+  {@example samples/tutorial4/templates/helloWorld.tpl}
+  <para>As we can see, we have declared 4 components: an inputbox (nameInputBox), a combobox (saludationComboBox), a commandbutton (sayHelloButton) and a label (helloLabel).<br/>
+  What we expect is to see a customized 'Hello World!' message like 'Hello mr. Antuan' when click on the button.</para>
+ </refsect1>
+ <refsect1 id="{@id creating_event_handler}">
+  <title>Modifying the event handler</title>
+  <para>The following task to do is to adapt the event handle to:</para>
+  <itemizedlist>
+    <listitem>Read user input from components</listitem>
+    <listitem>Build a customized 'Hello World!' message and show it</listitem>
+  </itemizedlist>
+  <para>To do that, we have to define a method to handle the button click event and perform those tasks:</para>
+  {@example samples/tutorial4/libs/eventhandlers/HelloWorldEventHandler.class.php}
+  <para>As we can see in the listing above, we have just retrieve the value of the input components by calling the getValue method.<br/>
+  All the input components inherit from the {@link __InputComponent}, exposing the getValue method to retrieve the current value of each one</para>
+  <para>Analogous, all those kind of components exposes another method (setValue) to set a new value.</para>
+ </refsect1>  
+ <refsect1 id="{@id executing_the_hello_world}">
+  <title>Executing the Hello World Pro</title>
+  <para>Now it's time to execute our application. Just type the following url: <underline>http://yourdomain/pathtoyourapplication/helloWorld.html</underline></para>
+  <para>The aspect of our application should be like the following figure once we have click on the button:</para>
+  <image>imagesdir/Tutorials/tutorial4/execution_in_browser.png</image>
+  <para>And again: No need to refresh the entire page to show the hello message. Ajax + Json instead of, which is handled automagically by the framework.</para>
+ </refsect1>
+</refentry>

@@ -1,0 +1,13 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <routes>
+ 
+    <route id="invoices_route" uri-pattern="\/invoices\/$invoice_id\.html$">
+      <front-controller class="__HttpFrontController"/>
+      <action controller="invoices" code="search"/>
+      <parameter name="invoice_id" value="$invoice_id"/>
+      <variable name="$invoice_id" var-pattern="^\d+$"/>
+    </route>
+
+</configuration>

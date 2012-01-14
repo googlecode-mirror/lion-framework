@@ -1,0 +1,151 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Overview</refname>
+  <refpurpose></refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction</title>
+  <para>Lion is an emerging open source PHP framework for creating rich web applications as a combination of the most valuable features and patterns taken from the development community.</para>
+ </refsect1>
+ <refsect1 id="{@id theframework}">
+  <title>The framework</title>
+  <para>One of the most fundamental piece within the framework is the <emphasis>context container</emphasis>.</para>
+  <para>Lion framework is organized by contexts, where each context represents a concrete application. At the very high level, a context is just a space where instances collaborate together without interfering with other contexts. i.e., a context manages his own session and cache, avoiding conflicts with other contexts running at the same time.</para>
+  <para>A context is linked to a physical directory where application's classes and configuration files are contained in. Each context is bound to a single directory, being able to handle his own configuration and classes.</para>
+  <para>The first context that lion loads is the one representing the main application (also known as <emphasis>application context</emphasis>).<br/>
+  Getting the application context is really simple: there is a singleton instance representing it. The context also exposes some accessor to retrieve context contained instances such the session or the configuration.<br/>
+  i.e.
+  {@example Context/getTheApplicationContext.php}</para>
+  <refsect2 id="{@id dependency_injection}">
+   <title>Dependency injection</title>
+   <para>One of the most interesting capability of the context container is the known as <emphasis>Dependency Injection</emphasis> (aka inversion of control or <italic>IoC</italic>), being today's latest development craze.</para>
+   <para>Software components (Clients) are often a part of a set of collaborating components which depend upon other components (Services) to successfully complete their intended purpose. In many scenarios, they need to know 'which' components to communicate with, 'where' to locate them, and 'how' to communicate with them. When the way such services can be accessed is changed, such changes can potentially require the source of lot of clients to be changed.</para>
+   <para>One way of structuring the code is to have the clients declare their dependency on services, and have some "external" piece of code assume the responsibility of locating and/or instantiating the services and simply supplying the relevant service references to the clients when needed. With this method, client code typically is not required to be changed when the way to locate an external dependency changes. This type of implementation is what's known as dependency injection.</para>
+   <para>In lion we can declare the dependencies in the context configuration file and let the framework work out the complexities of service instantiation, initialization, sequencing and supplies the service references to the clients as required.  This way to declare dependencies is based on Spring XML-style.</para>
+   <para>{@example Context/contextinstances.xml}
+   Each context container manages his own instances. In fact, the mechanism of locating object references is by calling to the appropriate context accessor:
+   {@example Context/getUserDaoContextInstance.php}
+   </para>
+  </refsect2>
+  <refsect2 id="{@id request_dispatcher}">
+   <title>The request dispatcher and the intercepting filter</title>
+   <para>Lion defines a complete infrastructure of modules and classes to dispatch and transform client requests in terms of application components.<br/>
+   The request dispatching mechanism receives many different types of requests, which require varied types of processing. Some requests are simply forwarded to a concrete controller, while other requests must be modified, audited, or uncompressed before being further processed.</para>
+   <para>When a request enters on Lion, it often must pass several entrance tests prior to the main processing stage. i.e. perform the user authentication, switch the language, validate certain constraints, ...</para>
+   <para>The key to solving this problem in a flexible and unobtrusive manner is to have a simple mechanism for adding and removing processing components, in which each component completes a specific filtering action. This pattern is known as intercepting filter, which is one of the most interesting features on Lion request dispatcher system.<br/>
+   The filters intercept incoming requests and outgoing responses, allowing preprocessing and post-processing. We are able to add and remove these filters unobtrusively, without requiring changes to our existing code.</para>
+   {@example Request/InterceptingFilter.class.php}
+   <para>Filters are executed before giving the control to the front controller (preFilter) and after returning the response to the client (postFilter).<br/>
+   Filters can be associated to routes declaratively within the configuration.</para>
+   {@example Request/interceptingfilter.xml}   
+  </refsect2>
+  <refsect2 id="{@id seo}">
+   <title>The url rewrite engine</title>
+   <para>This is the Lion native <emphasis>URL rewrite engine</emphasis>, delegating the URL parsing from the webserver to Lion itself.</para>
+   <para>URL rewriting is a method of creating search engine friendly URLs, also known as SEO (Search Engine Optimization) URLs. Dynamic URLs have apparently a negative effect on search engine ranking. To get around this issue the URL rewriting technique is used. URL rewrite tools can examine a website and produce a simplified link for each resource on the website.</para>
+   <para>i.e. the link:</para>
+     <syntaxdefinition>http://yourdomain.com/index.php?module=invoices&amp;view_id=10948</syntaxdefinition>
+   <para>can be changed to</para>
+     <syntaxdefinition>http://yourdomain.com/invoices/10948.html</syntaxdefinition>
+   <para>Different URL formats accepted by Lion are specified within route definitions. A route is a way to describe the mapping between an URL and how to <italic>route</italic> the execution flow.<br/>
+   A route defines a pattern for the URL, in pure perl compatible regular expression syntax. First found route matching an URL will be the one used to process the request.</para>
+   <para>A route defines the following components:</para>
+   <itemizedlist>
+     <listitem>Which front controller will attend the request.</listitem>
+     <listitem>Which action/controller will be executed.</listitem>
+     <listitem>Which other parameters will be appended to the request.</listitem>
+   </itemizedlist>
+   <para>Because URL formats are sensible to be changed, Lion provides a class designed to cover the translation between url and route components in 2 directions: This class exposes methods to discompound an URL into components as well as to do the inverse task, to compose an URL as from the components.</para>
+  </refsect2>
+  <refsect2 id="{@id mvc}">
+   <title>The model-view-controller</title>
+   <para>Many frameworks follow the Model View Controller (MVC) architectural pattern to separate the data model, business rules and user interface.</para>
+   <para>Most MVC frameworks follow a push-based architecture. These frameworks use actions that do the required processing, and then "push" the data to the view layer to render the results.</para>
+   <para>An alternative to this is pull-based architecture, sometimes also called "component-based". These frameworks start with the view layer, which can then "pull" results from multiple controllers as needed. In this architecture, multiple controllers can be involved with a single view.</para>
+   <para>So, which MVC has lion?<br/>
+   Both of them: Lion integrates a push-based MVC really similar to spring's approach, but also implements a proprietary pull-based approach.<br/>
+   Both cooperate together in harmony during the execution life-cycle.</para>
+  </refsect2>
+  <refsect2 id="{@id component-model}">
+   <title>The component model</title>
+   <para>The lion <emphasis>component model</emphasis> may be one of the key pieces of the framework:<br/>
+   It reduces drastically the amount of code needed to bound UI component representation to server side instances, handling the following aspects:</para>
+   <itemizedlist>
+     <listitem>How component status are propagated between client and server</listitem>
+     <listitem>How client events are sent synchronous or asynchronously to server.</listitem>
+     <listitem>How events are dispatched on server</listitem>
+   </itemizedlist>
+   <para>The way to handle an event is as simple as writing a single method to do that. No extra declarations to let lion know that a concrete event need to be handled by the server side. Changes are bound between client and server automagically.<br/>
+   In the other hand, by handling an event we are able to execute a world of operations such retrieve or update components status, access to the model, check security stuffs, manipulate the nagivation flow, ...</para>
+   <para>i.e., to shows the 'FoO BaR!' string on myLabel component once the user has click on the button myButton, a single method with just 2 lines of code:
+   {@example View/Components/EventHandler1.class.php}
+   We don't have to care about how to propagate the click event from client to server or how to call to this method once the event has been received on server side. Just 2 lines of code is enough.</para>
+   <graphic fileref="imagesdir/View/Components/eventmanagementsystem.png"/>
+   <para>Lion handles asynchronous calls to the server by using one of the most exciting technology: <emphasis>Ajax</emphasis>.<br/>
+   Ajax helped the Web to be faster by reducing the CPU load on the servers for tasks that are mostly cosmetic and have almost no interference in the application business logic.</para>
+   <para>When an event has raised, lion uses the Ajax call not just to send the event notification but client info that has changed since last time the component model was synchronized.</para>
+  </refsect2>
+  <refsect2 id="{@id components}">
+   <title>Custom components</title>
+   <para>In fact, component is more like a synonym of reusability: We don't want to develop again and again the same calendar widget.</para>
+   <para>Lion has been designed to make pretty easy the creation of new components, as this is a really common practice on application development.<br/>
+   It has a clear separation between the component logic and the UI rendering, allowing several representations over the same components for several client types.</para>
+   <para>There are some pieces within Lion destined to ease the binding between component's properties and client representation:<br/>
+   Lion understand the end-point concept associated to terminal pieces envolved on client-server synchronization. A client end-point is the piece on the client side, i.e. a javascript object property. Analog to the server end-point, i.e. a component property.</para>
+   <para>Lion exposes an API to establish bindings between client and server end-points. i.e. to bind the value property of a textbox component to the HTML input value representing it.</para>
+   {@example View/Components/ComponentDefinition.class.php}
+  </refsect2>
+  <refsect2 id="{@id security_layer}">
+   <title>The security layer</title>
+   <para>Lion security layer is a <emphasis>RBAC</emphasis> designed to solve most of the authentication and authorization related tasks.<br/>
+   The RBAC, which means Role Based Access Control, is an access control pattern which defines one of the most flexible ways to administer access permissions.</para>
+   <para>This pattern defines a world of permissions and roles where we can protect some pieces of our web application, known formally as system resources. Each system resource has an associed permission, more like a lock requiring a concrete key. Each user has a set of roles. A role allow to access to a system resource if the required permission is covered by the role. i.e., an user with the role READ_POSTS could read posts on a forum while an user with the role WRITE_POSTS could create new posts but at the same time read existing posts.</para>
+   <para>Thanks to the dependency injection configuration facility, we can easily define the security layer by declaring involved instances and dependency between them.</para>
+   {@example Security/Authentication/instances1.xml}
+  </refsect2>
+  <refsect2 id="{@id configuration}">
+   <title>The configuration and section handlers</title>
+   <para>Based on .net framework, the premise for the Lion configuration system is simple: to provide developers with a consistent manner for storing and reading configuration information.</para>
+   <para>The Lion configuration system features an extensible infrastructure opened for extension, providing the following benefits:</para>
+   <itemizedlist>
+     <listitem>Configuration information is allowed to be stored in several formats (XML, .ini files, ...) as well as several sources (files, database, ...). In that sense, Lion offers a flexible way to organize the configuration within an application.</listitem>
+     <listitem>Configuration information is cached once it has been parsed and transformed. So there are not performance penalties in that sense.</listitem>
+     <listitem>Lion configuration system is extensible. You can define new configuration parameters and write configuration section handlers to process them.</listitem>
+   </itemizedlist>
+   <para>The Lion Configuration System provides several classes for programmatic access to the configuration settings. One of the key features within the configuration system is the capability to intercept a request for getting a concrete configuration section and execute a filter to transform the section in terms of application components.</para>
+   <graphic fileref="imagesdir/Configuration/sectionhandlerprocess.png" />
+   <para>By ussing section handlers we get 2 main benefits: to parse configuration fragments on demand and to uncouple configuration parsing classes from configuration consumers.</para>
+  </refsect2>
+  <refsect2 id="{@id classloader}">
+   <title>The class loader</title>
+   <para>I'm really bored about writing <emphasis>include directives</emphasis> on my PHP files, do you?<br/>
+   For that reason, one of the first features that was added to Lion framework was the <emphasis>class loader</emphasis>, a class in charge of include every php file just when needed.</para>
+   <para>Lion redirects the __autoload callback to the class loader, making possible to include any missing class files on demand. In the other hand, the class loader knows where is located every class by reading from some xml files, known as includepath files.</para>
+   <para>In an includepath file We can declare where is located a concrete class, but we can also specify a naming convention for a set of classes by ussing a pattern, easing the maintenance. Imagine that sometime a class can be loaded by just following what naming convention we have defined.</para>
+   {@example BootstrappedApplication/config/includepath.xml}
+   <para>There are 3 main benefits on using the class loader:</para>
+   <itemizedlist>
+     <listitem>To avoid the use of include directives within php files. On small project this doesn't matter, but on relative big projects it becomes a great advantage.</listitem>
+     <listitem>As consequence of the previous point, refactoring the code by moving files from one to other folder is a really easy task because just implies to adapt the specific includepath files without altering the code at all.</listitem>
+     <listitem>To plug new libraries ready to use on lion by just adding new includepath files. Again, code does not need to know where libraries are located on.</listitem>
+   </itemizedlist>
+  </refsect2>
+  <refsect2 id="{@id what_else}">
+   <title>What else?</title>
+   <para>Well, the purpose of this document is just to highlight some of the most important functionalities implemented on Lion.<br/>
+   However, apart from that, there are a bunch of rich features available on Lion:</para>
+   <itemizedlist>
+     <listitem>The model proxy, a way to publish model access services by uncouple where services are really located. Also usefull to publish some services as webservices.</listitem>
+     <listitem>The action dispatcher, where front-controllers delegate on. This is also usefull to execute actions programatically.</listitem>
+     <listitem>The exception handler, a way to organize error codes in groups and associate exception classes to each group declarativelly. Each error code can be also associated to a internationalized message.</listitem>
+     <listitem>The I18n module, a way to provide the application with I18n capabilities. Language strings can be loaded from different sources (files, database, ...).</listitem>
+     <listitem>Command line support, a way to execute lion applications from the command line by ussing PHP-CLI. Also a way to execute lion administrative commands. Requests are routed to an special front-controller designed to route to the most appropriate controller based on command-line parameters.</listitem>
+     <listitem>The configuration stream wrapper, making transparent where a configuration file is retrieved from. i.e. the file <italic>config://servers.xml</italic> could be a physical file in a concrete location or the result of a query to an external database.</listitem>
+   </itemizedlist>
+  </refsect2>
+ </refsect1>
+</refentry>

@@ -1,0 +1,16 @@
+<?xml version = "1.0" standalone="yes"?>
+
+<configuration>
+
+  <model-services>
+
+    <!-- Invoice services -->
+    <class name="InvoiceDao">
+      <service name = "getAllInvoices" class-method = "loadAll"/>
+      <service name = "getInvoice"     class-method = "load"/>
+      <service name = "saveInvoice"    class-method = "save"/>
+    </class>
+    
+  </model-services>
+  
+</configuration>

@@ -1,0 +1,37 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Installation</refname>
+  <refpurpose>Installing lion framework</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id installing}">
+  <title>Installing Lion</title>
+  <para>To install Lion framework:
+  <orderedlist>
+    <listitem>{@link http://www.lionframework.org/downloads.html Download} the last stable version (.tgz or .zip depending on your operative system).</listitem>
+    <listitem>Uncompress the file downloaded.</listitem>
+    <listitem>Copy to a location that is accessible via your web server (i.e. /var/www/...)</listitem>
+  </orderedlist>
+ </para>
+ </refsect1>
+ <refsect1 id="{@id first_time_execution}">
+  <title>First time executing Lion</title>
+  <para>From a browser, open the web URL corresponding to the location where you have uncompressed it (i.e. <italic>http://example.com/lion/index.html</italic> or whatever path for which you have installed Lion).
+  </para>
+  <para>A page like the following one should be shown:</para>
+  <graphic fileref="imagesdir/Installation/welcome_page.png"/>
+  <note>
+  <para><emphasis>Important:</emphasis><br />
+  If you are not able to see this page (including the images and styles) you may need to read {@tutorial Lion/Installation/Lion.SystemRequirements.pkg} section in order to configure your web server.<br />
+  Also take a look at {@tutorial Lion/Lion.CommonTroubles.pkg} section.
+  </para>
+  </note>
+  <para>
+  If you are able to see the page of the figure (including the images and styles), Congratulations! It means that you have Lion working and you are ready to code your own application.
+  </para>
+ </refsect1>
+</refentry>
+

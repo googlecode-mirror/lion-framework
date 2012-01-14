@@ -1,0 +1,205 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Dependency Injection</refname>
+  <refpurpose></refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction</title>
+   <para>One of the biggest issues in software systems nowadays is the management of dependencies between components. In many scenarios, software components need to know "which" components to communicate with, "where" to locate them, and "how" to communicate with them.</para> 
+   <para>It becomes a problem when the way such services can be accessed is changed, such changes can potentially require the source of lot of clients to be changed.<br/>
+   i.e. if you have ever changed a constructor signature and realized that there are more like 20 different places where the constructor is called.</para>
+   <para>One way of structuring the code is to have the clients declare their dependency on services, and have some "external" piece of code assume the responsibility of locating and/or instantiating the services and simply supplying the relevant service references to the clients when needed. With this method, client code typically is not required to be changed when the way to locate an external dependency changes.<br/>
+   This type of implementation is what's known as <emphasis>dependency injection</emphasis>, being one of the today's latest development craze.</para>
+   <para>This pattern is commonly associated to Java lightweight containers, enterprise programming and similar stuffs, but it's weird to think about PHP. However, the concept goes behind the technology.</para>
+   <para>Lion framework opens an efficient PHP implementation which is more like a port of one of the most notable implementations in top of Java: the Spring framework. The reason is really simple: It's a fact that Spring approach has been strongly accepted by the community due to several reasons, so, why do we have to reinvent the wheel?</para>
+ </refsect1>
+ <refsect1 id="{@id context_container}">
+  <title>The context container</title>
+  <para>Lion framework is organized by context containers, where each one represents a concrete application. At the very high level, a context is just a space where instances collaborate together without interfering with other contexts. i.e., a context manages his own session and cache, avoiding conflicts with other contexts running at the same time.</para>
+  <para>The context container is also the responsible of orchestrate the dependency injection process, being able to read the specification from a configuration file, delegating the instance's creation and dependency injection to other classes to finally managing instance life-cycles.</para>
+  <para>The easiest way to define instances and dependences is by declaring them into a XML configuration file, described shortly.</para>
+ </refsect1>
+ <refsect1 id="{@id context_instances}">
+  <title>Context instances</title>
+  <para><italic>Context instance</italic> is the name that receives an instance managed by a context container in Lion framework. If you are familiar with Spring framework, <italic>context instance</italic> is more like the <italic>bean</italic> concept.</para>
+  <para>Anyway, context instances are created by an special factory designed just for that purpose: The {@link __InstanceFactory}. The way to define instances and dependences is by ussing instance definition objects ({@link __InstanceDefinition}). In fact, the context-instances configuration file is just translated in terms of instance definition objects by the context container.</para>
+  <para>Instance definitions provide the following information to the instance factory:</para>
+  <para>
+  <itemizedlist>
+    <listitem><emphasis>A class name</emphasis>: Commonly the class implementation of the context instance. However, it's allowed to define a factory method instead of using the constructor. In that case it will be the factory class name.</listitem>
+    <listitem><emphasis>Behavioral properties</emphasis>: How the context instance should behave in the context container (i.e. if it will be a prototype or a singleton, initialization and destruction methods, ...)</listitem>
+    <listitem><emphasis>Properties</emphasis>: A set of properties to setup the context instance once it's created. i.e. the database connection parameters such the host and port for a DAL instance.</listitem>
+    <listitem><emphasis>Dependences</emphasis>: Which others context instances need to be set to the actual instance.</listitem>
+  </itemizedlist>
+  </para>
+  <refsect2 id="{@id context_instance_creation}">
+    <title>Context instance creation</title>
+    <para>We have 3 ways to specify how to create a context instance:</para>
+    <refsect3 id="{@id via_constructor}">
+      <title>Via constructor</title>
+      <para>This is the most simple and common way to declare instances: by just providing the class name which we want to use to create the instance.</para>
+      <para>i.e.
+        {@example Context/constructor.xml}
+      </para>
+      <para>The context factory will create the instance by just calling the constructor, without delegating to other components for that purpose.</para>
+      <para>We are also able to specify which arguments to use when calling the constructor, as described later.</para>
+    </refsect3>
+    <refsect3 id="{@id via_factory_method}">
+      <title>Via factory method</title>
+      <para>Less common but likewise usefull in certain scenaries: by providing not just the class name but an static method (a factory method) within the class.<br/>
+      The instance factory will call the static method to obtain a new instance instead of calling directly to the constructor.</para>
+      <para>i.e.
+      {@example Context/staticfactorymethod.xml}
+      </para>
+      <para>Again, we are also able to specify which arguments to use when calling the factory method, as described later.</para>
+    </refsect3>
+    <refsect3 id="{@id context_instance_factory}">
+      <title>Via factory</title>
+      <para>By ussing this way, we do not provide the class name but the factory class. Of course, a factory method is required for this scenary.</para>
+      <para>The instance factory will call the static method within the factory to obtain a new instance. Also note that there is an implicit dependence between the instance and the factory.</para>
+      <para>i.e.
+      {@example Context/instancefactory.xml}
+      </para>
+      <para>Again, we are also able to specify which arguments to use when calling the factory method, as described later.</para>
+    </refsect3>
+  </refsect2>
+  <refsect2 id="{@id instance_identifiers}">
+    <title>Instance identifiers</title>
+    <para>Context instances are usually identified by an unique id within the context container the instance belong to. The id is commonly defined as a context-instance level attribute within the XML configuration.</para>
+    <para>This id will be usefull later to retrieve a concrete instance from the context container. For that purpose, the container exposes a method (getContextInstance).</para>
+    <para>i.e.
+    {@example Context/getContextInstance.php}
+    </para>
+  </refsect2>
+  <refsect2 id="{@id instance_scopes}">
+    <title>Instance scopes</title>
+  <para>Defining instances is like creating recipes for creating instances of a class defined by that instance definition. The fact that an instance definition is a recipe means that we can have many objects created from a single recipe.</para>
+  <para>However, we can manage not just dependencies and setup configurations to be plugged in objects to be created from a concrete instance definition, but the scope of the objects that we're going to create. This is a very powerfull approach, giving us the flexibility to define an scope of the objects from the configuration versus having to develop it within our PHP code.<br />
+  Instances can be declared in one single scope: Lion Framework support four scopes:</para>
+  <para>
+  <itemizedlist>
+    <listitem><emphasis>singleton</emphasis> - Scopes a single instance definition to a single object instance per Context Container.</listitem>
+    <listitem><emphasis>prototype</emphasis> - Scopes a single instance definition to any number of object instances.</listitem>
+    <listitem><emphasis>request</emphasis> - Scopes a single instance definition to the lifecycle of a single HTTP request; that is each and every HTTP request will have its own instance of a instance created off the back of a single instance definition.</listitem>
+    <listitem><emphasis>session</emphasis> - Scopes a single instance definition to the lifecycle of a HTTP Session.</listitem>
+    </itemizedlist>
+  </para>
+  <para>i.e., if we have a resource (i.e. a PDO connection) which is not serializable into the session, we may want to declare it with scope=request.<br />
+  By default, instances have scope=session, which means that once they are created, they are stored into the session.</para>
+  </refsect2>
+  <refsect2 id="{@id singleton_instances}">
+    <title>Singleton instances</title>
+    <para>The singleton pattern is extrapolated to context instances in the sense that we can declare if we want to get always the same instance (singleton) from the context container or a new one (prototype) every time we call the getContextInstance method.</para>
+    <para>By default, context instances are created in singleton mode, unless we specify otherwise.<br/>
+    A non-singleton instance means that the context container will return a clone of the requested instance. Lion will manage the instance life-cycle in a different manner depending on that mode.</para>
+    <para>i.e.
+    {@example Context/singleton.xml}
+    In this example, a new prototype instance of ExampleInstance will be returned every time we call to get it, while the same ExampleInstanceTwo instance will be returned since it's defined as singleton. Again, by omiting this attribute, Lion will treat an instance in singleton mode.
+    </para>
+  </refsect2>
+ </refsect1>
+  <refsect1 id="{@id dependencies}">
+   <title>Dependencies</title>
+   <para>As the basis of dependency injection, context instances just expose methods and properties waiting to be setted by the context container.<br/>
+   In that sense, instances delegate the responsability of locating and/or instantiating the services they depend on to the context container.</para>
+   <para>The way to do that is by defining which constructor arguments, arguments to a factory method or properties need to be called in order to set to.<br/>
+   The context container will <italic>inject</italic> those dependencies once it is able to do that. One of the context container big jobs is to resolve all the dependencies for all the instances before setting up them. This is how the inversion of control works</para>
+   <para>In lion, we have 2 ways to set dependencies: by passing them as constructor arguments or by calling setters</para>
+  <refsect2 id="{@id setter_injection}">
+    <title>Setter based injection</title>
+    <para>This way allow the context container to send all the collaborators to an instance by calling the setters of the dependant instance<br/>
+    i.e., if we need to set a database connection to a DAO, we can define a setter based injection by exposing a setter to receive the connection as argument</para>
+    <para>i.e.
+    {@example Context/setterInjection.php}
+    </para>
+    <para>Once we have define the way to inject dependencies via setter, we can declare dependencies in the XML format as following:
+    {@example Context/setterInjection.xml}
+    </para>
+    <para>In this example, we are setting our Dao connection property by setting the connection instance defined as localDbConnection.<br/>
+    In the other hand, we are setting concrete values for the localDbConnection, to be concrete all the parameters to connect to our local database. Note the diference between setting a reference to another instance and defining values directly. In both cases, the context container will call to each setter once resolve dependencies of each one</para>
+    <para>Take a look at the following example to see different ways to establish dependencies via setters:</para>
+    <refsect3 id="{@id via_setting_a_single_value}">
+      <title>Via setting a single value</title>
+      <para>We're able to declare values directly to be set to properties:
+      {@example Context/setterInjection24.xml}
+      You can set whatever literal value to whatever public setter in a class. This allow us to configure values to setup our instances declarativelly.<br/>
+      i.e., in our example, we have configured our connection instance with values to connect to our database.
+      </para>
+    </refsect3>
+    <refsect3 id="{@id via_the_value_attribute}">
+      <title>Via the value attribute</title>
+      <para>It's a short-cut of the previous case, by ussing the value attribute within the property.
+      {@example Context/setterInjection25.xml}
+      </para>
+    </refsect3>
+    <refsect3 id="{@id via_assigning_an_array}">
+      <title>Via assigning an array</title>
+      <para>Sometime, the way to set a property is by passing an array. So, Lion allow to declare arrays as properties as shown in the following example:
+      {@example Context/setterInjection26.xml}
+    </para>
+    </refsect3>
+    <refsect3 id="{@id via_referencing_another_context_instance}">
+      <title>Via assigning a hash</title>
+      <para>Similar to the previous case, but we can also set a key to each item by ussing the key attribute
+      {@example Context/setterInjection27.xml}
+      </para>
+    </refsect3>
+    <refsect3 id="{@id via_declaring_the_instance}">
+      <title>Via declaring an instance</title>
+      <para>We're able to declare a context instance as a property of another one as shown in the following example:
+      {@example Context/setterInjection23.xml}
+      In fact, this feature allow to be used recursivelly, meaning that you can establish whatever number of levels of instances contained inside other instances.      
+      </para>
+    </refsect3>
+    <refsect3 id="{@id via_referencing_another_context_instance}">
+      <title>Via referencing another context instance</title>
+      <para>Continuing with the previous case, sometime we need to set the same context instance to more than one instance, i.e., an instance representing the connection to a database could be set to more than one DAO instance.<br/>
+      For that purpose, there is a way to reference instances declared in our context as shown in the following example: 
+      {@example Context/setterInjection21.xml}
+      In this example we have reference the <italic>localDbConnection</italic> instance to be set in the connection property of the <italic>myContractorDao</italic> instance.</para>
+      <para>In general, the usage of references is the most common and best way to declare dependencies between instances, because open the configuration to reference instances in more than one place while let the configuration more clear and readable.</para>
+      <para>In the other hand, you can reference instances as part of an array or a hash, let see in the following example:
+      {@example Context/setterInjection212.xml}
+      </para>
+    </refsect3>
+    <refsect3 id="{@id via_ref_attribute}">
+      <title>Via the ref attribute</title>
+      <para>It's a short-cut of the previous case, by ussing the ref attribute within the property:
+      {@example Context/setterInjection22.xml}
+    </para>
+    </refsect3>
+    <para>As you can see, the are too many ways to define dependencies between instances.</para>
+  </refsect2>
+  <refsect2 id="{@id constructor_injection}">
+    <title>Constructor based injection</title>
+    <para>This way allow the context container to send all the collaborators to an instance as constructor arguments<br/>
+    i.e., if we need to set a database connection to a DAO, we can define a constructor based injection by exposing the connection as a constructor argument</para>
+    <para>i.e.
+    {@example Context/constructorArgument.php}
+    </para>
+    <para>Once we have define the way to inject dependencies via constructor, we can declare dependencies in the XML format as following:
+    {@example Context/constructorArgument.xml}
+    </para>
+    <para>In this example, we are defining which concrete DbConnection instance will be sent as parameter when building our ContractorDAO instance (identified as myContractorDao).</para>
+    <para>We can define dependencies as constructor argument in the same way as setters, being able the <italic>constructor-arg</italic> node to accept same formats as the property node.<br/>
+    Maybe a different is that we are able to establish the order in which arguments are passed when calling the constructor. i.e.:
+    {@example Context/constructorArgument2.php}
+    In this example, we are expossing 2 arguments for the constructor: The connection instance and the persistence engine as the second one.<br/>
+    Our configuration file could be like the following one:
+    {@example Context/constructorArgument2.xml}
+    </para>
+    <para>However, the order the constructor arguments are defined is the one they'll be sent to the constructor in case the index attribute is not present</para>
+  </refsect2>
+  <refsect2 id="{@id null}">
+    <title>The null value</title>
+    <para>Sometime, we need to initialize properties by passing null. To do that, we can use the <emphasis>null</emphasis> node as shown in the following example:
+    {@example Context/null.xml}
+    In this example, a new prototype instance of ExampleInstance will be returned every time we call to get it, while the same ExampleInstanceTwo instance will be returned since it's defined as singleton. Again, by omiting this attribute, Lion will treat an instance in singleton mode.
+    </para>
+  </refsect2>  
+ </refsect1> 
+</refentry>

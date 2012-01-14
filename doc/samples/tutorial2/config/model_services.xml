@@ -1,0 +1,14 @@
+<?xml version = "1.0" standalone="yes"?>
+
+<configuration>
+
+  <model-services>
+
+    <class name="HelloWorld">
+      <service name = "getHelloWorldString" 
+           class-method = "getHelloWorldString"/>
+    </class>
+
+  </model-services>
+
+</configuration>

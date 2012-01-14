@@ -1,0 +1,14 @@
+<?xml version = "1.0" standalone="yes"?>
+
+<configuration>
+
+  <view-definitions>
+  
+    <view code="fooBarView" class="__SmartyView">
+      <property name="template" value="fooBar.tpl"/>
+      <property name="eventHandlerClass" value="FooBarEventHandler"/> 
+    </view>
+  
+  </view-definitions>
+  
+</configuration>

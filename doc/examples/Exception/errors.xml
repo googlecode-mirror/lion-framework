@@ -1,0 +1,19 @@
+<?xml version = "1.0" standalone="yes"?>
+
+<configuration>
+
+  <errors>
+  
+    <!-- Common errors -->
+    <error-group id="ERR_MODEL_ERRORS" exception-class="MyModelExceptionClass">
+      <error code="75001" id="ERR_INVOICE_CANNOT_BE_EMPTY" />
+      <error code="75002" id="ERR_INVOICE_WRONG_DATE" />
+      <error code="75003" id="ERR_INVOICE_NOT_FOUND" />
+      <error code="75004" id="ERR_CUSTOMER_NOT_FOUND" />
+      ...
+    </error-group>
+
+    <error-group id="ERR_SECURITY_ERRORS" exception-class="MySecurityExceptionClass">
+      <error code="76002" id="ERR_WRONG_USERNAME_OR_PASSWORD" />
+      <error code="76008" id="ERR_ACCESS_LOGIN_REQUIRED" />
+      ...

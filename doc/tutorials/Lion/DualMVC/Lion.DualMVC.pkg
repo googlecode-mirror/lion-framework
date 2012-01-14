@@ -1,0 +1,24 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Dual MVC</refname>
+  <refpurpose>MVC plus MVP altogether</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction to the Dual MVC</title>
+  <para>Lion is compound by 2 different MVC approaches together:</para>
+  <itemizedlist>
+    <listitem>The push-style MVC, aka <emphasis>Model View Controller or MVC</emphasis>, which is the classic design pattern which decouples data access and business logic (model) from presentation layer (view) by introducing an intermediate component: the controller.</listitem>
+    <listitem>The pull-style MVC, aka <emphasis>Model View Presenter or MVP</emphasis>, where the view is able to "pull" data from multiple controllers as needed. This approach eases the creation of rich web user interfaces.</listitem>
+  </itemizedlist>
+  <image>imagesdir/MVC/dualmvc.png</image>
+  <para>For a better understanding of both patterns, let say that <emphasis>MVC</emphasis> is the piece in charge of executing the logic to show a page while <emphasis>MVP</emphasis> is the piece in charge of executing the logic associated to the page UI (i.e. the logic that is executed when the user click on a button or select an option from a drop-down list).</para>
+  <para>This does not mean that Lion executes the MVC before delegating in the MVP. i.e. When the user submit a form, the event associated to the submit is executed at the very beginning of the request, before giving the control to the MVC.</para>
+  <para>Lion allow the usage of the MVC, the MVP or both together on a per-request basis, which means that, for some request we may want to use just the MVC while for some other request we may prefer just the MVP or even both togethers.</para>
+  <para>For more information regarding the Model-View-Controller, please see the {@tutorial Lion/Lion.MVC.pkg} section.</para>
+  <para>For more information regarding the Model-View-Presenter, please see the {@tutorial Lion/DualMVC/Lion.MVP.pkg} section.</para>
+ </refsect1>
+</refentry>

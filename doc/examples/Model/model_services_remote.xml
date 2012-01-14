@@ -1,0 +1,19 @@
+<?xml version = "1.0" standalone="yes"?>
+
+<configuration>
+
+  <model-services>
+
+    <!-- Invoice services -->
+    <class name="InvoiceDao">
+      <service name = "getInvoices" 
+       class-method = "loadInvoices"
+             remote = "true" />
+          
+       ...      
+
+    </class>
+    
+  </model-services>
+  
+</configuration>

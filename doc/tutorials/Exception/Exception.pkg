@@ -1,0 +1,54 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Exception management system</refname>
+  <refpurpose>Handling exception</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction</title>
+  <para>All exceptions that are not catched by your code are handled by the {@link __ErrorHandler} class.</para>
+  <para>Once the {@link __ErrorHandler} receives an exception, it perform the following operations:
+  <itemizedlist>
+    <listitem>Logs the exception (if applicable by settings in the lion.ini file)</listitem>
+    <listitem>Executes a logic associated to the type of exception (just for exceptions subclassing the {@link __LionException})</listitem>
+    <listitem>Shows a page with information regarding the exception</listitem>
+  </itemizedlist>
+  </para>
+  <para>Exception model in lion is already integrated with the I18n framework, allowing to define internationalized message</para>
+  <para>Exception can be declared in xml configuration files and grouped by their semantic (i.e. security exception, configuration exceptions, rendering exceptions and so on).</para>
+  <para>Last but not the least, the class in charge of rendering the page showing the exception can be customized.</para>
+ </refsect1>
+ <refsect1 id="{@id configure_exceptions}">
+  <title>Runtime settings</title>
+  <para>Lion has some runtime settings regarding how to handle exceptions (defined in /app/lion.ini):</para>
+  {@example Exception/lion.ini}
+  <para>Being:</para>
+  <itemizedlist>
+    <listitem><emphasis>DEBUG_MODE</emphasis>: If debug mode is set to false, the trace of the exception won't be shown in the screen.</listitem>
+    <listitem><emphasis>DISPLAY_EXCEPTIONS</emphasis>: This setting allow to show the concrete exception message. Otherwise a general message will be shown for every exception.</listitem>
+    <listitem><emphasis>DISPLAY_DEBUG_INFO</emphasis>: This setting allow to show the trace when an exception comes. Note that this setting works just in debug mode. Otherwise it's ignored by Lion.</listitem>
+    <listitem><emphasis>LOG_ENABLED</emphasis>: This setting enable the logging. We may turn on this setting in order to also log exceptions.</listitem>
+    <listitem><emphasis>LOG_EXCEPTIONS</emphasis>: This setting forces to log every exception. Note that this setting works just if logging is enabled.</listitem>
+    <listitem><emphasis>LOG_DEBUG_INFO</emphasis>: This setting log the trace and complementary debug information when an exception is raised. Note that this setting works just if logging is enabled.</listitem>
+  </itemizedlist>
+ </refsect1>
+ <refsect1 id="{@id lion_exception_class}">
+  <title>The __LionException class</title>
+  <para>Lion has his own exception hierarchy subclassing the abstract exception class {@link __LionException}.<br />
+  However, Lion does not require to subclass the {@link __LionException} by our own exceptions.</para>
+ </refsect1>
+ <refsect1 id="{@id exception_management_system}">
+  <title>Lion error handling system</title>
+  <para>The error handler brings some advantages:</para>
+  <orderedlist>
+    <listitem>It decouples the usage of a concrete exception class or the other one from our logic, making it transparent to our application. See {@tutorial Exception/Exception.ErrorTable.pkg}.</listitem>
+    <listitem>It eases the internationalization of our exception messages. See {@tutorial Exception/Exception.I18n.pkg}.</listitem>
+    <listitem>It eases the maintenance of all our exceptions within a single place as well as the assignment of error codes</listitem>
+    <listitem>It eases how exceptions are shown to the user in an error page. See {@tutorial Exception/Exception.ErrorPage.pkg}.</listitem>
+  </orderedlist>  
+ </refsect1>
+</refentry>
+

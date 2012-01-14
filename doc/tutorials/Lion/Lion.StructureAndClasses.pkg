@@ -1,0 +1,31 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Lion Structure and Classes</refname>
+  <refpurpose>Going inside the Framework</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id lion_structure}">
+  <title>Lion directory structure</title>
+  <para>The <italic>lion</italic> directory contained within the lion distribution is like the following one:</para>
+  <para><graphic fileref="imagesdir/Lion/lion_structure.png" /></para>
+  <para>The <emphasis>/admin</emphasis> directory contains the Lion administration area (web-based application embedded within the rest of lion distribution)</para>
+  <para>The <emphasis>/config</emphasis> directory contains all the default configuration values as well as the <emphasis>lion.ini</emphasis> configuration file.<br />
+  It's important to note that lion.ini contains all the runtime directives used by lion.</para>
+  <para>The <emphasis>/includepath</emphasis> directory contains all the class loader files³</para>
+  <para>The <emphasis>/libs</emphasis> directory is the one that contains the lion core as well as all the libraries, modules and classes used by the framework.</para>
+  <para>Finally, the file <emphasis>lion.php</emphasis> located in the root directory contains the lion engine: a class in charge of load and execute the rest of the framework.</para>
+  <para>This file is the only one that we may include in our applications.</para>
+  <para><graphic fileref="imagesdir/Lion/include_lion_php.png" /></para>
+  <para>As soon as lion has his own class loader, we don't need to worry about including more files than the lion.php file. This task will be performed on demand by the framework, for both the framework classes as well as our own classes containing within our application directory.</para>
+  <note>Read more about the class loader at {@tutorial Lion/Lion.ClassLoader.pkg} section.</note>
+ </refsect1>
+ <refsect1 id="{@id lion_classes}">
+  <title>Lion Classes</title>
+  <para>All the lion classes start with a double underscore, (i.e. {@link __Lion}, {@link __FrontController}, {@link __AuthenticationManager}, ...).</para>
+  <para>By ussing this naming convention, lion tries to do not interfere with other application classes nor third party libraries and modules, as soon as it's really unusual to use this preffix.</para>
+  <para>At the same time, the double underscore allow classes to be more readable (vs. ussing a 2 letters suffix or similar ways)</para>
+ </refsect1>
+</refentry>

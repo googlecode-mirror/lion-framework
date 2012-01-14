@@ -1,0 +1,49 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Logging facade</refname>
+  <refpurpose>The log facade</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>What's logging</title>
+  <para>The Logging facade provided by the Lion Framework eases you to control the messages logged in your application.<br/>
+  However, it's important to note that Lion hasn't his own logging implementation since there are really excelents solutions out there. Instead of it, Lion brings a facade as an integrated way to manage logging.</para>
+  <para>By default, Lion framework is configured to use {@link http://logging.apache.org/log4php log4php}, a logging framework for PHP currently undergoing incubation at the Apache Software Foundation, which support a lot of interesting logging capabilities.</para>
+  <para>However, the Logging facade has been designed to work against whatever logging framework, so we are not binding our application to a concrete implementation at all</para>
+ </refsect1>
+ <refsect1 id="{@id configuring_logging_facade}">
+  <title>Configuring the Logging facade</title>
+  <para>The lion.ini file (located as part of the lion distribution within the <emphasis>app/lion.ini</emphasis> file) has the following logging configuration by default:
+  {@example Log/lion.ini}
+  </para>
+  <para>We can enable or disable the cache by altering the value of LOG_ENABLED directive. Note that you can also point to whatever facade implementation by just setting the LOGGER_CLASS directive.</para>
+  <para>As soon as the default lion's logging facade work against log4php, we can configure it by setting the <italic>config_log4php.properties</italic> file.</para>
+  <para>By default, this file contains the following settings:
+  {@example Log/log4php.properties}
+  </para>
+  <note>To learn more about log4php configuration, visit the {@link http://logging.apache.org/log4php log4php} site.</note>
+  <para>This properties file set a default appender to log against the <italic>logs_error.log</italic>.<br/>
+  In the other hand, the logging level has been set to DEBUG, which means that everything will be logged within our application. However, we are able to setup the logging level as desired.</para> 
+ </refsect1>
+ <refsect1 id="{@id logging_facade_api}">
+  <title>Logging facade API</title>
+  <para>Logging facade provides a main instance to log: The <emphasis>logger</emphasis></para>
+  <para>To retrieve the default logger associated to our application context, we just need to call the {@link __ContextContainer::getLogger()} method:
+  {@example Log/getLogger.php}
+  </para>
+  <para>The logger exposes mainly the following methods:</para>
+  <itemizedlist>
+    <listitem>debug (see {@link __ILogger::debug()}): Log an string in debug level</listitem>
+    <listitem>info (see {@link __ILogger::info()}): Log an string in info level</listitem>
+    <listitem>warn (see {@link __ILogger::warn()}): Log an string in warn level</listitem>
+    <listitem>error (see {@link __ILogger::error()}): Log an string in error level</listitem>
+    <listitem>fatal (see {@link __ILogger::fatal()}): Log an string in fatal level</listitem>
+  </itemizedlist>   
+  <para>i.e.
+  {@example Log/Logging.php}
+  </para> 
+ </refsect1>
+</refentry>

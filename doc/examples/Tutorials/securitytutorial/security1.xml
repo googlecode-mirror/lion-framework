@@ -1,0 +1,11 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <role-definitions>
+  
+    <!-- REGISTERED_USER is a role for registered users -->
+    <role id="REGISTERED_USER"/>
+
+  </role-definitions>
+  
+</configuration>

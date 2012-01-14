@@ -1,0 +1,24 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Annotation</refname>
+  <refpurpose>Annotating the code</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction to Annotations</title>
+  <para>Annotations is a way to express metadata associated to classes, methods and properties.<br/>
+  PHP does not bring any native way for annotations, however there is a workaround: to write them within the comments like auto-doc tags.<br/>
+  </para>
+  <para>i.e.
+  {@example Annotation/example1.php}
+  </para>
+ </refsect1>
+ <refsect1 id="{@id annotations_in_lion}">
+  <title>Annotations in Lion</title>
+  <para>todo...</para>
+ </refsect1>
+</refentry>
+

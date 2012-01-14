@@ -1,0 +1,88 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Authentication in Lion</refname>
+  <refpurpose>Validating user credentials</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction</title>
+  <para><emphasis>Authentication</emphasis> is the practice of checking that users are who they say they are. For example, motorists identify themselves to police by presenting a driver's license. Police compare the photo and description on the driver's license with the motorist to authenticate identity. All forms of authentication are based on something you know, something you have, or something you are.</para>
+  <para>In Lion we have the {@link __AuthenticationManager} class to perform all the tasks regarding the authentication. This class exposes two main methods for authenticating: {@link __AuthenticationManager::logon()} and {@link __AuthenticationManager::logout()}.</para>
+  <para>{@link __AuthenticationManager::logon()} allows to perform a logon, it is, all the tasks regarding the authentication.<br/>
+  At the same time, the {@link __AuthenticationManager} has a set of authenticators (classes implementing the {@link __IAuthenticator}). To perform the logon, it delegates the authentication on each {@link __IAuthenticator} instance until the user is successfully authenticated.<br/>
+  Once it occurs, the user instance is stored in the {@link __AuthenticationManager}. It also activate some roles in the {@link __UserSession}.</para>
+  <para>{@link __AuthenticationManager::logout()} just unset the authenticated user from {@link __AuthenticationManager}. Also unset the active roles from the {@link __UserSession}.</para>
+ </refsect1>
+ <refsect1 id="{@id authentication_process}">
+  <title>Authentication Process</title>
+  <para>An user claiming to be authenticated, need to present 2 things: An user's identity and a credential:</para>
+  <itemizedlist>
+    <listitem><emphasis>User identity</emphasis> is basically all the information that drives to identify an user.<br/>
+    i.e. The most typical user identity in a web application is the <emphasis>login</emphasis> or <emphasis>username</emphasis>. It also often used the <emphasis>email</emphasis> as user identity.</listitem>
+    <listitem><emphasis>Credentials</emphasis> is all the information that help to bear out that the user is who he say he is.<br/>
+    i.e. The most typical user credential in a web application is the <emphasis>password</emphasis>, but it could be a <emphasis>digital sign</emphasis>, a <emphasis>smart card</emphasis>, ...</listitem>
+  </itemizedlist>
+  <para>So, the user identity is a class implementing the {@link __IUserIdentity} while the credentials is a class implementing the {@link __ICredentials}.</para>
+  <para>Once the user has an user identity and a credential, he is able to call to the {@link __AuthenticationManager} in order to perform the logon<br/>
+  The {@link __AuthenticationManager} is not the one who will perform the authentication, but delegates in a set of classes implementing the {@link __IAuthenticator}.<br/>
+  The authentication process will finish once an authenticator has accept the authentication, it is, has check that the user is the one who he say he is.</para>
+  <para>Each {@link __IAuthenticator} gives both the user identity and the credential and perform the following tasks:
+  <orderedlist>
+    <listitem>Call to the related user loader in order to load the user that corresponds with the given credentials</listitem>
+    <listitem>Once the user is loaded, the authenticator check that the provided credentials are the same that the loaded user has.</listitem>
+    <listitem>If the credential checking has success, the authenticator returns the user instance reference, otherwise it returns a null.</listitem>
+  </orderedlist>
+  </para>
+  <para>Once the first authenticator has return an user, the {@link __AuthenticationManager} stores the user as authenticated. This user can be retrieved whenever we want by calling to the {@link __AuthenticationManager::getAuthenticatedUser()} method.<br/>
+  In the other hand, the {@link __AuthenticationManager} delegates on the authenticated user in order to activate roles in the {@link __UserSession} instance. Remember that just the active roles will be the one used for authorization tasks.</para>
+  <para>Last step is to inform to the caller if the authentication has success. Simple: the {@link __AuthenticationManager::logon()} method is a boolean method, it is: true if the user has been authenticated.</para>
+  <image>imagesdir/Security/authentication.png</image>
+ </refsect1>
+ <refsect1 id="{@id configuring_authenticators}">
+  <title>Configuring the authentication</title>
+  <para>Authenticators can be configured declarativelly as well as the rest of the classes involved in the authentication. It can be done by modifying the <emphasis>app/config/context.xml</emphasis> file that allows to define instances and inject dependencies:</para>
+  <para>i.e.
+  {@example Security/Authentication/instances1.xml}
+  </para>
+  <floatnote>To read more information regarding dependency injection in Lion, please see the {@tutorial Lion/Lion.DependencyInjection.pkg} section</floatnote>
+  <para>In this example, we are defining an instance <emphasis>authenticationManager</emphasis> being from {@link __AuthenticationManager} class as well as setting just one authenticator.<br/>
+  The authenticator is the instance <emphasis>authenticator</emphasis> being from {@link __Authenticator} class. We are also setting the user loader as a reference to the userLoader instance.<br/>
+  Last, we are defining the <emphasis>userLoader</emphasis> as an instance of the {@link __UserLoader} class.</para>
+  <para>In this example, we are ussing classes out of the box, but it becomes pretty interesting when we can alter the configuration by adding our own implementations.</para>
+  <para>The most critical class here is the one implementing the {@link __IUserLoader}.<br/>
+  Why? this is the one which receives an user identity and load the corresponding user. So, it's the most sensible to be customized depending on the logic used to retrieve the user from.</para>
+  <refsect2 id="{@id loading_users}">
+    <title>Loading users</title>
+    <para>i.e. imagine a system where users are stored in a database and identified by logins. It's simple to understand that we need to provide our own class implementing the {@link __IUserLoader}.<br/>
+    In that sense, we need to create a class implementing the {@link __IUserLoader} and configure the authentication in order to use this class.</para>
+    <para>Let's see it in an example:
+    {@example Security/Authentication/UserDao.class.php}
+    </para>
+    <para>In this example we are implementing the {@link __IUserLoader} by the class <emphasis>UserDao</emphasis>. This class exposes the loadUser method (implementing the one from {@link __IUserLoader}. This method expects a {@link __UsernameIdentity} instance as input argument.</para>
+    <para>Once it receives a {@link __UsernameIdentity}, it retrieves the username and delegates to the <emphasis>loadUserByUsername</emphasis> method.<br/>
+    This other method call to the database by performing a search by the primary key (the username).</para>
+    <para>Last, we have to define the user class created by the user loader. i.e.:
+    {@example Security/Authentication/User.class.php}
+    In this example, we have just extends the {@link __User} class by adding the setPassword method in order to store the expected credentials once the password has been setted.<br/>
+    Take into account that once the user is returned to the authenticator, the authenticator will get the user's credential in order to compare with the given one, so, let your user class returns the expected credentials to be compared to.</para>
+    <para>Now let's modify the <emphasis>app/config/context.xml</emphasis> in order to put our new class:
+    {@example Security/Authentication/instances2.xml}
+    </para>
+  </refsect2>
+ </refsect1>
+ <refsect1 id="{@id anonymous_user}">
+  <title>The Anonymous user</title>
+  <para>Since the user's permissions are checked taking into account just active roles stored in the {@link __UserSession}, it's not necessary to support the figure of the anonymous user in most of the Lion applications.<br/>
+  If case there are not authenticated users in session, the {@link __UserSession} won't have active roles and therefore any system resource requiring permissions won't be accessible.</para>
+  <para>However, some applications require to grant some permissions to anonymous users, i.e. to embed the login form in a page just if the user has a given permission.<br/>
+  To cover this kind of situations, Lion supports the anonymous figure and provide 2 special classes for that purpose: The {@link __AnonymousIdentity} and the {@link __AnonymousCredentials} representing the identity and credentials for anonymous users.<br/>
+  It's an authenticator task to distinguish between the anonymous authentication request and the regular authentication request in order to create an anonymous user or not.</para>
+  <para>Following with our previous example, let's update the UserDao class in order to support the anonymous user:
+  {@example Security/Authentication/UserDao2.class.php}
+  </para>
+  <para>The anonymous user will be claimed by authenticators if there is not any authenticated user in session. If an authenticator returns the anonymous user, the {@link __AuthenticationManager} will set it as the authenticated user and also activate his roles.</para>
+ </refsect1>
+</refentry>

@@ -1,0 +1,105 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>URLs and Routes</refname>
+  <refpurpose>Defining URL routes</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+  <refsect1 id="{@id intro}">
+   <title>Introduction</title>
+   <para>This is the Lion native <emphasis>URL rewrite engine</emphasis>, delegating the URL parsing from the webserver to Lion itself.</para>
+   <para>URL rewriting is a method of creating search engine friendly URLs, also known as SEO (Search Engine Optimization) URLs. Dynamic URLs have apparently a negative effect on search engine ranking. To get around this issue the URL rewriting technique is used. URL rewrite tools can examine a website and produce a simplified link for each resource on the website.</para>
+   <para>i.e. the link:</para>
+     <syntaxdefinition>http://yourdomain.com/index.php?module=invoices&amp;view_id=10948</syntaxdefinition>
+   <para>can be changed to</para>
+     <syntaxdefinition>http://yourdomain.com/invoices/10948.html</syntaxdefinition>
+   <para>As part of a web application usability regarding the URLs, general recommendation is that URLs be chosen so that they:</para>
+     <itemizedlist>
+       <listitem>Are short.</listitem>
+       <listitem>Are easy to type.</listitem>
+       <listitem>Visualize the site structure.</listitem>
+       <listitem>Are <italic>guessable</italic>, allowing the user to navigate through the site by using intuition to fid resourcesoff parts of the URL.</listitem>
+     </itemizedlist>
+  </refsect1>
+  <refsect1 id="{@id routes}">
+   <title>Routes</title>
+   <para>Different URL formats accepted by Lion are specified within route definitions. A route is a way to describe the mapping between an URL and how to <italic>route</italic> the execution flow.<br/>
+   A route defines a pattern for the URL, in pure perl compatible regular expression syntax. First found route matching an URL will be the one used to process the request.</para>
+   <para>A route defines the following components:</para>
+   <itemizedlist>
+     <listitem>Which front controller will attend the request.</listitem>
+     <listitem>Which action/controller will be executed.</listitem>
+     <listitem>Which other parameters will be appended to the request.</listitem>
+   </itemizedlist>
+  </refsect1>
+  <refsect1 id="{@id route_definition}">
+   <title>Defining a Route</title>
+   <para>The way to define routes is by adding them to the configuration (by default, the <emphasis>app/config/routes.xml</emphasis> file)</para>
+   <para>i.e.
+     {@example Request/Routing/routes1.xml}
+   </para>
+   <para>In this example we are defining a route for URLs matching the regular expression <italic>\/invoices\/$invoice_id\.html$</italic>. It is, URLs like <italic>/invoices/xxx.html</italic>, being xxx a number.<br/>
+   An URL matching this pattern will be routed as following:
+   <itemizedlist>
+     <listitem>The front controller class to attend the request will be the {@link __HttpFrontController} class.</listitem>
+     <listitem>The controller and action to be executed will be the controller <italic>invoices</italic> and the action <italic>search</italic>.</listitem>
+     <listitem>A parameter (<italic>invoice_id</italic>) will be added to the request.</listitem>
+   </itemizedlist>
+   </para>
+   <para>
+   i.e.<br />
+   <graphic fileref="imagesdir/Request/url_routing.png" />
+   </para>
+   <para>Note that the way to define variables within the URL regular expression is by ussing the prefix dollar ($) followed by an identifier. In our example, $invoice_id.<br/>
+   It's also important to note that we can also impose a regular expression to restrict the value for a variable. In our example, we are restricting the value for $invoice_id to the pattern <italic>^\d+$</italic>.</para>
+   <para>According to that, the full regular expression that need to matches an URL in order to be routed by the invoice_search route is the following one: <italic>\/invoices\/\d+\.html$</italic><br/>
+   i.e. 
+   <syntaxdefinition>http://yourdomain.com/invoices/10948.html</syntaxdefinition></para>
+   <para>Now, let's see a more generic example:
+     {@example Request/Routing/routes2.xml}
+   </para>
+   <para>In this example, we are reusing the same route definition for the controllers invoices, clients and accounts.</para>
+  <refsect2 id="{@id adding_conditions}">
+   <title>Conditional parameters</title>
+   <para>Lion allows the use of conditional parameters, meaning parameters that will be added just if a condition is satisfaced.<br/>
+   Conditions can be defined in 2 different ways:</para>
+   <itemizedlist>
+     <listitem>By checking if a variable has a concrete value, by ussing the <italic>if-equals</italic> tag.</listitem>
+     <listitem>By checking if a variable has been set, by ussing the <italic>if-isset</italic> tag.</listitem>
+   </itemizedlist>
+   <para>i.e., checking the variable value:
+     {@example Request/Routing/routes_ifequals.xml}
+   </para>
+   <para>In this example, we are adding a variable (use_cache) just in case the extension is 'html'.</para>
+   <para>i.e., checking if a variable has been set:
+     {@example Request/Routing/routes_ifisset.xml}
+   </para>
+   <para>In this example, we are adding 2 variables (pagination and page_id) just if the page_id is set.</para>
+  </refsect2>
+  </refsect1>
+  <refsect1 id="{@id default_routes}">
+   <title>Default routes</title>
+   <para>Lion defines a set of routes that will be availabled by default, and defined in the /lion/libs/configuration/default/config.xml file, located in the lion directory:</para>
+   <itemizedlist>
+     <listitem>Route <emphasis>default</emphasis>: Defined as <italic>&lt;controller&gt;[.&lt;action&gt;].(action|lion)</italic>. This route uses the {@link __HttpFrontController} and has been defined in order to route the most common client requests. The only thing to highlight here is the fact that by ussing the suffix .lion we'll switch to lion administrative area context. Otherwise, the application context will be used.</listitem>
+     <listitem>Route <emphasis>ajax</emphasis>: Defined as <italic>index.ajax</italic>. This route uses the {@link __AjaxFrontController} and has been defined in order to route the ajax requests.</listitem>
+     <listitem>Route <emphasis>resource</emphasis>: Defined as <italic>/resources/&lt;resource_file&gt;</italic>. This route uses the {@link __ResourceFrontController} and has been defined in order to route request for images, css and .js files protected by lion (i.e. a js for a concrete UI component).</listitem>
+     <listitem>Route <emphasis>unknow_url_format</emphasis>: This is the last route to be evaluated by lion. It accepts any URL format, and redirects to the error page with the error code 55701 (Unknwo URL format). If an URL does not match any other route, will be handled by this one.</listitem>
+   </itemizedlist>
+  </refsect1>
+  <refsect1 id="{@id uri}">
+   <title>The __Uri class</title>
+   <para>By delegating the URL rewrite to Lion, the URL format depends on the route definitions. Because URL formats are sensible to be changed, is a bad practice to hardcode URLs within the code/templates since they could stop working after changing the URL format within the route specification.</para>
+   <para>The {@link __Uri} class has been designed to cover this aspect. It provides methods to discompound an URL into components as well as to do the inverse task, to compose an URL as from the components.</para>
+   <para>i.e. Discompound an URL into components:
+     {@example Request/Routing/url_to_uri_components.php}
+   </para>
+   <para>i.e. Compound an URL as from components:
+     {@example Request/Routing/uri_components_to_uri.php}
+   </para>
+   <para>See the {@link __Uri} definition for more information.</para>
+  </refsect1>
+</refentry>
+

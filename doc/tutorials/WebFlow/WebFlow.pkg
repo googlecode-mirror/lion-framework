@@ -1,0 +1,22 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Web Flows</refname>
+  <refpurpose>Declaring the navigation</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction to Web Flows</title>
+  <para>Traditionally, defining the user interface (UI) flow in a web application has been a less than intuitive process. MVC based frameworks force you to cut the UI flow into individual controllers and views. Although this is a really functional system, it has a major disadvantage: the overall UI flow of the web application is not at all clear from looking at the action definitions in whatever used configuration. Flexibility also suffers since actions cannot easily be reused.</para>
+  <para>This is where Lion Web Flow comes in, allowing you to represent the UI flow in (part of) a web application in a clear and simple way. As we will see, this has several advantages:</para>
+  <itemizedlist>
+    <listitem>The UI flow in a web application is clearly visible by looking at the corresponding web flow definition (typically <emphasis>/app/config/webflow.xml</emphasis>).</listitem>
+    <listitem>Web Flows can be designed to be self contained. This allows you to see a part of your application as a module and reuse it in multiple situations.</listitem>
+    <listitem>Web Flows can define any reasonable UI flow in a web application, always using the same consistent technique. You're not forced into using specialized controllers for very particular situations.</listitem>
+  </itemizedlist>
+  <para>For now it suffices to say that a Web Flow is composed of a set of states. A state is a point in the flow where something happens: for instance showing a view or executing an action. Each state has one or more transitions that are used to move to another state. A transition is triggered by an event. To give you an impression of what a Web Flow might look like, the following piece of XML defines a Web Flow roughly equivalent to the work flow implemented by the SimpleFormController. A more detailed explanation of Web Flow principles will follow later.</para> 
+ </refsect1> 
+</refentry>
+

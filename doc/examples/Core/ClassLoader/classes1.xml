@@ -1,0 +1,9 @@
+<?xml version = "1.0" standalone="yes"?>
+<classes>
+
+  <cluster name="My cluster" path="/libs/classes">
+    <class name="MyClass" file="MyClass.php"/>
+    <interface name="MyIFaz" file="MyIfaz.php"/>
+  </cluster>
+
+</classes>

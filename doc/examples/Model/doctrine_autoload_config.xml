@@ -1,0 +1,8 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <configuration-directives>
+    <autoload class="Doctrine" method="autoload"/>
+  </configuration-directives>
+
+</configuration>

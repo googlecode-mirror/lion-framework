@@ -1,0 +1,33 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Error Page</refname>
+  <refpurpose>Customizing how errors are shown</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id error_printer}">
+  <title>The default error page</title>
+  <para>When an unhandled exception occurs, Lion shows the exception message as well as the trace and some other extra information in a page as following</para>
+  <para><graphic fileref="imagesdir/Exception/errorpage.png" /></para>
+  <para>This page shows the type of exceptions (i.e. <italic>Internal core error</italic>), the error code (i.e. 55712), the error message (i.e. <italic>Unable to resolve a controller for code: hello</italic>).<br />
+  It also shows the complete trace, which allow to expand the excerpt of code of each call within the execution stack</para>
+  <para><graphic fileref="imagesdir/Exception/trace.png" /></para>
+ </refsect1>
+ <refsect1 id="{@id custom_error_printer}">
+  <title>Customizing the error page</title>
+  <para>Lion delegates in a class, the Error Printer, to render and output the error page. However, Lion allow to customize that page as well as the content that is shown to the user</para>
+  <para>To do that, we have to change the ERROR_PRINTER setting to point to our own class within the app/config/application.ini</para>
+  {@example Exception/settings.ini}
+  <para>The error printer is a class implementing the {@link __IErrorPrinter} interface, which includes to create a method {@link __IErrorPrinter::displayError()} that is call when an unhandled exceptions is raised to.</para>
+  <para>We can use the MVC, as we're doing to render other pages, to output this page. <br />
+  i.e.</para>
+  {@example Exception/ErrorPrinter.php}
+  <para>So we can design our own controller and view to render our exceptions and errors.<br />
+  i.e. Look the difference between the same error shown by the default error printer, and by a customized error printer:</para>
+  <para><graphic fileref="imagesdir/Exception/error_printer_difference.png" /></para>
+  <para>The first page shows how the error is shown by a customized error printer. The second screenshot shows the same error rendered by the default error printer class.</para>
+ </refsect1>
+</refentry>
+

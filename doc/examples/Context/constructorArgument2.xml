@@ -1,0 +1,14 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="myInvoiceDao" class="InvoiceDAO">
+        <constructor-arg index="0"><ref id="localDbConnection"/></constructor-arg>
+        <constructor-arg index="1"><ref id="doctrine"/></constructor-arg>
+    </context-instance>
+    
+  </context-instances>
+  
+</configuration>
+

@@ -1,0 +1,43 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Accessing the configuration</refname>
+  <refpurpose>Getting configuration values</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Accessing the configuration</title>
+  <para>In Lion, each context has his own configuration. The way to access to the configuration within a context is by ussing the {@link __Context::getConfiguration()} method, which returns a reference to the associated context {@link __Configuration} instance.</para>
+  <para>The {@link __Configuration} class represents a configuration file applicable to a particular application and provides accessors to get any configuration value.</para>
+  <para>i.e.
+    {@example Configuration/getConfiguration.php}
+  </para>
+ </refsect1>
+ <refsect1 id="{@id getting_sections}">
+  <title>Getting a configuration section</title>
+  <para>A section within the configuration can be retrieved by ussing the <emphasis>getSection</emphasis> method.</para>
+  <note>
+    <para>Note that in order to get a section within the Lion configuration we need to access first to the <italic>configuration</italic> section because all the Lion sections are enclosed by that section.</para>
+  </note>
+  <para>i.e., imagine the following configuration content:
+    {@example Configuration/foobar.xml}
+  </para>
+  <para>To access to the foobars section, we should need a code like the following one:
+    {@example Configuration/getSection.php}
+  </para>
+ </refsect1>
+ <refsect1 id="{@id getting_properties}">
+  <title>Getting a property value</title>
+  <para>Some configuration files are structured to just define property values (property files).</para>
+  <para>i.e.,
+    {@example Configuration/settings.ini}
+  </para>
+  <para>For those files, the {@link __Configuration} class define a really usefull method to access to the property values: {@link __Configuration::getPropertyContent()}.</para>
+  <para>i.e.
+    {@example Configuration/getPropertyContent.php}
+  </para>
+ </refsect1>
+</refentry>
+

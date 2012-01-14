@@ -1,0 +1,43 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Default Set of Components</refname>
+  <refpurpose>Components out of the box</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id comp_render_model}">
+  <title>Components out of the box</title>
+  <para>Lion offers a set of components out of the box, which are included within the lion distribution.</para>
+  <para>However, lion exposes an API to ease the creation of custom components.<br/>
+  The advantage of ussing lion ootb components is the fact that those components are maintained within the lion framework source code, guarantying the compatibility when upgrading to an upper version</para>
+  <para>Lion components out of the box:</para>
+   <orderedlist>
+     <listitem>The {@link __ActionBoxComponent actionbox}, a component able to render the result of executing a controller action</listitem>
+     <listitem>The {@link __AreaComponent area}, a component designed to group components within an area</listitem>
+     <listitem>The {@link __CheckBoxComponent checkbox}, a component to check or uncheck an option</listitem>
+     <listitem>The {@link __ComboBoxComponent combobox}, a component to select an item within a list</listitem>
+     <listitem>The {@link __CommandButtonComponent commandbutton}, more like a button</listitem>
+     <listitem>The {@link __CommandLinkComponent commandlink}, more like a link</listitem>
+     <listitem>The {@link __DataCollectorComponent datacollector}, a component to collect data from the view</listitem>
+     <listitem>The {@link __DateBoxComponent datebox}, a component that shows a calendar to easy data selection</listitem>
+     <listitem>The {@link __FileBoxComponent filebox}, a component to submit files, even asynchronouslly</listitem>
+     <listitem>The {@link __FormComponent form}, a component to group input components to be submitted together</listitem>
+     <listitem>The {@link __InputBoxComponent inputbox}, a component to write text in a single line</listitem>
+     <listitem>The {@link __ItemComponent item}, a component representing an item within a list</listitem>
+     <listitem>The {@link __JavascriptComponent javascript}, a component to render javascript at bottom</listitem>
+     <listitem>The {@link __LabelComponent label}, a component to show a text</listitem>
+     <listitem>The {@link __ListBoxComponent listbox}, a component to select one or more items within a list</listitem>
+     <listitem>The {@link __OptionBoxComponent optionbox}, a component to check one single option at a time</listitem>
+     <listitem>The {@link __ProtectedSectionComponent protected section}, a component to protect the enclosed content to be shown to users having a given permission</listitem>
+     <listitem>The {@link __RemoteServiceComponent remote service component}, a component to call to server-side event-handler methods from client javascript code</listitem>
+     <listitem>The {@link __ResourceComponent resource component}, a component to show I18n resources</listitem>
+     <listitem>The {@link __SliderComponent slider}, a component to select a quantity by the mouse</listitem>
+     <listitem>The {@link __TextAreaComponent textarea}, same as the textbox allowing multiple lines</listitem>
+     <listitem>The {@link __UriComponent uri}, a component to render a url corresponding to a defined route</listitem>
+     <listitem>The {@link __ValidationRuleComponent validationrule}, a component to validate other components</listitem>
+     <listitem>The {@link __WindowComponent window}, a component representing a popup window</listitem>
+   </orderedlist>
+ </refsect1>
+</refentry>

@@ -1,0 +1,6 @@
+<?xml version = "1.0" standalone="yes"?>
+
+<foobars>
+  <foo bar="lion"/>
+  <foo bar="rocks"/>
+</foobars>

@@ -1,0 +1,24 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="myInvoiceDao" class="InvoiceDAO">
+    
+        <!-- via an array -->
+        <property name="managedClasses">
+          <list>
+            <entry><value>Invoice</value></entry>
+            <entry><value>InvoiceCollection</value></entry>
+            <entry><value>Customer</value></entry>
+          </list>
+        </property>
+        
+    </context-instance>
+
+    ...    
+
+  </context-instances>
+  
+</configuration>
+

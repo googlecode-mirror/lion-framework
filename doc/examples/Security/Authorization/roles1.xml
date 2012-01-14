@@ -1,0 +1,23 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <role-definitions>
+    
+    <role id="FORUM_USER">
+      <permissions>
+        <permission id="READ_POSTS"/>
+        <permission id="WRITE_POSTS"/>
+      </permissions>
+    </role>
+    
+    <role id="FORUM_ADMIN">
+      <permissions>
+        <permission id="DELETE_POSTS"/>
+        <permission id="MODIFY_POSTS"/>
+      </permissions>
+      <junior-roles>
+        <ref id="FORUM_USER"/>
+      </junior-roles>
+    </role>
+
+  </role-definitions>

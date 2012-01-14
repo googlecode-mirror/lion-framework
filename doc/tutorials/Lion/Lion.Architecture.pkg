@@ -1,0 +1,125 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Lion Architecture</refname>
+  <refpurpose>The whole picture</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id architecture_overview}">
+  <title>Architecture overview</title>
+  <para>Lion is compounded by 3 main pieces:</para>
+  <para>
+  <itemizedlist>
+    <listitem><emphasis>The Request Dispatcher System</emphasis>: The most in top layer just in front of the client. This is the one in charge of request handling tasks.</listitem>
+    <listitem><emphasis>The Context Container</emphasis>: This layer represents the application itself. All the application specific logic is contained within this layer.</listitem>
+    <listitem><emphasis>The Dual MVC</emphasis>: A combination of a MVC and a MVP together. MVC gives the framework a clear layer separation while MVP eases the creation of rich/ajax based user interfaces.</listitem>
+  </itemizedlist>
+  </para>
+  <para>Apart from that, there are a bundle of general purpose libraries and classes used by all the framework, such the error handling module, the I18n system and the event management system.</para>
+  <para><image>imagesdir/Lion/lionarchitecture.png</image></para>
+ </refsect1>
+ <refsect1 id="{@id request_dispatcher}">
+  <title>The Request Dispatcher</title>
+  <para>The request dispatcher system is one of the lion key parts. As mentioned, is the most in top layer listening for client requests.<br/>
+  It has been designed and optimized to be as lightweight as possible due to the execution frequency that it represents.</para>
+  <para>The Request Dispatcher System is compounded by 3 main parts:</para>
+  <refsect2 id="{@id url_routing_system}">
+    <title>The Url Routing Engine</title>
+    <para>This is the Lion URL rewriting engine, delegating the URL parsing from the webserver to Lion itself.<br/>
+    Different URL formats accepted by Lion are specified in route definitions. Each route describes how to map an URL in terms of Lion components, it is: which action/controller has request the client side, which front controller will attend the request and which parameters will be passed as part of the request.<br/>
+    The url routing engine has also the capacity to perform the transformation in the oposited way, it is, to compose an URL as from the envolved components.</para>
+    <para>For more information regarding the Url Routing Engine, please see the {@tutorial Request/Request.UrlRouting.pkg} section.</para>
+  </refsect2>
+  <refsect2 id="{@id request_filter_chain}">
+    <title>The Request Filter Chain</title>
+    <para>This is an intercepting filter in top of the Front Controller.</para>
+    <para>The intercepting filter is a pluggable mechanism to process common services in a standard manner without requiring changes to core request processing code.<br/>
+    The filters intercept incoming requests and outgoing responses, allowing preprocessing and post-processing.<br/>
+    Lion allows to add and remove these filters unobtrusively, without requiring changes to our existing code.</para>
+    <para>For more information regarding the Request Filter Chain, please see the {@tutorial Filter/Filter.pkg} section.</para>
+  </refsect2>
+  <refsect2 id="{@id front_controller}">
+    <title>The Front Controller</title>
+    <para>The front controller provides a centralized entry point that controls and manages Web request handling. It's the initial point of contact for handling the request in terms of the application.<br/>
+    Of course, any filter within the associated filter chain will be executed before the front controller.</para> 
+    <para>For more information regarding the Front Controller, please see the {@tutorial FrontController/FrontController.pkg} section.</para>
+  </refsect2>
+ </refsect1>
+ <refsect1 id="{@id context_container}">
+  <title>The Context Container</title>
+  <para>Lion framework is organized by contexts, where each context represents a concrete application. At the very high level, a context is just a space where instances collaborate together without interfering with other contexts. i.e., a context manages his own session and cache, avoiding conflicts with other contexts running at the same time.</para>
+  <refsect2 id="{@id managed_instances}">
+    <title>Context Instances</title>
+    <para><italic>Context instance</italic> is the name that receives an instance managed by a context container in Lion framework. If you are familiar with Spring framework, <italic>context instance</italic> is more like the <italic>bean</italic> concept.</para>
+    <para>To learn more about context instances and how they are managed by the context container, take a look at {@tutorial Context/Context.DependencyInjection.pkg}</para>
+  </refsect2>
+  <refsect2 id="{@id security}">
+    <title>The Security Framework</title>
+    <para>Lion has his own framework to handle security. The security layer is a session based RBAC (Role Based Access Control), where instances are protected by permissions and permissions are group by roles.</para>
+    <para>For more information regarding the security layer, please see the {@tutorial Security/Security.pkg} section.</para>
+  </refsect2>
+  <refsect2 id="{@id facades}">
+    <title>Session, Cache and Logging facades</title>
+    <para>Well, Lion framework does not implement mechanism to handle the session, nor the cache nor the logging, but provides several interfaces to the most notable frameworks and libraries for that purpose.</para>
+    <para>A context container has a method to retrieve each one, bound to each context</para>
+    <para>For more information regarding the session facade, please see the {@tutorial Session/Session.pkg} section.</para>
+    <para>For more information regarding the cache facade, please see the {@tutorial Cache/Cache.pkg} section.</para>
+    <para>For more information regarding the logging facade, please see the {@tutorial Log/Log.pkg} section.</para>
+  </refsect2>
+  <refsect2 id="{@id configuration}">
+    <title>The Configuration Management System</title>
+    <para>The Lion configuration system features an infrastructure opened for extension.<br/>
+    It's the way that Lion exposes to define the configuration parameters within an application context. Again, Lion integrates the configuration management system at context container level, it is, configuration parameters just affect to the instance within the same ampplication context where they are defined in</para>
+    <para>For more information regarding the configuration management system, please see the {@tutorial Configuration/Configuration.pkg} section.</para>
+  </refsect2>
+ </refsect1>
+ <refsect1 id="{@id dual_mvc}">
+  <title>The Dual-MVC</title>
+  <para>Lion is compound by 2 different MVC approaches together:</para>
+  <itemizedlist>
+    <listitem>The push-style MVC, which is the classic design pattern which decouples data access and business logic (model) from presentation layer (view) by introducing an intermediate component: the controller.</listitem>
+    <listitem>The pull-style MVC, also known as component based, where the view is able to "pull" data from multiple controllers as needed. This approach eases the creation of rich web user interfaces.</listitem>
+  </itemizedlist>
+  <image>imagesdir/MVC/dualmvc.png</image>
+  <para>To be concrete, the component based MVC is one of the major efforts invested in lion:<br/>
+  Lion component model is similar to the AWT GUI component model. It has events and properties just like the Swing component model. It also has containers that contain components, and that also are components that can be contained by other containers.<br/>
+  In that sense, the Lion component model is divorced from traditionals view layers. Lion view allows not just to define the interface look and feel but dyncamic behaviors.</para>
+  <para>For more information regarding the Model-View-Controller, please see the {@tutorial Lion/Lion.MVC.pkg} section.</para>
+  <para>For more information regarding the Component based UI, please see the {@tutorial View/Components/View.ComponentModel.pkg} section.</para>
+ </refsect1>
+ <refsect1 id="{@id lion_modules}">
+  <title>General purpose libraries</title>
+  <para>Lion has a bundle of general purpose libraries designed as helper to perform all the common tasks needed by the rest of layers, to highlight:</para>
+  <para>
+  <itemizedlist>
+    <listitem>The I18n management system, in charge of all the I18n aspects of the application.</listitem>
+    <listitem>The event management system, in charge of event broadcasting and listener callback executions.</listitem>
+    <listitem>The stream wrapper module, easing the definition and management of stream wrappers.</listitem>
+    <listitem>The error management system, a way to centralize and organize the error and exception handling.</listitem>
+  </itemizedlist>
+  </para>
+  <refsect2 id="{@id I18n}">
+    <title>The I18n System</title>
+    <para>Lion brings his own I18n framework, perfectly integrated within the rest of the architecture in order to use language specific literals wherever we prefer within our code.</para>
+    <para>For more information regarding the I18n management system, please see the {@tutorial I18n/I18n.pkg} section.</para>
+  </refsect2>
+  <refsect2 id="{@id event_management_system}">
+    <title>The Event Management System</title>
+    <para>todo</para>
+    <para>For more information regarding the event management system, please see the {@tutorial Event/Event.pkg} section.</para>
+  </refsect2>
+  <refsect2 id="{@id stream_wrapper_module}">
+    <title>The Stream Wrapper Module</title>
+    <para>todo</para>
+    <para>For more information regarding the Stream Wrapper Module, please see the {@tutorial Stream/Stream.pkg} section.</para>
+  </refsect2>
+  <refsect2 id="{@id error_management_system}">
+    <title>The Error Management System</title>
+    <para>todo</para>
+    <para>For more information regarding the error management system, please see the {@tutorial Exception/Exception.pkg} section.</para>
+  </refsect2>
+ </refsect1>
+</refentry>
+

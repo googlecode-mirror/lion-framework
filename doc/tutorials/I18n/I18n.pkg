@@ -1,0 +1,83 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>I18n</refname>
+  <refpurpose>Adding internationalization capabilities</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>What's I18n</title>
+  <para>I18n means internationalization. There are 18 characters between the first letter of the word and the last one, so there is an <italic>i</italic> followed by 18 characters and a <italic>n</italic>.</para>
+  <para>The concept is really simple: To provide an application a way to show the same content in different languages.<br/>
+  Lion offers a set of libraries perfectly integrated within the rest of the framework to bring our applications with I18n capabilities easily, so we just need to define our I18n language-specific literals within separate files by following some naming-conventions and let the framework do the rest.</para>
+ </refsect1>
+ <refsect1 id="{@id define_i18n_literals}">
+  <title>Define I18n literals</title>
+  <para>We can define literals for a concrete language by just following a simple naming convention:
+  <itemizedlist>
+    <listitem>Literals for each language must be contained in a separate folder contained within the <emphasis>libs/language</emphasis> directory. i.e. english language literals must be defined inside the <emphasis>libs/language/en</emphasis> directory.</listitem>
+    <listitem>Literals must be set in different files. Those files must have the name of the controller code followed by the <italic>.ini</italic> extenssion. i.e. literals to be used within the <italic>myControllerCode</italic> controller must be defined in the <emphasis>libs/language/en/myControllerCode.ini</emphasis> file.</listitem>
+  </itemizedlist>
+  </para>
+  <para>Of course, Lion is opened to set whatever way to retrieve language literals (from database, from other file naming convention, from memcache, ...), however this naming convention is the result of the configuration that Lions offers by default.</para>
+  <para>i.e., we can define literals to each languages by just creating different directories (one per each language with the 2 letter iso code of each language) and setting-up .ini files in each one:<br/>
+  English literals (to be defined in <emphasis>libs/language/en/myControllerCode.ini</emphasis>)
+  {@example I18n/en_index.ini}
+  </para>
+  <para>
+  Spanish literals (to be defined in <emphasis>libs/language/es/myControllerCode.ini</emphasis>)
+  {@example I18n/es_index.ini}
+  </para>   
+ </refsect1> 
+ <refsect1 id="{@id the_resource_manager}">
+  <title>The Resource Manager</title>
+  <para>Language literals are also known as string resources. The {@link __ResourceManager} is the class in charge of serve I18n literals.</para>
+  <para>The resource manager has a really useful method to do that: {@link __ResourceManager::getResource()}<br/>
+  i.e.
+  {@example I18n/resourceManagerUsage.php}
+  </para>
+ </refsect1> 
+ <refsect1 id="{@id locale_negociator}">
+  <title>The Locale Negociator</title>
+  <para>Lion negociates at the very beginning of the request the browser configured locale.<br/>
+  This locale is taken into account if the language is already supported by the application. i.e., if we support both english and spanish, and a browser has the locale es_ES, the application will take into account it.</para>
+  <para>However, if the client locale is not supported by the application, it will use the default one (configured as part of the <emphasis>I18n.xml</emphasis> file).</para>
+  <para>In this case, if we do not specify a language to retrieve literals from the Resource Manager, the negociated one will be used instead of:
+  {@example I18n/resourceManagerUsage2.php}
+  </para>
+ </refsect1> 
+ <refsect1 id="{@id literals_in_templates}">
+  <title>I18n and templates</title>
+  <para>I18n is also perfectly integrated within template views<br/>
+  We are able to just define placeholders with the same name of the literal key. The template based view will recognize them and set the I18n literals.</para>
+  <para>i.e. <emphasis>myControllerCode.tpl</emphasis> template:
+  {@example I18n/index.tpl}
+  </para>
+  <para>Language literals will be set according to the current negociated language</para>
+  <para>However, another way to set literals into templates is by ussing the <emphasis>resource</emphasis> component:<br/>
+  i.e.
+  {@example I18n/index_resource_component.tpl}
+  </para>
+  <note>To learn more about the resource component, please take a look at {@link __ResourceComponent}.</note>
+ </refsect1> 
+ <refsect1 id="{@id parametrized_literals}">
+  <title>Parametrized literals</title>
+  <para>Sometime, we need to set valueholders inside I18n literals.<br/>
+  Imagine the following message: <italic>Welcome Antonio to our web application</italic>. This message could be in spanish like <italic>Bienvenido a nuestra aplicacion web, Antonio</italic>.</para>
+  <para>So, we may need to define placeholders inside the I18n literals to be replaced by dynamic values in runtime<br/>
+  To do that, we are able to define placeholders enclosed by curly brakets (i.e. {0}, {1}, {2}, ...)</para>
+  <para>English literals (to be defined in <emphasis>libs/language/en/myControllerCode.ini</emphasis>)
+  {@example I18n/en_index2.ini}
+  </para>
+  <para>
+  Spanish literals (to be defined in <emphasis>libs/language/es/myControllerCode.ini</emphasis>)
+  {@example I18n/es_index2.ini}
+  </para>
+  <para>So, we just need to set the paremeters in the resource by following the same order they are defined as placeholders in the I18n literals:  i.e.
+  {@example I18n/resourceManagerParametrizedUsage.php}
+  </para>
+ </refsect1> 
+</refentry>
+

@@ -1,0 +1,16 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+ 
+  <controller-definitions>
+
+    <!-- generic rule -->
+    <controller code = "*" class = "*Controller"/>
+
+    <controller code = "protectedPage" 
+               class = "ProtectedPageController">
+        <permission id = "PRIVATE_AREA_PERMISSION"></permission>
+    </controller>
+    
+  </controller-definitions>
+  
+</configuration>

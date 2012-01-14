@@ -1,0 +1,88 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Event Handlers</refname>
+  <refpurpose>Handling component events</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id event_management_system}">
+  <title>The Event Management System</title>
+  <para>The event management system is one of the most important pieces within the component model since is the one in charge of performing the following tasks:</para>
+  <para>
+  <itemizedlist>
+    <listitem>To notify to the server all the events raised in the client (i.e. a click on a button or a text control change)</listitem>
+    <listitem>To synchronize the component status between the client and the server (i.e. update the component text property once it has been changed in the client)</listitem>
+  </itemizedlist>
+  </para>
+  <para>From the server point of view, it's transparent the fact that an event has been raised from the client side.</para>
+ </refsect1>
+ <refsect1 id="{@id lifecycle}">
+  <title>Life-cycle of the event management system</title>
+  <para>The following figure ilustrates the life-cycle of the event management system:</para>
+  <para>
+    <image>imagesdir/View/Components/eventmanagementsystem.png</image>
+  </para>
+  <para>
+  <orderedlist>
+    <listitem>When an event is raised from a component in the client-side, it is sent to the server (usually via AJAX).</listitem>
+    <listitem>Once the request is received, the Front Controller delegates to the associated <emphasis>Event Handler</emphasis>, a subclass of {@link __EventHandler} which executes some logic associated to the given event.</listitem>
+    <listitem>Finally, components are updated in the client-side according to the server status after the event has been handled.</listitem>
+  </orderedlist>
+  </para>
+  <para>The communication process between client and server is performed usually via <emphasis>Ajax</emphasis> plus <emphasis>JSON</emphasis>.<br/>
+  However, this communication is handled entirely by the framework, so we don't need to care about low-level details regarding how this process is being done.</para>
+ </refsect1>
+ <refsect1 id="{@id event_handler}">
+  <title>The Event Handler</title>
+  <para>The way that lion proposes to handle client events is by defining <emphasis>Event Handlers</emphasis> associated to views. An event handler is a class in charge of events management for concrete views.</para>
+  <para>We just need to define subclasses of {@link __EventHandler} and follow a naming convention for methods.</para>
+ </refsect1>
+ <refsect1 id="{@id naming_convention}">
+  <title>Naming convention and location</title>
+  <para>Lion is enough flexible to allow whatever name and location for your event handlers. There are not restrictions in that sense.<br/>
+  However there are some naming conventions and predefined locations that ease the definition and enablement of event handlers:</para>
+  <para>
+  <itemizedlist>
+    <listitem>Use the <emphasis>view code</emphasis> plus the suffix <emphasis>'EventHandler'</emphasis> to define an event handler associated to a concrete view.</listitem>
+    <listitem>Define each event handler in a single file with the same name of the event handler class followed by the suffix <emphasis>'.class.php'</emphasis></listitem>
+    <listitem>Place your event handlers in the <emphasis>/libs/eventhandlers</emphasis> directory</listitem>
+  </itemizedlist>
+  </para>
+  <para>
+    <image>imagesdir/View/Components/EventHandler.directory_structure.png</image>
+  </para>
+ <refsect2 id="{@id associating_event_handler_to_view}">
+  <title>Associating an event handler to a view</title>
+  <para>First thing that we need to know in order to define event handlers is the fact that each event handle need to be associated to a view at least.</para>
+  <para>We can do it declarativelly in the <emphasis>view-definitions</emphasis> configuration section by defining the <emphasis>eventHandlerClass</emphasis> view property.</para>
+  <para>i.e.
+    {@example View/Components/views1.xml}
+  In this example, we are associating the class FooBarEventHandler to the view identified by the code fooBar.</para>
+  <para>However, there is a rule in the views.xml by default that simplifies this task by just following a naming convention:<br/>
+    {@example View/Components/views2.xml}
+  This rule associates an event handler to a view if we define the name of the event handler as the <italic>view code</italic> plus the suffix <italic>EventHandler</italic>.</para>
+  <para>i.e., for the view <italic>fooBar</italic> we'll define the event handler class as <italic>FooBarEventHandler</italic>. Note that the mapping between the view code and the class name is case insensitive.</para>
+ </refsect2>
+ <refsect2 id="{@id event_handler_location}">
+  <title>Event handler file and location</title>
+  <para>The file <emphasis>app/config/includepath.xml</emphasis> contains the following mapping rule:</para>
+  {@example View/Components/classes1.xml}
+  <para>This mapping rule let Lion know that any file placed in <emphasis>libs/eventhandlers</emphasis> with the suffix '.class.php' corresponds to a class with the same name without the suffix.</para>
+  <para>So, by placing event handler files in that directory and following the naming convention, it's not needed to declare explicitly the location of your event handlers in the includepath.xml file.</para>
+ </refsect2>
+ </refsect1>
+ <refsect1 id="{@id defining_event_handlers}">
+  <title>Defining Event Hadlers</title>
+  <para>The way to define event handlers is by implementing the {@link __IEventHandler} class. However, Lion proposes a class that already implements this interface: The {@link __EventHandler} class.</para>
+  <para>By subclassing the {@link __EventHandler} class, we just need to define a method for each component event that we need to handle taking into account the following naming convention for the method name: <emphasis>'componentName' + '_' + 'eventName'</emphasis> (i.e. myButton_click, myTextBox_blur, ...).</para>
+  <para>And again: this naming convention belong to the {@link __EventHandler}. If you implement the {@link __IEventHandler} then you should develop your own ways to handle events.</para>
+  <para>i.e.
+    {@example View/Components/EventHandler1.class.php}
+  In this example, we have define how to handle the <italic>click</italic> event for a button component.</para>
+  <para>As we can also see in this example, one of the most interesting things of {@link __EventHandler} class is that allows to retrieve whatever component within the same view by calling to the {@link __EventHandler::getComponent()} method.</para>
+  <para>Try {@tutorial Lion/Tutorials/Lion.tutorial3.pkg}. It contains a practical tutorial regarding components and event handlers.</para>
+  <para>To see information regarding events handled in lion, see the {@tutorial View/Components/View.Events.pkg} section</para>
+ </refsect1>
+</refentry>

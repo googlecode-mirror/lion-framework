@@ -1,0 +1,13 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="exampleInstance" class="ExampleClass"/>
+                   
+    <context-instance id="anotherExample"  class="ExampleClassTwo"/> 
+
+  </context-instances>
+  
+</configuration>
+

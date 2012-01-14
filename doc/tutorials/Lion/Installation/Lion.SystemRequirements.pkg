@@ -1,0 +1,46 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>System requirements</refname>
+  <refpurpose>Configuring your server to execute Lion</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id system_requirements}">
+  <title>System Requirements</title>
+  <para>Since Lion is a web application framework built on top of PHP, you will need a web server (i.e. Apache) and PHP installed.</para>
+  <refsect2 id="{@id php}">
+    <title>PHP Version</title>
+    <para>We recommend using <emphasis>PHP 5.2.1</emphasis> or greater in order to optimize the framework performance since this distribution includes some native modules which accelerate the execution.</para>
+    <para>However, if needed, Lion is capable of working with <emphasis>PHP 5.1.6</emphasis> distribution or greater.</para>
+  </refsect2>
+  <refsect2 id="{@id php_configuration}">
+    <title>PHP Configuration</title>
+    <para>In order to make Lion's reverse AJAX work correctly, you may want to disable <emphasis>zlib.output_compression</emphasis>. However, you can use Apache mod_deflate or its equivalent to compress output other than AJAX responses.</para>
+    <para>We also recommend changing <emphasis>output_buffering</emphasis> to off in your php.ini file in order to make reverse AJAX to work propertly. For example, reverse AJAX is used by the asynchonous file uploader in order to refresh the upload progress bar.<br />
+    However, it's important to note that this is not a requirement to make the framework function normally.</para>
+    <para>If you are using the php_domxml extension, we recommend you disabling it in order to make the framework work properly since Lion uses some PHP-native XML classes which come into conflict with some classes of this module.</para> 
+  </refsect2>
+  <refsect2 id="{@id php_modules}">
+    <title>PHP Recommended Extensions</title>
+    <para>If you use <emphasis>APC (Alternative PHP Cache)</emphasis>, we recommend enabling the <italic>apc.rfc1867</italic> directive in order to make the asynchonous file uploader component function normally. This component uses the APC module to update a progress bar while uploading files.<br />
+    Note: APC is not a requirement to make the Lion framework work and it may be part of future PHP distributions (i.e. PHP6).</para>
+   <note><emphasis>IMPORTANT:</emphasis> You may need to enable the <emphasis>apc.stat_ctime</emphasis> setting in your php.ini (apc.stat_ctime=1) if you have APC enabled. Otherwise, you may experience unexpected behaviors in the output like blank screens or the wrong template rendered instead of the expected one.
+   </note>
+  </refsect2>
+  <refsect2 id="{@id mod_rewrite}">
+    <title>Apache mod_rewrite (or equivalent)</title>
+    <para>Lion needs the Apache mod_rewrite (or equivalent) enabled in order to route all the requests to the framework properly.</para>
+    <para>To configure mod_rewrite in Apache properly, make sure that:
+    <itemizedlist>
+      <listitem>You have installed and enabled the Apache <emphasis>mod_rewrite</emphasis> module in your server.</listitem>
+      <listitem>You have enabled the <emphasis>AllowOverride</emphasis> directive in your apache configuration (httpd.conf).</listitem>
+      <listitem>You have modified the correct Apache configuration file located in the directory where Apache is reading the configuration from.<br />
+      Take into account that some configurations allow either one configuration file per user or per domain.</listitem>
+    </itemizedlist>
+    </para>
+  </refsect2>
+ </refsect1>
+</refentry>
+

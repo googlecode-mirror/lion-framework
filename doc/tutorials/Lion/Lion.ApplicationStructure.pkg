@@ -1,0 +1,15 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Application Structure</refname>
+  <refpurpose>How Lion based applications are organized</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id app_structure}">
+  <title>Application structure</title>
+  <para>... </para>
+  
+ </refsect1>
+</refentry>

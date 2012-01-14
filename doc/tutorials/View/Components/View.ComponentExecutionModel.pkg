@@ -1,0 +1,47 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Component Execution Model</refname>
+  <refpurpose>How components live</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id event_mgmnt_system}">
+  <title>Overview</title>
+  <para>The component execution model is the piece in charge of:
+  <itemizedlist>
+    <listitem>Synchronize status between components and their client representation.</listitem>
+    <listitem>Execute the appropriate code in response to events, by delegating on the event management system.</listitem>
+  </itemizedlist>
+  </para>
+  <para>Let's see it in a diagram:</para>
+  <para>
+    <image>imagesdir/View/Components/componentexecutionmodel.png</image>
+  </para>
+  <para>Most important pieces within this diagram are:
+  <itemizedlist>
+    <listitem><emphasis>Event handler</emphasis>: The event handler is notified about events as soon as they are fired from the user interface. Lion brings a default implementation, really useful since it has a naming convention to define methods associated to events and components: The {@link __EventHandler} class.</listitem>
+    <listitem><emphasis>End-points</emphasis>: End points are classes representing properties, callbacks and whatever we need to bind between components and their interface representations.<br/>
+    In that sense, there are 2 kind of end-points: 
+    <itemizedlist>
+      <listitem><emphasis>Client end-points</emphasis>, representing what we need to bind from the client-side (i.e. a text property within an HTML input element)</listitem>
+      <listitem><emphasis>Server end-points</emphasis>, representin what we bind to components (i.e. a text property within a server-side component representing a text area).</listitem>
+    </itemizedlist>
+    A pair compound by a client and a server end-points is what we associate in what we know as <emphasis>UI Binding</emphasis>, a rule about how client and server are synchronized to.
+    </listitem>
+    <listitem><emphasis>Component Pool</emphasis>: A collection where all the components within our application are living in. Components implementing the {@link __IPoolable} are stored automatically in the component pool during the user session until they are deleted.</listitem>
+    <listitem><emphasis>Component Handler</emphasis>: Contain a reference to all the components associated to a concrete view.</listitem>
+  </itemizedlist>
+  </para>
+ </refsect1>
+ <refsect1 id="{@id event_handler}">
+  <title>Event handler</title>
+  <para>Everytime an event is fired in the client-side (i.e. a click on a button or just by changing the selection in a combobox) a piece within the server side will catch the event and execute a concrete code (if defined) as a consequence of it.</para>
+  <para>The event handler is the piece in charge of perform this task. To read more about event handling in Lion, take a look at {@tutorial View/Component/View.EventManagementSystem.pkg}.</para>
+ </refsect1>
+ <refsect1 id="{@id end_points}">
+  <title>End-points</title>
+  <para>End-points represents properties, callbacks and</para>
+ </refsect1>
+</refentry>

@@ -1,0 +1,48 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Conding Standards</refname>
+  <refpurpose>Lion Framework coding standards</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id coding_standard}">
+  <title>Coding Standards</title>
+  <para>Lion Coding Standards is relative to code that is to become a part of Lion.<br/>
+  Lion Coding Standards are based on the {@link http://pear.php.net/manual/en/standards.php PEAR} coding standards.</para> 
+ </refsect1>
+ <refsect1 id="{@id indenting_and_line_length}">
+  <title>Indenting and Line Length</title>
+  <para>Use an indent of 4 spaces, with no tabs. This helps to avoid problems with diffs, patches, CVS history and annotations.</para>
+  <para>For Emacs you should set indent-tabs-mode to nil. Here is an example mode hook that will set up Emacs (ensure that it is called when you are editing PHP files):</para>
+  <syntaxdefinition>(defun php-mode-hook ()<br/>
+  (setq tab-width 4<br/>
+        c-basic-offset 4<br/>
+        c-hanging-comment-ender-p nil<br/>
+        indent-tabs-mode<br/>
+  (not<br/>
+    (and (string-match "/\\(PEAR\\|pear\\)/" (buffer-file-name))<br/>
+      (string-match "\.php$" (buffer-file-name))))))<br/>
+  </syntaxdefinition>
+  <para>Here are Vim rules for the same thing: </para>
+  <syntaxdefinition>
+set expandtab<br/>
+set shiftwidth=4<br/>
+set softtabstop=4<br/>
+set tabstop=4<br/> 
+  </syntaxdefinition>
+  <para>It is recommended to keep lines at approximately 75-85 characters long for better code readability. Paul M. Jones has some thoughts about that limit. </para>
+ </refsect1>
+ <refsect1 id="{@id control_structures}">
+  <title>Control Structures</title>  
+   <para>These include if, for, while, switch, etc. Here is an example if statement, since it is the most complicated of them: 
+   {@example Core/CodingStandards/control_structures1.php}
+   </para>
+   <para>Control statements should have one space between the control keyword and opening parenthesis, to distinguish them from function calls. </para>
+   <para>You are strongly encouraged to always use curly braces even in situations where they are technically optional. Having them increases readability and decreases the likelihood of logic errors being introduced when new lines are added. </para>
+   <para>For switch statements: </para>
+   {@example Core/CodingStandards/control_structures2.php}
+ </refsect1>
+   
+</refentry>

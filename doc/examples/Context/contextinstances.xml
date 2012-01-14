@@ -1,0 +1,19 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <context-instance id="userDao" class="UserDao">
+      <property name="dataSource" ref="mysqlDataSource"/>
+    </context-instance>
+
+    <context-instance id="mysqlDataSource" class="DataSource">
+      <property name="dataEngine"><value>mysql</value></property>
+      <property name="host"><value>localhost</value></property>
+      <property name="user"><value>lion</value></property>
+      <property name="password"><value>rocks</value></property>
+    </context-instance>
+
+  </context-instances>
+  
+</configuration>

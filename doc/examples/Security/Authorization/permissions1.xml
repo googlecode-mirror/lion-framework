@@ -1,0 +1,20 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+ <permission-definitions>
+
+    <permission id="READ_POSTS"/>
+    <permission id="WRITE_POSTS"/>
+    <permission id="DELETE_POSTS"/>
+    <permission id="MODIFY_POSTS"/>
+    
+    <permission id="ADMIN_POSTS">
+      <junior-permissions>
+        <ref id="DELETE_POSTS"/>
+        <ref id="MODIFY_POSTS"/>
+      </junior-permissions>
+    </permission>
+    
+  </permission-definitions>
+  
+</configuration>

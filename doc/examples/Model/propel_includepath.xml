@@ -1,0 +1,13 @@
+<?xml version = "1.0" standalone="yes"?>
+<classes>
+
+  ...
+
+  <cluster name = "Propel classes" 
+           path="/libs/thrdparty/Propel/runtime/classes/propel">
+    <class name="Propel" file="Propel.php"/>
+  </cluster>
+
+  ...
+  
+</classes>

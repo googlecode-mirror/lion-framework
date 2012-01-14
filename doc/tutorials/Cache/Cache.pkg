@@ -1,0 +1,57 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>The Cache facade</refname>
+  <refpurpose>Improving the performance by caching</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id intro}">
+  <title>Introduction</title>
+  <para>The Cache facade provided by the Lion Framework eases you to manage the cache usage within your application as well as define declarativelly or programatically your own caching policies.<br/>
+  However, it's important to note that Lion hasn't his own cache implementation since there are really excelents solutions out there. Instead of it, Lion brings a facade as an integrated way to manage cache.</para>
+  <para>By default, Lion framework has a facade to {@link http://pear.php.net/package/Cache_Lite Cache Lite} as well as {@link http://pecl.php.net/package/memcache MemCache}, 2 of the most mature and completed PHP caching solutions.</para>
+  <para>However, we are working in order to provide facades to others great caching frameworks such APC.<br/>
+  In general, cache facade has been designed to work against whatever cache framework, so we are not binding our application to a concrete implementation at all.</para>
+  <note>
+    <para>Cache is enabled by default, meaning that every time you perform changes within the configuration, you may delete the cache to reflect your changes.</para>
+    <para>Take into account that configuration is pre-processed and stored in cache to accelerate the performance.</para> 
+  </note>
+ </refsect1>
+ <refsect1 id="{@id configuring_cache_facade}">
+  <title>Configuring the Cache facade</title>
+  <para>The <emphasis>app/lion.ini</emphasis> file has the following cache configuration by default:
+  {@example Cache/lion.ini}
+  </para>
+  <para>Note that default facade points to {@link __CacheLite}. However, we can change it in order to use the MemCache facade by changing the CACHE_HANDLER_CLASS directive to use the {@link __MemCache} facade</para>
+ </refsect1>
+ <refsect1 id="{@id cache_facade_api}">
+  <title>Cache facade API</title>
+  <para>Cache facade works against specific cache handler implementations, so it exposes a defined interface working against whatever implementation like MemCache, APC, etc...</para>
+  <para>To retrieve the cache handler associated to our application context, we just need to call the {@link __ContextContainer::getCache()} method:
+  {@example Cache/getCache.php}
+  </para>
+  <para>The cache handler exposes a really short and easy API allowing to store, retrieve and clear information from and to the cache.<br/>
+  To highlight:
+  <itemizedlist>
+    <listitem>getData (see {@link __Cache::getData()}): Get data from the cache</listitem>
+    <listitem>setData (see {@link __Cache::setData()}): Set data to the cache</listitem>
+    <listitem>removeData (see {@link __Cache::removeData()}): Remove data from the cache</listitem>
+    <listitem>clear (see {@link __Cache::clear()}): Clear the cache</listitem>
+  </itemizedlist>
+  </para>   
+  <para>i.e.
+  {@example Cache/cacheUsage.php}
+  </para>
+ <refsect2 id="{@id cache_ttl}">
+  <title>Cache TTL</title>
+  <para>TTL is the expiration time of an item within the cache.<br/>
+  If it's equal to zero, the item will never expire. You can use a number of seconds starting from current time, but in any case the number of seconds may not exceed 2592000 (30 days).</para>
+  <para>We can set the TTL as the third parameter of {@link __ICacheHandler::save()} method. i.e.
+  {@example Cache/cacheTtlUsage.php}
+  </para>
+ </refsect2>
+ </refsect1>
+</refentry>
+

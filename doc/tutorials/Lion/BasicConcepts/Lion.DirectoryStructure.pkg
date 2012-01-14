@@ -1,0 +1,32 @@
+<refentry id="{@id}">
+ <refnamediv>
+  <refname>Directory structure</refname>
+  <refpurpose>Going inside the Framework</refpurpose>
+ </refnamediv>
+ <refsynopsisdiv>
+ </refsynopsisdiv>
+{@toc}
+ <para></para>
+ <refsect1 id="{@id lion_structure}">
+  <title>Lion directory structure</title>
+  <para>After uncompressing lion, we're going to see the following directories:</para>
+  <para><graphic fileref="imagesdir/Lion/simple_directory_structure.png" /></para>
+  <para>The <emphasis>/app</emphasis> directory is where we're going to develop our application.</para>
+  <para>The <emphasis>/lion</emphasis> directory contains the framework code. We don't need to alter any content within this directory.</para>
+  <graphic fileref="imagesdir/Lion/directory_structure.png" />
+  <para>The <emphasis>index.php</emphasis> file is always executed for each single request (see {@tutorial Request/Request.pkg} section to learn why).<br/>
+  This file just includes the lion.php, a file containing the main core class: <emphasis>{@link __Lion}</emphasis>, the lion engine, a class in charge of load and execute the rest of the framework.</para>
+  <graphic fileref="imagesdir/Lion/include_lion_php.png" />
+ </refsect1>
+ <refsect1 id="{@id lion_classes}">
+  <title>Lion Framework classes</title>
+  <para>All the lion framework classes are contained within the <emphasis>/lion</emphasis> directory. Almost all of them are located under the <emphasis>/lion/libs</emphasis> directory.<br />
+  We do not need (ideally) to alter whatever content under that directory.</para>
+  <para>Lion classes have an typical naming convention to avoid conflicts with whatever other third-party library or even with our own application code: The name of all classes and interfaces start with a double underscore, (i.e. {@link __Lion}, {@link __FrontController}, {@link __AuthenticationManager}, ...).</para>
+ </refsect1>
+ <refsect1 id="{@id application_classes}">
+  <title>Application classes</title>
+  <para>Our application classes should be placed under <emphasis>/app</emphasis> directory. In fact, almost all of them should be placed under <emphasis>/app/libs</emphasis>.<br />
+  This directory contains some subdirectories out of the box to place our classes and files grouped by the kind of task they are designed to. i.e. Controller classes should be placed in the <emphasis>/app/libs/controllers</emphasis>, templates should be placed within the <emphasis>/app/templates</emphasis>, and so on.</para>
+ </refsect1>
+</refentry>

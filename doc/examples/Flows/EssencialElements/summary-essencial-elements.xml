@@ -1,0 +1,17 @@
+<flow>
+
+    <action-state id="enterBookingDetails">
+        <transition on="submit" to="reviewBooking" />
+    </action-state>
+    
+    <action-state id="reviewBooking">
+        <transition on="confirm" to="bookingConfirmed" />
+        <transition on="revise" to="enterBookingDetails" />
+        <transition on="cancel" to="bookingCancelled" />
+    </action-state>
+    
+    <end-state id="bookingConfirmed" />
+
+    <end-state id="bookingCancelled" />
+        
+</flow> 

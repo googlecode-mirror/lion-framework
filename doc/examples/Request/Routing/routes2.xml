@@ -1,0 +1,14 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <routes>
+ 
+    <route id="search" uri-pattern="\/$module\/$search_id\.html$">
+      <front-controller class="__HttpFrontController"/>
+      <action controller="$module" code="search"/>
+      <parameter name="search_id" value="$search_id"/>
+      <variable name="$module" var-pattern="^(invoices|clients|accounts)$"/>
+      <variable name="$search_id" var-pattern="^\d+$"/>
+    </route>
+
+</configuration>

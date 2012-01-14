@@ -1,0 +1,22 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <routes>
+ 
+    <route id="search" uri-pattern="\/$module\/$search_id(\_$page_id)?\.html$">
+      <front-controller class="__HttpFrontController"/>
+      <action controller="$module" code="search"/>
+      <parameter name="search_id" value="$search_id"/>
+
+      <if-isset variable="$page_id">
+        <parameter name="pagination" value="1"/>
+        <parameter name="page_id" value="$page_id"/>
+      </if-isset>
+
+      <variable name="$module" var-pattern="^(invoices|clients|accounts)$"/>
+      <variable name="$page_id" var-pattern="^\d+$"/>
+      <variable name="$search_id" var-pattern="^\d+$"/>
+    </route>
+
+</configuration>
+

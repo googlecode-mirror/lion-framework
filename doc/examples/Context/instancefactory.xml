@@ -1,0 +1,21 @@
+<?xml version = "1.0" standalone="yes"?>
+<configuration>
+
+  <context-instances>
+
+    <!-- The factory instance, which contains a method called
+         createInstance -->
+    <context-instance id="myFactoryInstance"
+                   class="...">
+      ...
+    </context-instance>
+    
+    <!-- The instance to be created via the factory instance -->
+    <context-instance id="exampleInstance"
+        factory-instance="myFactoryInstance"
+          factory-method="createInstance"/>
+
+  </context-instances>
+  
+</configuration>
+
