@@ -145,6 +145,7 @@
     <!-- *********************************************************** -->
 	<target name="buildlion" depends="prepare">
         <echo msg="Minifying javascript and css files..." />
+        <!-- 
 	    <minifyjs targetDir="${liondelivdir}"
 	              yuiPath="build-libs/yuicompressor-2.4.2/build/yuicompressor-2.4.2.jar">
 	        <fileset dir="${liondelivdir}">
@@ -153,6 +154,7 @@
 	          <exclude name="**/jscalendar/lang/calendar-*.js"/>
 	        </fileset>
 	    </minifyjs>
+	     -->
 		<echo msg="Compiling REInverseParser and ComponentParser..." />
     	<delete>
 		  <fileset dir="${phplemondir}">
@@ -440,7 +442,8 @@
                  <include name="${lionpackage}" />
              </fileset>
         </tar>
-    
+
+<!--     
         <foreachfileset param="sample" target="packagesample">
             <fileset dir="${samplesdir}">
                 <include name="*" />
@@ -464,7 +467,32 @@
                 <include name="${webdocpackage}" />
             </fileset>
         </tar>
+        
+        -->
+        
+		<pharpackage
+		  basedir="${lionpackagedir}"
+		  destfile="${artifactsdir}/${lionpackage}.phar"
+		  webstub="${liondelivdir}"
+		  clistub="${liondelivdir}"
+		  stub="${liondelivdir}/phar-stub.php"
+		  alias="lion.phar"
+		  >
+		  <fileset dir="${deliverablesdir}">
+		    <include name="${lionpackage}/**" />
+		  </fileset>
+		  <metadata>
+		    <element name="version" value="1.0" />
+		    <element name="authors">
+		      <element name="Antonio Parraga Navarro">
+		        <element name="e-mail" value="antonio@lionframework.org" />
+		      </element>
+		    </element>
+		  </metadata>
+		</pharpackage>        
+        
         <echo msg="Done!" />
+        
 	</target>
 	
     <!-- *********************************************************** -->
@@ -473,8 +501,8 @@
 	<target name="dist">
 		
 		<phingcall target="buildlion" />
-        <phingcall target="builddoc" />
-		<phingcall target="buildsamples" />
+<!--         <phingcall target="builddoc" />  -->
+<!--   		 <phingcall target="buildsamples" /> -->
         <phingcall target="packageall" />
 		
         <echo msg="Build completed!" />

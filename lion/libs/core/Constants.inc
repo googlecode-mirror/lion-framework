@@ -14,7 +14,9 @@ if(!defined('APP_DIR')) {
 }
 
 //Define the framework base dir as two levels up from this script ( "/libs/startup" -> "/libs", and "/libs" -> "/"):
-define ('LION_DIR', realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'));
+if(!defined('LION_DIR')) {
+	define ('LION_DIR', realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'));
+}
 
 if(!defined('ADMIN_DIR')) {
     define ('ADMIN_DIR', LION_DIR . DIRECTORY_SEPARATOR . 'admin');

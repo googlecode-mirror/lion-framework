@@ -105,7 +105,7 @@ final class __Lion {
     private function _startupLionCore() {
         
         //Include lion constants:
-        include realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Constants.inc';
+        include 'libs' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Constants.inc';
         
         //Do not process HEAD request if LION_IGNORE_HEAD_REQUEST constant is set to true
         if(key_exists('REQUEST_METHOD', $_SERVER) && $_SERVER['REQUEST_METHOD'] == 'HEAD' && LION_IGNORE_HEAD_REQUEST == true) {
