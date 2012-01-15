@@ -145,7 +145,7 @@
     <!-- *********************************************************** -->
 	<target name="buildlion" depends="prepare">
         <echo msg="Minifying javascript and css files..." />
-        <!-- 
+ 
 	    <minifyjs targetDir="${liondelivdir}"
 	              yuiPath="build-libs/yuicompressor-2.4.2/build/yuicompressor-2.4.2.jar">
 	        <fileset dir="${liondelivdir}">
@@ -154,7 +154,7 @@
 	          <exclude name="**/jscalendar/lang/calendar-*.js"/>
 	        </fileset>
 	    </minifyjs>
-	     -->
+
 		<echo msg="Compiling REInverseParser and ComponentParser..." />
     	<delete>
 		  <fileset dir="${phplemondir}">
