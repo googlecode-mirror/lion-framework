@@ -81,5 +81,8 @@
   <cluster name="HTMLPurifierLibrary" path="/libs/thrdparty/htmlpurifier/library/HTMLPurifier">
     <class name="HTMLPurifier_Bootstrap" file="Bootstrap.php"/>
   </cluster>
+  <cluster name="CommandLine Console Classes" path="/libs/thrdparty/Console_CommandLine-1.1.3/Console">
+    <class name="Console_CommandLine" file="CommandLine.php"/>
+  </cluster>
     
 </classes>
