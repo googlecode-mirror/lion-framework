@@ -79,10 +79,6 @@ class __CommandLineController extends __ActionController {
 	    
 	}
 	
-	private function _printUsage() {
-	    echo 'Lion framework ' . LION_VERSION_NUMBER . ' (built: ' . LION_VERSION_BUILD_DATE . ")\n";
-	}
-	
     private function _printLionInfo() {
         echo 'Lion framework ' . LION_VERSION_NUMBER . ' (built: ' . LION_VERSION_BUILD_DATE . ")\n";
         echo "\n";
