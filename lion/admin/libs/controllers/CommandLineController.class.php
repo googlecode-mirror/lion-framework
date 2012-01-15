@@ -8,31 +8,74 @@
 class __CommandLineController extends __ActionController {
     
     protected function _readCommandLineRequest() {
-        $args = array('clearcache');
-        $short_options = array();
-        $long_options  = array('clearcache');
-        $console_getopt = new Console_Getopt($args, $short_options, $long_options);
-        $parameters = $console_getopt->readPHPArgv();
+
+    	$parser = new Console_CommandLine();
+ 	
+    	$parser->description = "Lion Framework " . LION_VERSION_NUMBER . ' (built: ' . LION_VERSION_BUILD_DATE . ")\n" .
+    						   "An open source PHP Framework for rapid development of PHP web applications";
+    	$parser->version = LION_VERSION_NUMBER;
+    	$parser->addOption(
+    			'clearcache',
+    			array(
+    					'short_name'  => '-c',
+    					'long_name'   => '--clearcache',
+    					'description' => 'clear the cache',
+    					'action'      => 'StoreTrue'
+    			)
+    	);
+    	// Adding an option that will store a string
+    	$parser->addOption(
+    			'info',
+    			array(
+    					'short_name'  => '-i',
+    					'long_name'   => '--info',
+    					'description' => 'show the runtime directives',
+    					'action'      => 'StoreTrue',
+    			)
+    	);    	
+    	// Adding an option that will store a string
+    	$parser->addOption(
+    			'bootstrap',
+    			array(
+    					'short_name'  => '-b',
+    					'long_name'   => '--bootstrap',
+    					'description' => 'bootstrap a new application',
+    					'action'      => 'StoreTrue',
+    			)
+    	);
+    	
+    	
+    	return $parser;
     }
     
     public function defaultAction()	{
-	    //handle special bootstrap command:
-	    if(basename($_SERVER['SCRIPT_FILENAME']) == 'bootstrap.php') {
-	        if(__ModelProxy::getInstance()->doBootstrap(APP_DIR)) {
-	           echo "Bootstrap completed!\n";
-  	        }
-	    }
-	    else if(__FrontController::getInstance()->getRequest()->hasParameter('clearcache')) {
+
+    	$options = array();
+		$parser = $this->_readCommandLineRequest();
+		try {
+			$result = $parser->parse();
+			$options = $result->options;
+		} catch (Exception $exc) {
+			$parser->displayError($exc->getMessage());
+		}		
+		
+
+	    if($options['clearcache']) {
 	        if(__ModelProxy::getInstance()->clearCache()) {
                 echo "Cache cleared!\n";
 	        }
 	    }
-        else if(__FrontController::getInstance()->getRequest()->hasParameter('lioninfo')) {
+        else if($options['info']) {
             $this->_printLionInfo();
         }
-	    else {
-	        $this->_printUsage();
-	    }
+        else if($options['bootstrap']) {
+			if(__ModelProxy::getInstance()->doBootstrap(APP_DIR)) {
+				echo "Bootstrap completed!\n";
+			}        	
+        }
+        else {
+        	$parser->displayUsage();
+        }
 	    
 	}
 	
