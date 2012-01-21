@@ -33,8 +33,6 @@ class __CommandLineRequest extends __Request {
 
         }
         return $return_value;
-
-
     }
 
 }

@@ -43,7 +43,24 @@ class __CommandLineController extends __ActionController {
     					'action'      => 'StoreTrue',
     			)
     	);
-    	
+    	// Adding an option that will store a string
+    	$parser->addOption(
+    			'controller',
+    			array(
+    					'long_name'   => '--controller',
+    					'description' => 'executes the given controller',
+    					'action'      => 'StoreString',
+    			)
+    	);
+    	// Adding an option that will store a string
+    	$parser->addOption(
+    			'action',
+    			array(
+    					'long_name'   => '--action',
+    					'description' => 'executes the given action',
+    					'action'      => 'StoreString',
+    			)
+    	);
     	
     	return $parser;
     }

@@ -25,7 +25,11 @@ final class __Cache {
     private $_cache_handler = null;
     
     final public function __construct() {
-        $this->setEnabled(__Lion::getInstance()->getRuntimeDirectives()->getDirective('CACHE_ENABLED'));
+    	$cache_enabled = __Lion::getInstance()->getRuntimeDirectives()->getDirective('CACHE_ENABLED');
+    	if(__Client::getInstance()->getRequestType() == REQUEST_TYPE_COMMAND_LINE) {
+    		$cache_enabled = false;
+    	}
+        $this->setEnabled($cache_enabled);
     }
     
     public function setEnabled($enabled) {

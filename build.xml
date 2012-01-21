@@ -112,9 +112,6 @@
           <fileset dir="${liondir}/forms"/>
         </copy>
     	
-        <move file="${appdelivdir}/index.php" tofile="${lionpackagedir}/index.php" overwrite="true"/>
-        <move file="${appdelivdir}/.htaccess" tofile="${lionpackagedir}/.htaccess" overwrite="true"/>
-
     	<copy file="${liondelivdir}/libs/configuration/defaultvalues/settings.ini" tofile="${appdelivdir}/config/settings.ini"/>
         <copy file="${liondelivdir}/libs/configuration/defaultvalues/lion.ini" tofile="${appdelivdir}/lion.ini"/>
         <!-- configure settings.ini -->
@@ -190,6 +187,18 @@
             </replacetokens>
           </filterchain>
         </reflexive> 		
+        
+        <reflexive>
+          <fileset dir="${lionpackagedir}" >
+            <include name="app/index.php" />
+          </fileset>            
+          <filterchain>
+            <replacetokens begintoken="[" endtoken="]">
+              <token key="lionphar" value="${lionpackage}.phar" />
+            </replacetokens>
+          </filterchain>
+        </reflexive>        
+        
 		
         <exec command="perl ${buildlibsdir}/common/generate_docblock_headers.pl ${liondelivdir} ${docdir}/plaintextdocs/header_docblock.txt ${major_version}" dir="." passthru="true"/>
 		
@@ -375,8 +384,8 @@
               <regexp pattern="Unnamed Project" replace="${sample}" ignoreCase="true"/>
             </replaceregexp>            
           </filterchain>
-        </reflexive>        
-	   	
+        </reflexive>   
+
 	   	<echo msg="Done!"/>
 	   </then>
 	 </if>
@@ -443,6 +452,26 @@
              </fileset>
         </tar>
 
+		<pharpackage
+		  basedir="${absolute_lionpackagedir}"
+		  destfile="${artifactsdir}/${lionpackage}.phar"
+		  webstub="${liondelivdir}"
+		  clistub="${liondelivdir}"
+		  stub="${liondelivdir}/phar-stub.php"
+		  alias="lion.phar"
+		  >
+		  <fileset dir="${deliverablesdir}">
+		    <include name="${lionpackage}/**" />
+		  </fileset>
+		  <metadata>
+		    <element name="version" value="1.0" />
+		    <element name="authors">
+		      <element name="Antonio Parraga Navarro">
+		        <element name="e-mail" value="antonio@lionframework.org" />
+		      </element>
+		    </element>
+		  </metadata>
+		</pharpackage>        
 <!--     
         <foreachfileset param="sample" target="packagesample">
             <fileset dir="${samplesdir}">
@@ -469,27 +498,6 @@
         </tar>
         
         -->
-        
-		<pharpackage
-		  basedir="${lionpackagedir}"
-		  destfile="${artifactsdir}/${lionpackage}.phar"
-		  webstub="${liondelivdir}"
-		  clistub="${liondelivdir}"
-		  stub="${liondelivdir}/phar-stub.php"
-		  alias="lion.phar"
-		  >
-		  <fileset dir="${deliverablesdir}">
-		    <include name="${lionpackage}/**" />
-		  </fileset>
-		  <metadata>
-		    <element name="version" value="1.0" />
-		    <element name="authors">
-		      <element name="Antonio Parraga Navarro">
-		        <element name="e-mail" value="antonio@lionframework.org" />
-		      </element>
-		    </element>
-		  </metadata>
-		</pharpackage>        
         
         <echo msg="Done!" />
         

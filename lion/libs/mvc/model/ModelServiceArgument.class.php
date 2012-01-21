@@ -4,7 +4,7 @@ class __ModelServiceArgument {
 
     protected $_name  = null;
     protected $_index = null;
-    protected $_is_json = true;
+    protected $_is_json = false;
     
     public function setName($name) {
         $this->_name = $name;

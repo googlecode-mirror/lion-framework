@@ -13,7 +13,7 @@ class __RemoteServiceFrontController extends __HttpFrontController {
     public function processRequest(__IRequest &$request, __IResponse &$response) {
         try {
             $return_value = $this->_resolveAndCallRemoteService($request);
-            if($return_value != null) {
+            if($return_value !== null) {
                 if(function_exists('json_encode')) {
                     $return_value = json_encode($return_value);
                 }
