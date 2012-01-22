@@ -53,16 +53,16 @@ final class __Cache {
     
     public function &getData($key, $ttl = null) {
         $return_value = null;
-        if(!key_exists($key, $this->_cache_data)) {
-            if($this->_enabled) {
+        if(key_exists($key, $this->_cache_data)) {
+            $return_value =& $this->_cache_data[$key];
+        }
+        else {
+        	if($this->_enabled) {
                 $return_value = $this->_cache_handler->load($key, $ttl);
                 if($return_value != null) {
                     $this->_cache_data[$key] =& $return_value;
                 }
             }
-        }
-        else {
-            $return_value =& $this->_cache_data[$key];
         }
         return $return_value;
     }
@@ -83,10 +83,11 @@ final class __Cache {
         }
     }
     
+    /**
+     * cache clear works even if the cache is disabled
+     */
     public function clear() {
-        if($this->_enabled) {
-            $this->_cache_handler->clear();
-        }
+        $this->_cache_handler->clear();
     }
 
 }
