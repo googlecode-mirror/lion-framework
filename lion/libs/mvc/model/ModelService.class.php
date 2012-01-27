@@ -114,7 +114,12 @@ class __ModelService extends __SystemResource {
                 $mapped_parameters[$argument->getIndex()] = $parameter_value; 
             }
             else {
-                throw __ExceptionFactory::getInstance()->createException('Error calling remote service ' . $this->_service . ': missing argument ' . $argument_name);
+            	if($argument->isOptional()) {
+            		$mapped_parameters[$argument->getIndex()] = null;
+            	}
+            	else {
+                	throw __ExceptionFactory::getInstance()->createException('Error calling remote service ' . $this->_service . ': missing argument ' . $argument_name);
+            	}
             }
         }
         ksort($mapped_parameters);
