@@ -31,9 +31,6 @@
                 4  => self::ANYTHINGELSE,
                 5  => self::OPEN_PROPERTY_TAG,
                 6  => self::CLOSE_PROPERTY_TAG,
-                7  => self::HTML_ELEMENT_TAG,
-                8  => self::OPEN_HTML_FORM_TAG,
-                9  => self::CLOSE_HTML_FORM_TAG
         );
 
     protected $_token_names =
@@ -44,9 +41,6 @@
                 self::ANYTHINGELSE        => 'Any character',
                 self::OPEN_PROPERTY_TAG   => 'Property open tag',
                 self::CLOSE_PROPERTY_TAG  => 'Property close tag within the [component] component',
-                self::HTML_ELEMENT_TAG => 'Html element',
-                self::OPEN_HTML_FORM_TAG => 'Form open tag',
-                self::CLOSE_HTML_FORM_TAG => 'Form close tag'
         );
 
     private function _getTokenName($token_id) {
@@ -318,39 +312,6 @@ component_tag(A) ::= r_open_component_tag(B) component_body(C) r_close_component
     A = B . C . D;
 }
 
-component_tag(A) ::= r_open_form_tag(B) component_body(C) r_close_form_tag(D) . 
-{
-    A = B . C . D;
-}
-
-
-component_tag(A) ::= HTML_ELEMENT_TAG(B) .
-{ 
-    //Setup, validate and register current component:
-    $element_type = $this->_getHtmlElementType(B);
-    $attribute_list = $this->_getAttributeList(B);
-    $tag_name = null; //we'll try to map to a component
-    if(is_array($attribute_list) && key_exists('runat', $attribute_list) && strtoupper($attribute_list['runat']) == 'SERVER') {
-        if(key_exists('componenttag', $attribute_list)) {
-            $tag_name = $attribute_list['componenttag'];
-        }
-        else {
-            $tag_name = __RunAtServerHtmlElementHelper::resolveComponentTag($element_type, $attribute_list);
-        }
-        if($tag_name != null) {
-            $component_spec = __ComponentSpecFactory::getInstance()->createComponentSpec($tag_name);
-            $component_spec->setDefaultValues($attribute_list);
-            $component_spec->setViewCode($this->_view_code);
-            $this->_registerComponentSpec($component_spec);
-            B = B . $this->_getRunAtServerHtmlElementCode($component_spec);
-        }
-        else {
-            throw __ExceptionFactory::getInstance()->createException('Can not resolve a component for html element ' . $element_type . '. Either remove the runat="server" attribute or set a componenttag attribute to map the element to.');
-        }
-    }
-    A = B;
-}
-
 component_tag(A) ::= SHORT_COMPONENT_TAG(B) .
 { 
     //Setup, validate and register current component:
@@ -365,45 +326,6 @@ component_tag(A) ::= SHORT_COMPONENT_TAG(B) .
     }
     else {
         A = $component;
-    }
-}
-
-
-r_open_form_tag(A) ::= OPEN_HTML_FORM_TAG(B) .
-{
-   //Setup, validate and register current component:
-    $component_spec = __ComponentSpecFactory::getInstance()->createComponentSpec('form');
-    $attribute_list = $this->_getAttributeList(B);
-    $component_spec->setDefaultValues($attribute_list);
-    $component_spec->setViewCode($this->_view_code);
-    if(is_array($attribute_list) && key_exists('runat', $attribute_list) && strtoupper($attribute_list['runat']) == 'SERVER') {
-        B = $this->_getComponentBeginTagCode($component_spec);
-    }
-    else {
-        $component_spec->setRunAtServer(false);
-    }
-    $this->_registerComponentSpec($component_spec);
-    $this->_pushComponentSpec($component_spec);
-    A = B;
-}
-
-r_close_form_tag(A) ::= CLOSE_HTML_FORM_TAG(B) .
-{
-    //Retrieve the current component and perform validations:
-    $component_spec =& $this->_popComponentSpec();
-    if($component_spec->getRunAtServer() == true) {
-        if($component_spec->getTag() != 'form') {
-            throw __ExceptionFactory::getInstance()->createException('ERR_UI_UNEXPECTED_CLOSE_TAG', array($tag_name, $component_spec->getTag()));
-        }
-        if($this->_getCurrentProperty() == null) {
-            A = $this->_getComponentEndTagCode($component_spec);
-        }
-        else {
-            A = $component;
-        }
-    }
-    else {
-        A = B;
     }
 }
 

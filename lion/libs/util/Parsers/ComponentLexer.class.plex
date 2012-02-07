@@ -8,9 +8,6 @@ class __ComponentLexer
     const ANYTHINGELSE        = __ComponentParser::ANYTHINGELSE;
     const OPEN_PROPERTY_TAG   = __ComponentParser::OPEN_PROPERTY_TAG;
     const CLOSE_PROPERTY_TAG  = __ComponentParser::CLOSE_PROPERTY_TAG;
-    const HTML_ELEMENT_TAG = __ComponentParser::HTML_ELEMENT_TAG;
-    const OPEN_HTML_FORM_TAG = __ComponentParser::OPEN_HTML_FORM_TAG;
-    const CLOSE_HTML_FORM_TAG = __ComponentParser::CLOSE_HTML_FORM_TAG;
  
     private $input;
     private $N;
@@ -32,9 +29,6 @@ class __ComponentLexer
 %token {$this->token}
 %value {$this->value}
 %line {$this->line}
-OPEN_HTML_FORM_TAG  = /<form((\s+[A-Za-z0-9_\-]+(\s*=\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\s*|\s*)>/
-CLOSE_HTML_FORM_TAG = /<\/form>/
-HTML_ELEMENT_TAG  = /<(?!form)[A-Za-z][A-Za-z_0-9]*((\s+[A-Za-z0-9_\-]+(\s*=\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\s*|\s*)\/?>/
 OPEN_COMPONENT_TAG  = /<comp\:[A-Za-z_][A-Za-z_0-9]*((\s+[A-Za-z0-9_\-]+(\s*=\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\s*|\s*)>/
 CLOSE_COMPONENT_TAG = /<\/comp\:[A-Za-z_][A-Za-z_0-9]*>/
 SHORT_COMPONENT_TAG = /<comp\:[A-Za-z_][A-Za-z_0-9]*((\s+[A-Za-z0-9_\-]+(\s*=\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\s*|\s*)\/>/
@@ -44,18 +38,6 @@ ANYTHINGELSE = /[\s\S]/
 */
 /*!lex2php
 %statename YYINITIAL
-
-HTML_ELEMENT_TAG {
-    $this->token = self::HTML_ELEMENT_TAG;
-}
-
-OPEN_HTML_FORM_TAG {
-    $this->token = self::OPEN_HTML_FORM_TAG;
-}
-
-CLOSE_HTML_FORM_TAG {
-    $this->token = self::CLOSE_HTML_FORM_TAG;
-}
 
 OPEN_COMPONENT_TAG {
     $this->token = self::OPEN_COMPONENT_TAG;

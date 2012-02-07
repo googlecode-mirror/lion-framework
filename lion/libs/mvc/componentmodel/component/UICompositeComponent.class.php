@@ -60,7 +60,7 @@ class __UICompositeComponent extends __UIContainer implements __ICompositeCompon
     }
     
     public function getContent() {
-        return $this->_content;
+        return utf8_encode($this->_content);
     }
     
     public function setAsUnsynchronized() {
