@@ -6,6 +6,14 @@ Options -Indexes
 Deny from all
 </Files>
 
+<Files "sitemap.xml">
+Allow from all
+</Files>
+
+<Files "robots.txt">
+Allow from all
+</Files>
+
 ############ Rewrite Engine ##############
 <IfModule mod_rewrite.c>
   RewriteEngine On

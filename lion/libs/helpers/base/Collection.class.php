@@ -33,6 +33,16 @@ class __Collection implements IteratorAggregate, ArrayAccess, Countable {
     }
     
     /**
+     * Adds all the items within the given collection 
+     * @param array $collection
+     */
+    public function addAll($collection) {
+    	foreach($collection as $key => &$value) {
+    		$this->add($value, $key);
+    	}
+    }
+    
+    /**
      * This method retrieves an element from the collection
      *
      * @param mixed The index or key that identify the item to be retrieved

@@ -200,7 +200,7 @@ class __HtmlErrorPrinter implements __IErrorPrinter {
             @ob_end_clean();
         }
 
-        if (eregi("MSIE",$_SERVER['HTTP_USER_AGENT'])) {
+        if (preg_match("/MSIE/",$_SERVER['HTTP_USER_AGENT'])) {
             $use_mhtml = true;
         }
         else {

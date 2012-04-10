@@ -13,6 +13,7 @@ class __ClassLoader {
     static private $_instance = null;
     private $_mappings = array();
     private $_autoloaders = array();
+    private $_classpaths = array();
     private $_class_file_locator_ids = array();
 
     /**
@@ -39,6 +40,7 @@ class __ClassLoader {
         if(!key_exists($class_file_locator_key, $this->_class_file_locator_ids)) {
             $this->_mappings = $class_file_locator->getMapping() + $this->_mappings;
             $this->_autoloaders = $class_file_locator->getAutoloaders() + $this->_autoloaders;
+            $this->_classpaths = $class_file_locator->getClasspaths() + $this->_classpaths;
             $this->_class_file_locator_ids[$class_file_locator_key] = true;
             if(!__Lion::getInstance()->getRuntimeDirectives()->getDirective('DEBUG_MODE')) {
                 __CacheManager::getInstance()->getCache()->setData('__ClassLoader__', $this);
@@ -92,8 +94,9 @@ class __ClassFileLocator {
     const INCLUDE_PATH_FILENAME = 'includepath.xml';
     
     private $_metadata = null;
-    private $_mapping = null;
+    private $_mapping = null; 
     private $_autoloaders = null;
+    private $_classpaths = null;
     private $_base_dir = null;
     private $_normalized_basedir = null;
     private $_include_dir = null;
@@ -131,13 +134,19 @@ class __ClassFileLocator {
                 __CacheManager::getInstance()->getCache()->setData('classloader_' . $this->_normalized_basedir, $this->_metadata);
             }
         }
-        $this->_mapping = $this->_metadata['mapping'];
+        $this->_mapping     = $this->_metadata['mapping'];
         $this->_autoloaders = $this->_metadata['autoloaders'];
+        $this->_classpaths  = $this->_metadata['classpaths'];
     }
     
     public function getAutoloaders() {
         return $this->_autoloaders;
     }
+
+    public function getClasspaths() {
+    	return $this->_classpaths;
+    }
+    
     
     /**
      * Load the metadata xml specification
@@ -148,7 +157,8 @@ class __ClassFileLocator {
     private function _loadMetadata()
     {
         $return_value = array('mapping' => array(),
-                              'autoloaders' => array()); #by default
+                              'autoloaders' => array(),
+        					  'classpaths' => array()); #by default
         //Find any include path files recursively, under the base directory's lib directories
         if(is_dir($this->_normalized_basedir . DIRECTORY_SEPARATOR . 'libs')) {
             $includepath_files = __FileResolver::
@@ -208,6 +218,15 @@ class __ClassFileLocator {
                             throw new Exception('Missing information to register the autoload method. It was expected a class and a method attribute.');
                         }
                     }
+                    else if($child->nodeName == 'classpath') {
+                    	if($child->hasAttribute('path')) {
+                    		$return_value['classpaths'][] = $child->getAttribute('path');
+                    	}
+                    	else {
+                    		throw new Exception('Missing path attribute.');
+                    	}                    	
+                    }
+                    	
                 }
             }
             else {

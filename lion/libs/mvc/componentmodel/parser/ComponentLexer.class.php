@@ -1,5 +1,37 @@
 <?php
- 
+/**
+ * This file is part of lion framework.
+ * 
+ * Copyright (c) 2012 Antonio Parraga Navarro
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ * 
+ *
+ * @copyright  Copyright (c) 2012 Antonio Parraga Navarro
+ * @author     Antonio Parraga Navarro
+ * @link       http://www.lionframework.org
+ * @license    http://www.lionframework.org/license.html
+ * @version    1.4
+ * @package    ComponentModel
+ * 
+ */
+
 class __ComponentLexer
 {
     const OPEN_COMPONENT_TAG  = __ComponentParser::OPEN_COMPONENT_TAG; 
@@ -8,9 +40,6 @@ class __ComponentLexer
     const ANYTHINGELSE        = __ComponentParser::ANYTHINGELSE;
     const OPEN_PROPERTY_TAG   = __ComponentParser::OPEN_PROPERTY_TAG;
     const CLOSE_PROPERTY_TAG  = __ComponentParser::CLOSE_PROPERTY_TAG;
-    const HTML_ELEMENT_TAG = __ComponentParser::HTML_ELEMENT_TAG;
-    const OPEN_HTML_FORM_TAG = __ComponentParser::OPEN_HTML_FORM_TAG;
-    const CLOSE_HTML_FORM_TAG = __ComponentParser::CLOSE_HTML_FORM_TAG;
  
     private $input;
     private $N;
@@ -57,19 +86,16 @@ class __ComponentLexer
     {
         $tokenMap = array (
               1 => 3,
-              5 => 3,
-              9 => 0,
-              10 => 3,
-              14 => 0,
-              15 => 3,
-              19 => 0,
-              20 => 0,
-              21 => 0,
+              5 => 0,
+              6 => 3,
+              10 => 0,
+              11 => 0,
+              12 => 0,
             );
         if ($this->N >= strlen($this->input)) {
             return false; // end of input
         }
-        $yy_global_pattern = "/^(<disabled(?!form)[A-Za-z][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)\/?>)|^(<form((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/form>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])/";
+        $yy_global_pattern = "/^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])/";
 
         do {
             if (preg_match($yy_global_pattern, substr($this->input, $this->N), $yymatches)) {
@@ -109,15 +135,12 @@ class __ComponentLexer
                     // skip this token
                     continue;
                 } else {                    $yy_yymore_patterns = array(
-        1 => "^(<form((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/form>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
-        5 => "^(<\/form>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
-        9 => "^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
-        10 => "^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
-        14 => "^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
-        15 => "^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
-        19 => "^(<\/comp-property>)|^([\s\S])",
-        20 => "^([\s\S])",
-        21 => "",
+        1 => "^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
+        5 => "^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
+        6 => "^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
+        10 => "^(<\/comp-property>)|^([\s\S])",
+        11 => "^([\s\S])",
+        12 => "",
     );
 
                     // yymore is needed
@@ -160,44 +183,29 @@ class __ComponentLexer
     function yy_r1_1($yy_subpatterns)
     {
 
-    $this->token = self::HTML_ELEMENT_TAG;
+    $this->token = self::OPEN_COMPONENT_TAG;
     }
     function yy_r1_5($yy_subpatterns)
     {
 
-    $this->token = self::OPEN_HTML_FORM_TAG;
-    }
-    function yy_r1_9($yy_subpatterns)
-    {
-
-    $this->token = self::CLOSE_HTML_FORM_TAG;
-    }
-    function yy_r1_10($yy_subpatterns)
-    {
-
-    $this->token = self::OPEN_COMPONENT_TAG;
-    }
-    function yy_r1_14($yy_subpatterns)
-    {
-
     $this->token = self::CLOSE_COMPONENT_TAG;
     }
-    function yy_r1_15($yy_subpatterns)
+    function yy_r1_6($yy_subpatterns)
     {
 
     $this->token = self::SHORT_COMPONENT_TAG;
     }
-    function yy_r1_19($yy_subpatterns)
+    function yy_r1_10($yy_subpatterns)
     {
 
     $this->token = self::OPEN_PROPERTY_TAG;
     }
-    function yy_r1_20($yy_subpatterns)
+    function yy_r1_11($yy_subpatterns)
     {
 
     $this->token = self::CLOSE_PROPERTY_TAG;
     }
-    function yy_r1_21($yy_subpatterns)
+    function yy_r1_12($yy_subpatterns)
     {
 
     $this->token = self::ANYTHINGELSE;
