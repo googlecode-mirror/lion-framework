@@ -471,7 +471,20 @@
 		      </element>
 		    </element>
 		  </metadata>
-		</pharpackage>        
+		</pharpackage>
+        
+        <zip destfile="${artifactsdir}/${lionpackage}.zip" basedir="${deliverablesdir}">
+            <fileset dir="${deliverablesdir}">
+                <include name="${lionpackage}/**" />
+            </fileset>
+        </zip>
+        
+        <tar destfile="${artifactsdir}/${docpackage}.tgz" basedir="${deliverablesdir}" compression="gzip">
+            <fileset dir="${deliverablesdir}">
+                <include name="${docpackage}" />
+            </fileset>
+        </tar>        
+        
 <!--     
         <foreachfileset param="sample" target="packagesample">
             <fileset dir="${samplesdir}">
@@ -479,17 +492,7 @@
             </fileset>      
         </foreachfileset>       
         
-        <zip destfile="${artifactsdir}/${lionpackage}.zip" basedir="${deliverablesdir}">
-            <fileset dir="${deliverablesdir}">
-                <include name="${lionpackage}/**" />
-            </fileset>
-        </zip>
-    
-        <tar destfile="${artifactsdir}/${docpackage}.tgz" basedir="${deliverablesdir}" compression="gzip">
-            <fileset dir="${deliverablesdir}">
-                <include name="${docpackage}" />
-            </fileset>
-        </tar>
+
     
         <tar destfile="${artifactsdir}/${webdocpackage}.tgz" basedir="${deliverablesdir}" compression="gzip">
             <fileset dir="${deliverablesdir}">
@@ -509,7 +512,7 @@
 	<target name="dist">
 		
 		<phingcall target="buildlion" />
-<!--         <phingcall target="builddoc" />  -->
+         <phingcall target="builddoc" /> 
 <!--   		 <phingcall target="buildsamples" /> -->
         <phingcall target="packageall" />
 		

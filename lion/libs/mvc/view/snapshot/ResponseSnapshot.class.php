@@ -31,7 +31,7 @@ class __ResponseSnapshot {
          }
          else {
              $component_handler_manager = __ComponentHandlerManager::getInstance();
-             foreach($this->_views as $view_code => $dummy) {
+             foreach($this->_view_codes as $view_code => $dummy) {
                  if($component_handler_manager->hasComponentHandler($view_code) && 
                     $component_handler_manager->getComponentHandler($view_code)->isDirty()) {
                     //do not read from the cache if the component handler is dirty

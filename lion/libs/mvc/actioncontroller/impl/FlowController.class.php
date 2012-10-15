@@ -59,12 +59,18 @@ class __FlowController extends __ActionController {
                 }
             }
             else {
-                $return_value = $flow_executor->getResponse($flow_execution_key);
-                $return_value->setBufferControl(true);
-                //let also the browser cache the page
-                $return_value->addHeader('Cache-Control: private, max-age=10800, pre-check=10800');
-                $return_value->addHeader('Pragma: private');
-                $return_value->addHeader("Expires: " . date(DATE_RFC822,strtotime("+2 day")));
+            	if($flow_executor->hasFlowExecution($flow_execution_key)) {
+	                $return_value = $flow_executor->getResponse($flow_execution_key);
+	                $return_value->setBufferControl(true);
+	                //let also the browser cache the page
+	                $return_value->addHeader('Cache-Control: private, max-age=10800, pre-check=10800');
+	                $return_value->addHeader('Pragma: private');
+	                $return_value->addHeader("Expires: " . date(DATE_RFC822,strtotime("+2 day")));
+            	}
+            	else {
+            		//start a new flow and redirect the user to the very first step:
+            		$this->startFlowAction();
+            	}
             }
         }
         return $return_value;

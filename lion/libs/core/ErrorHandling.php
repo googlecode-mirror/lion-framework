@@ -164,7 +164,7 @@ class __ErrorHandler {
                    $log_message .= "\n    <trace><![CDATA[\n" . $exception->getTraceAsString() . "\n]]></trace>";
                    $log_message .= "\n</exception>";
                 }
-                if($exception->getCode() != 55601) {
+                if($exception->getCode() != 55601 && $exception->getCode() != 78010) {
                     __LogManager::getInstance()->getLogger('error')->error($log_message);
                 }                
             }

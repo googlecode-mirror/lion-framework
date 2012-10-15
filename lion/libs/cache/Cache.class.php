@@ -26,7 +26,7 @@ final class __Cache {
     
     final public function __construct() {
     	$cache_enabled = __Lion::getInstance()->getRuntimeDirectives()->getDirective('CACHE_ENABLED');
-    	if(__Client::getInstance()->getRequestType() == REQUEST_TYPE_COMMAND_LINE) {
+    	if(class_exists('__Client') && __Client::getInstance()->getRequestType() == REQUEST_TYPE_COMMAND_LINE) {
     		$cache_enabled = false;
     	}
         $this->setEnabled($cache_enabled);
