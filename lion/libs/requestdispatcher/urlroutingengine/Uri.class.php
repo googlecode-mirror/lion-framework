@@ -21,10 +21,11 @@ class __Uri {
     private $_parameters      = array();
     private $_protocol        = null;
     private $_route_id        = null;
-    private $_url             = null;
+    private $_relative_url    = null;
     private $_dirty           = false;
     private $_application_domain = null;
     private $_flow_id = null;
+    private $_only_ssl = false;
     
     /**
      * Constructor method
@@ -39,10 +40,10 @@ class __Uri {
     
     protected function _reset() {
         $this->_action_identity = new __ActionIdentity();
-        $this->_protocol        = __CurrentContext::getInstance()->getPropertyContent('DEFAULT_PROTOCOL');
+    	$this->_protocol        = HTTP_PROTOCOL;
         $this->_route_id        = __CurrentContext::getInstance()->getPropertyContent('DEFAULT_ROUTE');
         $this->_parameters      = array();
-        $this->_url             = null;
+        $this->_relative_url    = null;
         $this->_dirty           = false;
         $this->_front_controller_class = __ContextManager::getInstance()->getCurrentContext()->getConfiguration()->getPropertyContent('HTTP_FRONT_CONTROLLER_CLASS');
     }
@@ -153,7 +154,9 @@ class __Uri {
     public function &setRouteId($route_id) {
         if($this->_route_id != $route_id) {
             if(__RouteManager::getInstance()->hasRoute($route_id)) {
-                $this->_route_id = $route_id;
+                $route = __RouteManager::getInstance()->getRoute($route_id);
+                $this->_only_ssl = $route->getOnlySSL();
+            	$this->_route_id = $route_id;
                 $this->_dirty = true;
             }
             else {
@@ -214,7 +217,7 @@ class __Uri {
     }
     
     public function &setUrl($url) {
-        if($this->_url != $url) {
+        if($this->_relative_url != $url) {
             $url_components = parse_url($url);
             if(is_array($url_components)) {
                 $url = $url_components['path'];
@@ -225,7 +228,13 @@ class __Uri {
                     }
                 }
                 $this->_reset();
-                $this->_url = $url;
+                $this->_relative_url = $url;
+                if(key_exists('scheme', $url_components)) {
+                	$this->_protocol = $url_components['scheme'];
+                }
+                if(key_exists('host', $url_components)) {
+                	$this->_application_domain = $url_components['host'];
+                }
                 $this->_calculateUriComponents();
                 $this->_dirty = false;
             }
@@ -236,30 +245,34 @@ class __Uri {
         return $this;
     }
     
-    public function getUrl($force_relcalculate = false) {
-        return $this->getRelativeUrl($force_relcalculate);
-    }
-    
-    public function getRelativeUrl($force_relcalculate = false) {
-        if($this->_dirty || $force_relcalculate) {
-            $this->_url = $this->_calculateUrl();
-            $this->_dirty = false;
-        }
-        return $this->_url;
-    }
-    
-    public function getAbsoluteUrl($force_relcalculate = false) {
-        if($this->_application_domain != null) {
-            $application_domain = $this->_application_domain;
+    public function getUrl($force_recalculate = false) {
+        if((HTTP_PROTOCOL == 'http' && $this->_only_ssl == true) || HTTP_PROTOCOL != $this->_protocol) {
+        	return $this->getAbsoluteUrl($force_recalculate);
         }
         else {
-            $application_domain = __ApplicationContext::getInstance()->getPropertyContent('APPLICATION_DOMAIN');
-            if($application_domain == null && isset($_SERVER['SERVER_NAME'])) {
-                $application_domain = $_SERVER['SERVER_NAME'];
-            }
+    		return $this->getRelativeUrl($force_recalculate);
         }
+    }
+    
+    //get relative url will return the absolute url in case the url just allow ssl
+    public function getRelativeUrl($force_recalculate = false) {
+        if($this->_dirty || $force_recalculate) {
+            $this->_relative_url = $this->_calculateUrl();
+            $this->_dirty = false;
+        }
+        return $this->_relative_url;
+    }
+    
+    public function getAbsoluteUrl($force_recalculate = false) {
+    	$application_domain = $this->_resolveApplicationDomain();
         if($application_domain != null) {
-            $return_value = HTTP_PROTOCOL . '://' . $application_domain . HTTP_PORT . $this->getRelativeUrl($force_relcalculate);
+        	if($this->_only_ssl) {
+        		$protocol = 'https';
+        	}
+        	else {
+        		$protocol = $this->_protocol;
+        	}
+            $return_value = $protocol . '://' . $application_domain . HTTP_PORT . $this->getRelativeUrl($force_recalculate);
         }
         else {
             throw __ExceptionFactory::getInstance()->createException('Unable to resolve a server domain. Set a domain (APPLICATION_DOMAIN in settings.ini) in order to call to this method by the command line');
@@ -267,6 +280,19 @@ class __Uri {
         return $return_value;
     }
 
+    protected function _resolveApplicationDomain() {
+    	if($this->_application_domain != null) {
+    		$return_value = $this->_application_domain;
+    	}
+    	else {
+    		$return_value = __ApplicationContext::getInstance()->getPropertyContent('APPLICATION_DOMAIN');
+    		if($return_value == null && isset($_SERVER['SERVER_NAME'])) {
+    			$return_value = $_SERVER['SERVER_NAME'];
+    		}
+    	}
+    	return $return_value;
+    }
+    
     public function __toString() {
         return $this->getUrl();
     }
@@ -286,15 +312,15 @@ class __Uri {
     }
     
     protected function _calculateUriComponents() {
-        $route = __RouteManager::getInstance()->getValidRouteForUrl($this->_url);
+        $route = __RouteManager::getInstance()->getValidRouteForUrl($this->_relative_url);
         if($route == null) {
-            throw new Exception('Route not found matching url: ' . $this->_url);
+            throw new Exception('Route not found matching url: ' . $this->_relative_url);
         }
         $this->setRouteId( $route->getId() );
         $this->setFlowId( $route->getFlowId() );
         $url_variable_values = array();
         $variables_matched   = array();
-        if(preg_match('/' . $route->getUrlRegularExpression() . '/', $this->_url, $variables_matched)) {
+        if(preg_match('/' . $route->getUrlRegularExpression() . '/', $this->_relative_url, $variables_matched)) {
             $variables_order = $route->getVariablesOrder();
             $total_variables_matched = count($variables_matched);
             for($i = 1; $i < $total_variables_matched; $i++) {
@@ -343,6 +369,10 @@ class __Uri {
 
     public function getApplicationDomain() {
         return $this->_application_domain;
+    }
+    
+    public function getOnlySSL() {
+    	return $this->_only_ssl;
     }
     
     

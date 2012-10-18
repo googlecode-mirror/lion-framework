@@ -111,6 +111,7 @@ class __HttpRequest extends __Request {
                 $route = $uri->getRoute();
                 if($route != null && $route instanceof __Route) {
                     $route_id_to_redirect_to = $route->getRouteIdToRedirectTo();
+                    //check if need to redirect to any route:
                     if(!empty($route_id_to_redirect_to)) {
                         $uri = __UriFactory::getInstance()->createUri()->setRoute($route_id_to_redirect_to)
                                ->setParameters($this->toArray(REQMETHOD_GET));
@@ -118,6 +119,14 @@ class __HttpRequest extends __Request {
                         $redirection_code = $route->getRedirectionCode();
                         __FrontController::getInstance()->redirect($uri, $empty_request, $redirection_code);
                     }
+                    //also check if the current route allowes only SSL:
+                    if($route->getOnlySSL() && HTTP_PROTOCOL != 'https') {
+                    	$empty_request = __RequestFactory::getInstance()->createRequest();
+                    	$redirection_code = $route->getRedirectionCode();
+                    	$uri->setProtocol('https');
+                    	__FrontController::getInstance()->redirect($uri, $empty_request, $redirection_code);
+                    }
+                    
                 }
             }
             

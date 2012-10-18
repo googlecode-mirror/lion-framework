@@ -66,14 +66,13 @@ class __HttpFrontController extends __FrontController {
      * @param __IRequest &$request The request associated to the redirection
      * @param integer $redirection_code The HTTP redirection code
      */
-    public function redirect($uri, __IRequest &$request = null, $redirection_code = null) {
-        if(is_string($uri)) {
-            $uri = __UriFactory::getInstance()->createUri($uri);
+    public function redirect($url, __IRequest &$request = null, $redirection_code = null) {
+        if($url instanceof __Uri) {
+    		$url = $url->getUrl();
         }
-        else if(!$uri instanceof __Uri) {
-            throw __ExceptionFactory::getInstance()->createException('Unexpected type for uri parameter: ' . get_class($uri));
+        else if(!is_string($url)) {
+            throw __ExceptionFactory::getInstance()->createException('Unexpected type for url parameter: ' . get_class($url));
         }
-        $url = $uri->getUrl();
         if($request != null) {
             $parameters = $request->getParameters(REQMETHOD_GET);
             if(count($parameters) > 0) {

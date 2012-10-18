@@ -41,6 +41,11 @@ class __RoutesSectionHandler extends __CacheSectionHandler {
             }
             $route->setCacheTtl($cache_ttl);
         }
+        if($section->hasAttribute('only-ssl')) {
+        	$only_ssl = __ConfigurationValueResolver::toBool($section->getAttribute('only-ssl'));
+            $route->setOnlySSL($only_ssl);
+        }
+        
         if($section->hasAttribute('redirect-to')) {
             $route_to_redirect_to = $section->getAttribute('redirect-to');
             if($section->hasAttribute('redirection-code')) {

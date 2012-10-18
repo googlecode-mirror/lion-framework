@@ -22,6 +22,7 @@ class __Route {
     private $_supercache              = false;
     private $_cache_ttl               = null;
     private $_route_id_to_redirect_to = null;
+    private $_only_ssl                = false;
     private $_redirection_code        = 302;
     protected $_order = null;
 
@@ -259,6 +260,14 @@ class __Route {
     
     public function getCacheTtl() {
         return $this->_cache_ttl;
+    }
+    
+    public function setOnlySSL($only_ssl) {
+    	$this->_only_ssl = (bool) $only_ssl;
+    }
+    
+    public function getOnlySSL() {
+    	return $this->_only_ssl;
     }
     
     public function setRouteToRedirectTo($route_id, $redirection_code) {
