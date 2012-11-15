@@ -171,13 +171,10 @@ var __ClientEventHandler = Class.create({
         if (!silentMode) {
             this.startWaiting(componentId);
         }
-        this._doSendEvent(eventName, extraInfo, componentId);
-    },
-
-    _doSendEvent: function(eventName, extraInfo, componentId) {
+        
         if(this.allowEvents) {
             var messageProcessor = new __MessageProcessor();
-            new __LionAjaxRequest(this.url, {
+            new Ajax.Request(this.url, {
                 asynchronous: true,
                 evalJS: false,
                 evalJSON: false,
@@ -219,17 +216,6 @@ var __ClientEventHandler = Class.create({
 
 });
 
-__LionAjaxRequest = Class.create(Ajax.Request, {
-  
-    request: function($super, url) {
-        //multipart not supported by IE
-        if (/MSIE/.test(navigator.userAgent) == false){
-            this.transport.multipart = true;
-        }
-        $super(url);
-    }
-
-});
 
 /**
  * Static method to retrieve a __ClientEventHandler singleton instance
@@ -1537,9 +1523,9 @@ var __FileUploader = Class.create({
             this.asyncForm.appendChild(this.input);
             this.input = inputClone;
             
-            var encType = this.asyncForm.getAttributeNode("enctype");
+            var encType = this.asyncForm.getAttribute("enctype");
             encType.value = "multipart/form-data";
-            var formMethod = this.asyncForm.getAttributeNode("method");
+            var formMethod = this.asyncForm.getAttribute("method");
             formMethod.value = "POST";    
               
             this.asyncForm.submit();
