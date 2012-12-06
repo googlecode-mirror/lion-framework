@@ -122,14 +122,12 @@ class __HttpRequest extends __Request {
                     //also check if the current route allowes only SSL:
                     if($route->getOnlySSL() && HTTP_PROTOCOL != 'https') {
                     	$empty_request = __RequestFactory::getInstance()->createRequest();
-                    	$redirection_code = $route->getRedirectionCode();
-                    	$uri->setProtocol('https');
-                    	__FrontController::getInstance()->redirect($uri, $empty_request, $redirection_code);
+                    	$url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                    	__FrontController::getInstance()->redirect($url, $empty_request, 302);
                     }
                     
                 }
             }
-            
         }
     }
     
