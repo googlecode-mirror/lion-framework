@@ -12,7 +12,10 @@ class __InputBoxHtmlWriter extends __ComponentWriter {
         $properties = array();
         $component_properties = $component->getProperties();
         foreach($component_properties as $property => $value) {
-            $properties[] = $property . '="' . $value . '"';
+        	$property = strtolower($property);
+        	if($property != 'runat') {
+        		$properties[] = $property . '="' . $value . '"';
+        	}
         }
         if(!key_exists('TYPE', $component_properties)) {
             $properties[] = 'type="text"';

@@ -16,7 +16,7 @@ class __Stack {
     }
 
     public function &peek() {
-        $return_value =& $this->_elements[$this->_getLastIndex()];
+        $return_value =& end($this->_elements);
         return $return_value;
     }
     
@@ -27,11 +27,6 @@ class __Stack {
     public function clear() {
         $this->_elements = array();
     }
-    
-    protected function _getLastIndex() {
-        $indexes = array_keys($this->_elements);
-        $return_value = end($indexes);
-        return $return_value;
-    }
+
     
 }

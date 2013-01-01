@@ -274,8 +274,8 @@
         </reflexive>
 		
 		
-        <exec command="php ${absolute_buildlibsdir}/docgenerators/phpdocumentator/pear-phpdoc -c ${absolute_docdir}/lion.phpdoc.ini" dir="${liondelivdir}" passthru="true"/>
-        <exec command="php ${absolute_buildlibsdir}/docgenerators/phpdocumentator/pear-phpdoc -c ${absolute_docdir}/lionweb.phpdoc.ini" dir="${liondelivdir}" passthru="true"/>
+        <exec command="phpdoc -c ${absolute_docdir}/lion.phpdoc.ini" dir="${liondelivdir}" passthru="true"/>
+        <exec command="phpdoc -c ${absolute_docdir}/lionweb.phpdoc.ini" dir="${liondelivdir}" passthru="true"/>
 
         <copy todir="${docpackagedir}/images">
             <fileset refid="docimages" />

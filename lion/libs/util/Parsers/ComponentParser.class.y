@@ -31,6 +31,10 @@
                 4  => self::ANYTHINGELSE,
                 5  => self::OPEN_PROPERTY_TAG,
                 6  => self::CLOSE_PROPERTY_TAG,
+                7  => self::RUNATSERVER_SHORT_TAG,
+                8  => self::RUNATSERVER_OPEN_TAG,
+                9  => self::RUNATSERVER_CLOSE_TAG,
+                
         );
 
     protected $_token_names =
@@ -41,6 +45,9 @@
                 self::ANYTHINGELSE        => 'Any character',
                 self::OPEN_PROPERTY_TAG   => 'Property open tag',
                 self::CLOSE_PROPERTY_TAG  => 'Property close tag within the [component] component',
+                self::RUNATSERVER_SHORT_TAG => 'Html element (run at server)',
+                self::RUNATSERVER_OPEN_TAG  => 'Html element (run at server) open tag',
+                self::RUNATSERVER_CLOSE_TAG => 'Html element (run at server) close tag',
         );
 
     private function _getTokenName($token_id) {
@@ -64,19 +71,19 @@
     
     public function getResult() {
         return $this->_result;
-    }
-    
-    protected function _getHtmlElementType($tag_expression) {
-        $return_value = null;
-        if(preg_match('/\<([A-Za-z_][A-Za-z_0-9]*)/i', $tag_expression, $matched)) {
-            $return_value = $matched[1];
-        }
-        return $return_value;
-    }    
+    }   
     
     protected function _getTagName($tag_expression) {
     	$return_value = null;
         if(preg_match('/\<\/?comp\:([A-Za-z_][A-Za-z_0-9]*)/i', $tag_expression, $matched)) {
+        	$return_value = $matched[1];
+        }
+        return $return_value;
+    }
+
+    protected function _getHtmlTagName($tag_expression) {
+    	$return_value = null;
+        if(preg_match('/\<\/?([A-Za-z_][A-Za-z_0-9]*)/i', $tag_expression, $matched)) {
         	$return_value = $matched[1];
         }
         return $return_value;
@@ -226,6 +233,11 @@
         $return_value = $this->_component_specs_stack->pop();
         return $return_value;
     }    
+
+    protected function &_peekComponentSpec() {
+        $return_value = $this->_component_specs_stack->peek();
+        return $return_value;
+    }    
     
     protected function _registerComponentSpec(__ComponentSpec &$component_spec) {
         if($this->_properties_stack->count() == 0 && $this->_component_specs_stack->count() > 0) {
@@ -310,6 +322,73 @@ ui_code(A)    ::= .
 component_tag(A) ::= r_open_component_tag(B) component_body(C) r_close_component_tag(D) . 
 {
     A = B . C . D;
+}
+
+component_tag(A) ::= RUNATSERVER_SHORT_TAG(B) .
+{ 
+    //Setup, validate and register current component:
+    $tag_name  = $this->_getHtmlTagName(B);
+    $attribute_list = $this->_getAttributeList(B);
+    if(key_exists('componenttag', $attribute_list)) {
+        $component_tag = $attribute_list['component'];
+    }
+    else {
+        $component_tag = __RunAtServerHtmlElementHelper::resolveComponentTag($tag_name, $attribute_list);
+    }    
+    $component_spec = __ComponentSpecFactory::getInstance()->createComponentSpec($component_tag);
+    $component_spec->setDefaultValues($attribute_list);
+    $component_spec->setViewCode($this->_view_code);
+    $this->_registerComponentSpec($component_spec);  
+    if($this->_getCurrentProperty() == null) {
+        A = $this->_getComponentSingleTagCode($component_spec);
+    }
+    else {
+        A = $component;
+    }
+}
+
+component_tag(A) ::= RUNATSERVER_OPEN_TAG(B) .
+{
+   //Setup, validate and register current component:
+    $tag_name  = $this->_getHtmlTagName(B);
+    $attribute_list = $this->_getAttributeList(B);
+    if(key_exists('componenttag', $attribute_list)) {
+        $component_tag = $attribute_list['component'];
+    }
+    else {
+        $component_tag = __RunAtServerHtmlElementHelper::resolveComponentTag($tag_name, $attribute_list);
+    }    
+    $component_spec = __ComponentSpecFactory::getInstance()->createComponentSpec($component_tag);
+    $component_spec->setDefaultValues($attribute_list);
+    $component_spec->setViewCode($this->_view_code);
+    if(is_array($attribute_list) && key_exists('runat', $attribute_list) && strtoupper($attribute_list['runat']) == 'SERVER') {
+    	$component_spec->setRunAtServer(true);
+    }
+    else {
+        $component_spec->setRunAtServer(false);
+    }
+    $this->_registerComponentSpec($component_spec);
+    $this->_pushComponentSpec($component_spec);
+    A = $this->_getComponentBeginTagCode($component_spec);
+}
+
+component_tag(A) ::= RUNATSERVER_CLOSE_TAG(B) .
+{
+    //Retrieve the current component and perform validations:
+    $tag_name = $this->_getHtmlTagName(B);
+    $component_spec =& $this->_peekComponentSpec();
+    if($component_spec != null && $component_spec->getTag() == $tag_name && $component_spec->getRunAtServer() == true) {
+    	$this->_popComponentSpec();
+        if($this->_getCurrentProperty() == null) {
+            A = $this->_getComponentEndTagCode($component_spec);
+        }
+        else {
+            A = $component;
+        }
+    }
+    else {
+        A = B;
+    }
 }
 
 component_tag(A) ::= SHORT_COMPONENT_TAG(B) .

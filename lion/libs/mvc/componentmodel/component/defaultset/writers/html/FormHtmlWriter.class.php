@@ -9,7 +9,10 @@ class __FormHtmlWriter extends __ComponentWriter {
         $component_properties = $component->getProperties();
         
         foreach($component_properties as $property => $value) {
-            $properties[] = $property . '="' . $value . '"';
+        	$property = strtolower($property);
+        	if($property != 'runat') {
+            	$properties[] = $property . '="' . $value . '"';
+        	}
         }
         $properties[] = 'id="' . $component_id . '"';
         $properties[] = 'name="' . $component->getName() . '"';

@@ -45,6 +45,9 @@ class __RunAtServerHtmlElementHelper {
                     }
                 }
                 break;
+            default:
+            	$return_value = $html_tag_name;
+            	break;
         }
         return $return_value;        
     }

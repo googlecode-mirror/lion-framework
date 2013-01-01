@@ -1,37 +1,5 @@
 <?php
-/**
- * This file is part of lion framework.
- * 
- * Copyright (c) 2012 Antonio Parraga Navarro
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * 
- *
- * @copyright  Copyright (c) 2012 Antonio Parraga Navarro
- * @author     Antonio Parraga Navarro
- * @link       http://www.lionframework.org
- * @license    http://www.lionframework.org/license.html
- * @version    1.4
- * @package    ComponentModel
- * 
- */
-
+ 
 class __ComponentLexer
 {
     const OPEN_COMPONENT_TAG  = __ComponentParser::OPEN_COMPONENT_TAG; 
@@ -40,6 +8,9 @@ class __ComponentLexer
     const ANYTHINGELSE        = __ComponentParser::ANYTHINGELSE;
     const OPEN_PROPERTY_TAG   = __ComponentParser::OPEN_PROPERTY_TAG;
     const CLOSE_PROPERTY_TAG  = __ComponentParser::CLOSE_PROPERTY_TAG;
+    const RUNATSERVER_OPEN_TAG  = __ComponentParser::RUNATSERVER_OPEN_TAG;
+    const RUNATSERVER_CLOSE_TAG = __ComponentParser::RUNATSERVER_CLOSE_TAG;
+    const RUNATSERVER_SHORT_TAG = __ComponentParser::RUNATSERVER_SHORT_TAG;
  
     private $input;
     private $N;
@@ -85,17 +56,20 @@ class __ComponentLexer
     function yylex1()
     {
         $tokenMap = array (
-              1 => 3,
-              5 => 0,
-              6 => 3,
-              10 => 0,
-              11 => 0,
-              12 => 0,
+              1 => 7,
+              9 => 7,
+              17 => 0,
+              18 => 3,
+              22 => 0,
+              23 => 3,
+              27 => 0,
+              28 => 0,
+              29 => 0,
             );
         if ($this->N >= strlen($this->input)) {
             return false; // end of input
         }
-        $yy_global_pattern = "/^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])/";
+        $yy_global_pattern = "/^(<[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)runat\\s*=\\s*\"(server|client)\"((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)runat\\s*=\\s*\"(server|client)\"((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])/";
 
         do {
             if (preg_match($yy_global_pattern, substr($this->input, $this->N), $yymatches)) {
@@ -135,12 +109,15 @@ class __ComponentLexer
                     // skip this token
                     continue;
                 } else {                    $yy_yymore_patterns = array(
-        1 => "^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
-        5 => "^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
-        6 => "^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
-        10 => "^(<\/comp-property>)|^([\s\S])",
-        11 => "^([\s\S])",
-        12 => "",
+        1 => "^(<[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)runat\\s*=\\s*\"(server|client)\"((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
+        9 => "^(<\/[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
+        17 => "^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/>\s]+))?)+\\s*|\\s*)>)|^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
+        18 => "^(<\/comp:[A-Za-z_][A-Za-z_0-9]*>)|^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
+        22 => "^(<comp:[A-Za-z_][A-Za-z_0-9]*((\\s+[A-Za-z0-9_\-]+(\\s*=\\s*(?:\"[^\"]*\"|'[^']*'|[^'\"\/\s]+))?)+\\s*|\\s*)\/>)|^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
+        23 => "^(<comp-property\\s+name\\s*=\\s*\"[A-Za-z_][A-Za-z_0-9]*\"\\s*>)|^(<\/comp-property>)|^([\s\S])",
+        27 => "^(<\/comp-property>)|^([\s\S])",
+        28 => "^([\s\S])",
+        29 => "",
     );
 
                     // yymore is needed
@@ -183,29 +160,44 @@ class __ComponentLexer
     function yy_r1_1($yy_subpatterns)
     {
 
+    $this->token = self::RUNATSERVER_SHORT_TAG;
+    }
+    function yy_r1_9($yy_subpatterns)
+    {
+
+    $this->token = self::RUNATSERVER_OPEN_TAG;
+    }
+    function yy_r1_17($yy_subpatterns)
+    {
+
+    $this->token = self::RUNATSERVER_CLOSE_TAG;
+    }
+    function yy_r1_18($yy_subpatterns)
+    {
+
     $this->token = self::OPEN_COMPONENT_TAG;
     }
-    function yy_r1_5($yy_subpatterns)
+    function yy_r1_22($yy_subpatterns)
     {
 
     $this->token = self::CLOSE_COMPONENT_TAG;
     }
-    function yy_r1_6($yy_subpatterns)
+    function yy_r1_23($yy_subpatterns)
     {
 
     $this->token = self::SHORT_COMPONENT_TAG;
     }
-    function yy_r1_10($yy_subpatterns)
+    function yy_r1_27($yy_subpatterns)
     {
 
     $this->token = self::OPEN_PROPERTY_TAG;
     }
-    function yy_r1_11($yy_subpatterns)
+    function yy_r1_28($yy_subpatterns)
     {
 
     $this->token = self::CLOSE_PROPERTY_TAG;
     }
-    function yy_r1_12($yy_subpatterns)
+    function yy_r1_29($yy_subpatterns)
     {
 
     $this->token = self::ANYTHINGELSE;

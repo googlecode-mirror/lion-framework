@@ -123,6 +123,10 @@ abstract class __ComponentParser#line 107 "ComponentParser.class.php"
                 4  => self::ANYTHINGELSE,
                 5  => self::OPEN_PROPERTY_TAG,
                 6  => self::CLOSE_PROPERTY_TAG,
+                7  => self::RUNATSERVER_SHORT_TAG,
+                8  => self::RUNATSERVER_OPEN_TAG,
+                9  => self::RUNATSERVER_CLOSE_TAG,
+                
         );
 
     protected $_token_names =
@@ -133,6 +137,9 @@ abstract class __ComponentParser#line 107 "ComponentParser.class.php"
                 self::ANYTHINGELSE        => 'Any character',
                 self::OPEN_PROPERTY_TAG   => 'Property open tag',
                 self::CLOSE_PROPERTY_TAG  => 'Property close tag within the [component] component',
+                self::RUNATSERVER_SHORT_TAG => 'Html element (run at server)',
+                self::RUNATSERVER_OPEN_TAG  => 'Html element (run at server) open tag',
+                self::RUNATSERVER_CLOSE_TAG => 'Html element (run at server) close tag',
         );
 
     private function _getTokenName($token_id) {
@@ -156,19 +163,19 @@ abstract class __ComponentParser#line 107 "ComponentParser.class.php"
     
     public function getResult() {
         return $this->_result;
-    }
-    
-    protected function _getHtmlElementType($tag_expression) {
-        $return_value = null;
-        if(preg_match('/\<([A-Za-z_][A-Za-z_0-9]*)/i', $tag_expression, $matched)) {
-            $return_value = $matched[1];
-        }
-        return $return_value;
-    }    
+    }   
     
     protected function _getTagName($tag_expression) {
     	$return_value = null;
         if(preg_match('/\<\/?comp\:([A-Za-z_][A-Za-z_0-9]*)/i', $tag_expression, $matched)) {
+        	$return_value = $matched[1];
+        }
+        return $return_value;
+    }
+
+    protected function _getHtmlTagName($tag_expression) {
+    	$return_value = null;
+        if(preg_match('/\<\/?([A-Za-z_][A-Za-z_0-9]*)/i', $tag_expression, $matched)) {
         	$return_value = $matched[1];
         }
         return $return_value;
@@ -318,6 +325,11 @@ abstract class __ComponentParser#line 107 "ComponentParser.class.php"
         $return_value = $this->_component_specs_stack->pop();
         return $return_value;
     }    
+
+    protected function &_peekComponentSpec() {
+        $return_value = $this->_component_specs_stack->peek();
+        return $return_value;
+    }    
     
     protected function _registerComponentSpec(__ComponentSpec &$component_spec) {
         if($this->_properties_stack->count() == 0 && $this->_component_specs_stack->count() > 0) {
@@ -368,7 +380,7 @@ abstract class __ComponentParser#line 107 "ComponentParser.class.php"
     
     abstract protected function _getEndRenderCode();
     
-#line 375 "ComponentParser.class.php"
+#line 387 "ComponentParser.class.php"
 
 /* Next is all token values, as class constants
 */
@@ -379,15 +391,18 @@ abstract class __ComponentParser#line 107 "ComponentParser.class.php"
 **
 ** Each symbol here is a terminal symbol in the grammar.
 */
-    const SHORT_COMPONENT_TAG            =  1;
-    const OPEN_COMPONENT_TAG             =  2;
-    const CLOSE_COMPONENT_TAG            =  3;
-    const OPEN_PROPERTY_TAG              =  4;
-    const CLOSE_PROPERTY_TAG             =  5;
-    const ANYTHINGELSE                   =  6;
-    const YY_NO_ACTION = 42;
-    const YY_ACCEPT_ACTION = 41;
-    const YY_ERROR_ACTION = 40;
+    const RUNATSERVER_SHORT_TAG          =  1;
+    const RUNATSERVER_OPEN_TAG           =  2;
+    const RUNATSERVER_CLOSE_TAG          =  3;
+    const SHORT_COMPONENT_TAG            =  4;
+    const OPEN_COMPONENT_TAG             =  5;
+    const CLOSE_COMPONENT_TAG            =  6;
+    const OPEN_PROPERTY_TAG              =  7;
+    const CLOSE_PROPERTY_TAG             =  8;
+    const ANYTHINGELSE                   =  9;
+    const YY_NO_ACTION = 48;
+    const YY_ACCEPT_ACTION = 47;
+    const YY_ERROR_ACTION = 46;
 
 /* Next are that tables used to determine what action to take based on the
 ** current state and lookahead token.  These tables are used to implement
@@ -439,40 +454,42 @@ abstract class __ComponentParser#line 107 "ComponentParser.class.php"
 **                          shifting non-terminals after a reduce.
 **  self::$yy_default       Default action for each state.
 */
-    const YY_SZ_ACTTAB = 34;
+    const YY_SZ_ACTTAB = 41;
 static public $yy_action = array(
- /*     0 */    17,   16,   18,    6,   19,   20,    5,   14,    7,   11,
- /*    10 */     6,   12,   19,   20,    2,   15,   21,   13,    4,    8,
- /*    20 */     9,    3,   10,    9,   40,   19,   20,   41,    1,   40,
- /*    30 */    40,    7,   40,    6,
+ /*     0 */    22,   19,   18,   17,   20,    4,   10,    9,   12,   14,
+ /*    10 */    22,   19,   18,   17,   20,   11,    3,   16,    9,   22,
+ /*    20 */    19,   18,   17,   20,   15,   24,   21,    7,   46,    5,
+ /*    30 */     6,    7,    1,   47,    2,   46,   23,    8,    5,   13,
+ /*    40 */     7,
     );
     static public $yy_lookahead = array(
- /*     0 */    10,   11,   12,   13,    1,    2,   16,    4,   11,    6,
- /*    10 */    13,    3,    1,    2,    9,   18,    5,   15,   17,   14,
- /*    20 */    19,   17,    6,   19,   20,    1,    2,    8,    9,   20,
- /*    30 */    20,   11,   20,   13,
+ /*     0 */     1,    2,    3,    4,    5,   20,    7,   22,    9,   18,
+ /*    10 */     1,    2,    3,    4,    5,    9,   20,    8,   22,    1,
+ /*    20 */     2,    3,    4,    5,   13,   14,   15,   16,   23,   14,
+ /*    30 */    19,   16,   12,   11,   12,   23,   21,   17,   14,    6,
+ /*    40 */    16,
 );
-    const YY_SHIFT_USE_DFLT = -1;
+    const YY_SHIFT_USE_DFLT = -2;
     const YY_SHIFT_MAX = 9;
     static public $yy_shift_ofst = array(
- /*     0 */    -1,    3,    3,   11,   24,   -1,   -1,   -1,    8,   16,
+ /*     0 */    -2,   -1,   -1,    9,   18,   -2,   -2,   -2,   33,    6,
 );
-    const YY_REDUCE_USE_DFLT = -11;
+    const YY_REDUCE_USE_DFLT = -16;
     const YY_REDUCE_MAX = 8;
     static public $yy_reduce_ofst = array(
- /*     0 */    19,  -10,  -10,   -3,   20,    4,    5,    1,    2,
+ /*     0 */    22,   11,   11,   15,   24,  -15,   -4,   20,   -9,
 );
     static public $yyExpectedTokens = array(
         /* 0 */ array(),
-        /* 1 */ array(1, 2, 4, 6, ),
-        /* 2 */ array(1, 2, 4, 6, ),
-        /* 3 */ array(1, 2, 5, ),
-        /* 4 */ array(1, 2, ),
+        /* 1 */ array(1, 2, 3, 4, 5, 7, 9, ),
+        /* 2 */ array(1, 2, 3, 4, 5, 7, 9, ),
+        /* 3 */ array(1, 2, 3, 4, 5, 8, ),
+        /* 4 */ array(1, 2, 3, 4, 5, ),
         /* 5 */ array(),
         /* 6 */ array(),
         /* 7 */ array(),
-        /* 8 */ array(3, ),
-        /* 9 */ array(6, ),
+        /* 8 */ array(6, ),
+        /* 9 */ array(9, ),
         /* 10 */ array(),
         /* 11 */ array(),
         /* 12 */ array(),
@@ -485,11 +502,14 @@ static public $yy_action = array(
         /* 19 */ array(),
         /* 20 */ array(),
         /* 21 */ array(),
+        /* 22 */ array(),
+        /* 23 */ array(),
+        /* 24 */ array(),
 );
     static public $yy_default = array(
- /*     0 */    26,   22,   31,   40,   35,   38,   26,   38,   40,   36,
- /*    10 */    37,   39,   30,   27,   33,   32,   24,   23,   25,   28,
- /*    20 */    29,   34,
+ /*     0 */    29,   37,   25,   46,   41,   44,   44,   29,   46,   42,
+ /*    10 */    39,   43,   45,   36,   30,   26,   40,   34,   33,   32,
+ /*    20 */    35,   28,   31,   38,   27,
 );
 /* The next thing included is series of defines which control
 ** various aspects of the generated parser.
@@ -506,11 +526,11 @@ static public $yy_action = array(
 **    self::YYERRORSYMBOL is the code number of the error symbol.  If not
 **                        defined, then do no error processing.
 */
-    const YYNOCODE = 21;
+    const YYNOCODE = 24;
     const YYSTACKDEPTH = 100;
-    const YYNSTATE = 22;
-    const YYNRULE = 18;
-    const YYERRORSYMBOL = 7;
+    const YYNSTATE = 25;
+    const YYNRULE = 21;
+    const YYERRORSYMBOL = 10;
     const YYERRSYMDT = 'yy0';
     const YYFALLBACK = 0;
     /** The next table maps tokens into fallback tokens.  If a construct
@@ -592,11 +612,12 @@ static public $yy_action = array(
      * @var array
      */
     static public $yyTokenName = array( 
-  '$',             'SHORT_COMPONENT_TAG',  'OPEN_COMPONENT_TAG',  'CLOSE_COMPONENT_TAG',
-  'OPEN_PROPERTY_TAG',  'CLOSE_PROPERTY_TAG',  'ANYTHINGELSE',  'error',       
-  'start',         'ui_code',       'anychar',       'component_tag',
-  'component_property',  'r_open_component_tag',  'component_body',  'r_close_component_tag',
-  'r_open_property_tag',  'property_value',  'r_close_property_tag',  'literal',     
+  '$',             'RUNATSERVER_SHORT_TAG',  'RUNATSERVER_OPEN_TAG',  'RUNATSERVER_CLOSE_TAG',
+  'SHORT_COMPONENT_TAG',  'OPEN_COMPONENT_TAG',  'CLOSE_COMPONENT_TAG',  'OPEN_PROPERTY_TAG',
+  'CLOSE_PROPERTY_TAG',  'ANYTHINGELSE',  'error',         'start',       
+  'ui_code',       'anychar',       'component_tag',  'component_property',
+  'r_open_component_tag',  'component_body',  'r_close_component_tag',  'r_open_property_tag',
+  'property_value',  'r_close_property_tag',  'literal',     
     );
 
     /**
@@ -610,18 +631,21 @@ static public $yy_action = array(
  /*   3 */ "ui_code ::= ui_code component_property",
  /*   4 */ "ui_code ::=",
  /*   5 */ "component_tag ::= r_open_component_tag component_body r_close_component_tag",
- /*   6 */ "component_tag ::= SHORT_COMPONENT_TAG",
- /*   7 */ "r_open_component_tag ::= OPEN_COMPONENT_TAG",
- /*   8 */ "r_close_component_tag ::= CLOSE_COMPONENT_TAG",
- /*   9 */ "component_body ::= ui_code",
- /*  10 */ "component_property ::= r_open_property_tag property_value r_close_property_tag",
- /*  11 */ "r_open_property_tag ::= OPEN_PROPERTY_TAG",
- /*  12 */ "r_close_property_tag ::= CLOSE_PROPERTY_TAG",
- /*  13 */ "property_value ::= property_value component_tag property_value",
- /*  14 */ "property_value ::= literal",
- /*  15 */ "literal ::= literal ANYTHINGELSE",
- /*  16 */ "literal ::=",
- /*  17 */ "anychar ::= ANYTHINGELSE",
+ /*   6 */ "component_tag ::= RUNATSERVER_SHORT_TAG",
+ /*   7 */ "component_tag ::= RUNATSERVER_OPEN_TAG",
+ /*   8 */ "component_tag ::= RUNATSERVER_CLOSE_TAG",
+ /*   9 */ "component_tag ::= SHORT_COMPONENT_TAG",
+ /*  10 */ "r_open_component_tag ::= OPEN_COMPONENT_TAG",
+ /*  11 */ "r_close_component_tag ::= CLOSE_COMPONENT_TAG",
+ /*  12 */ "component_body ::= ui_code",
+ /*  13 */ "component_property ::= r_open_property_tag property_value r_close_property_tag",
+ /*  14 */ "r_open_property_tag ::= OPEN_PROPERTY_TAG",
+ /*  15 */ "r_close_property_tag ::= CLOSE_PROPERTY_TAG",
+ /*  16 */ "property_value ::= property_value component_tag property_value",
+ /*  17 */ "property_value ::= literal",
+ /*  18 */ "literal ::= literal ANYTHINGELSE",
+ /*  19 */ "literal ::=",
+ /*  20 */ "anychar ::= ANYTHINGELSE",
     );
 
     /**
@@ -986,24 +1010,27 @@ static public $yy_action = array(
      * </pre>
      */
     static public $yyRuleInfo = array(
-  array( 'lhs' => 8, 'rhs' => 1 ),
-  array( 'lhs' => 9, 'rhs' => 2 ),
-  array( 'lhs' => 9, 'rhs' => 2 ),
-  array( 'lhs' => 9, 'rhs' => 2 ),
-  array( 'lhs' => 9, 'rhs' => 0 ),
-  array( 'lhs' => 11, 'rhs' => 3 ),
   array( 'lhs' => 11, 'rhs' => 1 ),
-  array( 'lhs' => 13, 'rhs' => 1 ),
-  array( 'lhs' => 15, 'rhs' => 1 ),
+  array( 'lhs' => 12, 'rhs' => 2 ),
+  array( 'lhs' => 12, 'rhs' => 2 ),
+  array( 'lhs' => 12, 'rhs' => 2 ),
+  array( 'lhs' => 12, 'rhs' => 0 ),
+  array( 'lhs' => 14, 'rhs' => 3 ),
   array( 'lhs' => 14, 'rhs' => 1 ),
-  array( 'lhs' => 12, 'rhs' => 3 ),
+  array( 'lhs' => 14, 'rhs' => 1 ),
+  array( 'lhs' => 14, 'rhs' => 1 ),
+  array( 'lhs' => 14, 'rhs' => 1 ),
   array( 'lhs' => 16, 'rhs' => 1 ),
   array( 'lhs' => 18, 'rhs' => 1 ),
-  array( 'lhs' => 17, 'rhs' => 3 ),
   array( 'lhs' => 17, 'rhs' => 1 ),
-  array( 'lhs' => 19, 'rhs' => 2 ),
-  array( 'lhs' => 19, 'rhs' => 0 ),
-  array( 'lhs' => 10, 'rhs' => 1 ),
+  array( 'lhs' => 15, 'rhs' => 3 ),
+  array( 'lhs' => 19, 'rhs' => 1 ),
+  array( 'lhs' => 21, 'rhs' => 1 ),
+  array( 'lhs' => 20, 'rhs' => 3 ),
+  array( 'lhs' => 20, 'rhs' => 1 ),
+  array( 'lhs' => 22, 'rhs' => 2 ),
+  array( 'lhs' => 22, 'rhs' => 0 ),
+  array( 'lhs' => 13, 'rhs' => 1 ),
     );
 
     /**
@@ -1017,20 +1044,23 @@ static public $yy_action = array(
         1 => 1,
         2 => 1,
         3 => 1,
-        15 => 1,
+        18 => 1,
         4 => 4,
         5 => 5,
         6 => 6,
         7 => 7,
         8 => 8,
         9 => 9,
-        17 => 9,
         10 => 10,
         11 => 11,
         12 => 12,
+        20 => 12,
         13 => 13,
         14 => 14,
+        15 => 15,
         16 => 16,
+        17 => 17,
+        19 => 19,
     );
     /* Beginning here are the reduction cases.  A typical example
     ** follows:
@@ -1038,28 +1068,95 @@ static public $yy_action = array(
     **   function yy_r0($yymsp){ ... }           // User supplied code
     **  #line <lineno> <thisfile>
     */
-#line 284 "ComponentParser.class.y"
+#line 296 "ComponentParser.class.y"
     function yy_r0(){ 
     $this->_result = $this->_getStartRenderCode() . $this->yystack[$this->yyidx + 0]->minor . $this->_getEndRenderCode();
     }
-#line 1051 "ComponentParser.class.php"
-#line 289 "ComponentParser.class.y"
+#line 1081 "ComponentParser.class.php"
+#line 301 "ComponentParser.class.y"
     function yy_r1(){
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1056 "ComponentParser.class.php"
-#line 304 "ComponentParser.class.y"
+#line 1086 "ComponentParser.class.php"
+#line 316 "ComponentParser.class.y"
     function yy_r4(){
     $this->_retvalue = '';
     }
-#line 1061 "ComponentParser.class.php"
-#line 309 "ComponentParser.class.y"
+#line 1091 "ComponentParser.class.php"
+#line 321 "ComponentParser.class.y"
     function yy_r5(){
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor . $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1066 "ComponentParser.class.php"
-#line 314 "ComponentParser.class.y"
+#line 1096 "ComponentParser.class.php"
+#line 326 "ComponentParser.class.y"
     function yy_r6(){ 
+    //Setup, validate and register current component:
+    $tag_name  = $this->_getHtmlTagName($this->yystack[$this->yyidx + 0]->minor);
+    $attribute_list = $this->_getAttributeList($this->yystack[$this->yyidx + 0]->minor);
+    if(key_exists('componenttag', $attribute_list)) {
+        $component_tag = $attribute_list['component'];
+    }
+    else {
+        $component_tag = __RunAtServerHtmlElementHelper::resolveComponentTag($tag_name, $attribute_list);
+    }    
+    $component_spec = __ComponentSpecFactory::getInstance()->createComponentSpec($component_tag);
+    $component_spec->setDefaultValues($attribute_list);
+    $component_spec->setViewCode($this->_view_code);
+    $this->_registerComponentSpec($component_spec);  
+    if($this->_getCurrentProperty() == null) {
+        $this->_retvalue = $this->_getComponentSingleTagCode($component_spec);
+    }
+    else {
+        $this->_retvalue = $component;
+    }
+    }
+#line 1119 "ComponentParser.class.php"
+#line 349 "ComponentParser.class.y"
+    function yy_r7(){
+   //Setup, validate and register current component:
+    $tag_name  = $this->_getHtmlTagName($this->yystack[$this->yyidx + 0]->minor);
+    $attribute_list = $this->_getAttributeList($this->yystack[$this->yyidx + 0]->minor);
+    if(key_exists('componenttag', $attribute_list)) {
+        $component_tag = $attribute_list['component'];
+    }
+    else {
+        $component_tag = __RunAtServerHtmlElementHelper::resolveComponentTag($tag_name, $attribute_list);
+    }    
+    $component_spec = __ComponentSpecFactory::getInstance()->createComponentSpec($component_tag);
+    $component_spec->setDefaultValues($attribute_list);
+    $component_spec->setViewCode($this->_view_code);
+    if(is_array($attribute_list) && key_exists('runat', $attribute_list) && strtoupper($attribute_list['runat']) == 'SERVER') {
+    	$component_spec->setRunAtServer(true);
+    }
+    else {
+        $component_spec->setRunAtServer(false);
+    }
+    $this->_registerComponentSpec($component_spec);
+    $this->_pushComponentSpec($component_spec);
+    $this->_retvalue = $this->_getComponentBeginTagCode($component_spec);
+    }
+#line 1144 "ComponentParser.class.php"
+#line 374 "ComponentParser.class.y"
+    function yy_r8(){
+    //Retrieve the current component and perform validations:
+    $tag_name = $this->_getHtmlTagName($this->yystack[$this->yyidx + 0]->minor);
+    $component_spec =& $this->_peekComponentSpec();
+    if($component_spec != null && $component_spec->getTag() == $tag_name && $component_spec->getRunAtServer() == true) {
+    	$this->_popComponentSpec();
+        if($this->_getCurrentProperty() == null) {
+            $this->_retvalue = $this->_getComponentEndTagCode($component_spec);
+        }
+        else {
+            $this->_retvalue = $component;
+        }
+    }
+    else {
+        $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;
+    }
+    }
+#line 1163 "ComponentParser.class.php"
+#line 393 "ComponentParser.class.y"
+    function yy_r9(){ 
     //Setup, validate and register current component:
     $tag_name  = $this->_getTagName($this->yystack[$this->yyidx + 0]->minor);
     $attribute_list = $this->_getAttributeList($this->yystack[$this->yyidx + 0]->minor);
@@ -1074,9 +1171,9 @@ static public $yy_action = array(
         $this->_retvalue = $component;
     }
     }
-#line 1083 "ComponentParser.class.php"
-#line 331 "ComponentParser.class.y"
-    function yy_r7(){
+#line 1180 "ComponentParser.class.php"
+#line 410 "ComponentParser.class.y"
+    function yy_r10(){
     //Setup and validate current component:
     $tag_name  = $this->_getTagName($this->yystack[$this->yyidx + 0]->minor);
     $component_spec = __ComponentSpecFactory::getInstance()->createComponentSpec($tag_name);
@@ -1087,9 +1184,9 @@ static public $yy_action = array(
     $this->_pushComponentSpec($component_spec);
     $this->_retvalue = $this->_getComponentBeginTagCode($component_spec);
     }
-#line 1096 "ComponentParser.class.php"
-#line 344 "ComponentParser.class.y"
-    function yy_r8(){
+#line 1193 "ComponentParser.class.php"
+#line 423 "ComponentParser.class.y"
+    function yy_r11(){
     //Retrieve the current component and perform validations:
     $tag_name = $this->_getTagName($this->yystack[$this->yyidx + 0]->minor);
     $component_spec =& $this->_popComponentSpec();
@@ -1103,14 +1200,14 @@ static public $yy_action = array(
         $this->_retvalue = $component;
     }
     }
-#line 1112 "ComponentParser.class.php"
-#line 360 "ComponentParser.class.y"
-    function yy_r9(){
+#line 1209 "ComponentParser.class.php"
+#line 439 "ComponentParser.class.y"
+    function yy_r12(){
     $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;
     }
-#line 1117 "ComponentParser.class.php"
-#line 368 "ComponentParser.class.y"
-    function yy_r10(){
+#line 1214 "ComponentParser.class.php"
+#line 447 "ComponentParser.class.y"
+    function yy_r13(){
     if($this->_getCurrentComponentSpec() == null) {
         throw __ExceptionFactory::getInstance()->createException('ERR_UI_UNEXPECTED_PROPERTY_TAG');
     }
@@ -1145,39 +1242,39 @@ static public $yy_action = array(
         $this->_retvalue = $this->_getComponentPropertyTagCode($property_name, $property_value);
     }
     }
-#line 1154 "ComponentParser.class.php"
-#line 405 "ComponentParser.class.y"
-    function yy_r11(){
+#line 1251 "ComponentParser.class.php"
+#line 484 "ComponentParser.class.y"
+    function yy_r14(){
 	$property_name = $this->_getComponentPropertyName($this->yystack[$this->yyidx + 0]->minor);
     $this->_pushProperty($property_name);
     $this->_retvalue = $property_name;
     }
-#line 1161 "ComponentParser.class.php"
-#line 412 "ComponentParser.class.y"
-    function yy_r12(){
+#line 1258 "ComponentParser.class.php"
+#line 491 "ComponentParser.class.y"
+    function yy_r15(){
     $this->_popProperty();
     $this->_retvalue = '';
     }
-#line 1167 "ComponentParser.class.php"
-#line 418 "ComponentParser.class.y"
-    function yy_r13(){
+#line 1264 "ComponentParser.class.php"
+#line 497 "ComponentParser.class.y"
+    function yy_r16(){
     $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor;
     $this->_retvalue[] = $this->yystack[$this->yyidx + -1]->minor;
     foreach($this->yystack[$this->yyidx + 0]->minor as $item_from_D) {
         $this->_retvalue[] = $item_from_D;
     }
     }
-#line 1176 "ComponentParser.class.php"
-#line 427 "ComponentParser.class.y"
-    function yy_r14(){
+#line 1273 "ComponentParser.class.php"
+#line 506 "ComponentParser.class.y"
+    function yy_r17(){
 	$this->_retvalue = array($this->yystack[$this->yyidx + 0]->minor);
     }
-#line 1181 "ComponentParser.class.php"
-#line 437 "ComponentParser.class.y"
-    function yy_r16(){ 
+#line 1278 "ComponentParser.class.php"
+#line 516 "ComponentParser.class.y"
+    function yy_r19(){ 
     $this->_retvalue = '';
     }
-#line 1186 "ComponentParser.class.php"
+#line 1283 "ComponentParser.class.php"
 
     /**
      * placeholder for the left hand side in a reduce operation.
@@ -1297,7 +1394,7 @@ static public $yy_action = array(
     }
     throw new __UIComponentException('Error parsing the template for view ' . $this->_view_code . ': Unexpected ' . $this->_getTokenName($yymajor) . '(' . $TOKEN
         . '), expected one of: ' . implode(',', $expect));
-#line 1307 "ComponentParser.class.php"
+#line 1404 "ComponentParser.class.php"
     }
 
     /**
@@ -1315,10 +1412,10 @@ static public $yy_action = array(
         }
         /* Here code is inserted which will be executed whenever the
         ** parser accepts */
-#line 279 "ComponentParser.class.y"
+#line 291 "ComponentParser.class.y"
 
     return $this->_result;
-#line 1329 "ComponentParser.class.php"
+#line 1426 "ComponentParser.class.php"
     }
 
     /**
